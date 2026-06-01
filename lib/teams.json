@@ -13,8 +13,12 @@
   "Austria":     { "gdp": 56, "pop": 9.1,  "temp": 8.0,  "fifa": 1560, "latam": false, "host": false, "flag": "🇦🇹", "conf": "UEFA" },
   "Turkey":      { "gdp": 12, "pop": 85.3, "temp": 14.0, "fifa": 1570, "latam": false, "host": false, "flag": "🇹🇷", "conf": "UEFA" },
   "Slovakia":    { "gdp": 23, "pop": 5.5,  "temp": 10.0, "fifa": 1560, "latam": false, "host": false, "flag": "🇸🇰", "conf": "UEFA" },
-  "Scotland":    { "gdp": 47, "pop": 5.5,  "temp": 8.5,  "fifa": 1550, "latam": false, "host": false, "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "conf": "UEFA" },
-  "Hungary":     { "gdp": 22, "pop": 9.7,  "temp": 11.5, "fifa": 1540, "latam": false, "host": false, "flag": "🇭🇺", "conf": "UEFA" },
+  "Scotland":       { "gdp": 47,  "pop": 5.5,   "temp": 8.5,  "fifa": 1550, "latam": false, "host": false, "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "conf": "UEFA" },
+  "Hungary":        { "gdp": 22,  "pop": 9.7,   "temp": 11.5, "fifa": 1540, "latam": false, "host": false, "flag": "🇭🇺", "conf": "UEFA" },
+  "Czechia":        { "gdp": 26,  "pop": 10.8,  "temp": 9.5,  "fifa": 1545, "latam": false, "host": false, "flag": "🇨🇿", "conf": "UEFA" },
+  "Bosnia-Herz":    { "gdp": 8,   "pop": 3.2,   "temp": 11.5, "fifa": 1495, "latam": false, "host": false, "flag": "🇧🇦", "conf": "UEFA" },
+  "Sweden":         { "gdp": 61,  "pop": 10.5,  "temp": 6.5,  "fifa": 1580, "latam": false, "host": false, "flag": "🇸🇪", "conf": "UEFA" },
+  "Norway":         { "gdp": 106, "pop": 5.4,   "temp": 5.0,  "fifa": 1560, "latam": false, "host": false, "flag": "🇳🇴", "conf": "UEFA" },
 
   "Argentina":   { "gdp": 11, "pop": 46.7,  "temp": 14.5, "fifa": 1880, "latam": true,  "host": false, "flag": "🇦🇷", "conf": "CONMEBOL" },
   "Brazil":      { "gdp": 9,  "pop": 215.3, "temp": 22.5, "fifa": 1810, "latam": true,  "host": false, "flag": "🇧🇷", "conf": "CONMEBOL" },
@@ -22,6 +26,7 @@
   "Colombia":    { "gdp": 7,  "pop": 51.9,  "temp": 19.0, "fifa": 1690, "latam": true,  "host": false, "flag": "🇨🇴", "conf": "CONMEBOL" },
   "Ecuador":     { "gdp": 6,  "pop": 18.2,  "temp": 18.0, "fifa": 1570, "latam": true,  "host": false, "flag": "🇪🇨", "conf": "CONMEBOL" },
   "Venezuela":   { "gdp": 4,  "pop": 28.2,  "temp": 24.0, "fifa": 1480, "latam": true,  "host": false, "flag": "🇻🇪", "conf": "CONMEBOL" },
+  "Paraguay":    { "gdp": 5,  "pop": 7.4,   "temp": 22.0, "fifa": 1520, "latam": true,  "host": false, "flag": "🇵🇾", "conf": "CONMEBOL" },
 
   "USA":         { "gdp": 82, "pop": 334.0, "temp": 15.0, "fifa": 1710, "latam": false, "host": true,  "flag": "🇺🇸", "conf": "CONCACAF" },
   "Canada":      { "gdp": 53, "pop": 40.1,  "temp": 5.0,  "fifa": 1680, "latam": false, "host": true,  "flag": "🇨🇦", "conf": "CONCACAF" },
@@ -30,6 +35,8 @@
   "Panama":      { "gdp": 14, "pop": 4.4,   "temp": 27.0, "fifa": 1530, "latam": false, "host": false, "flag": "🇵🇦", "conf": "CONCACAF" },
   "Honduras":    { "gdp": 3,  "pop": 10.3,  "temp": 21.0, "fifa": 1480, "latam": false, "host": false, "flag": "🇭🇳", "conf": "CONCACAF" },
   "Costa Rica":  { "gdp": 14, "pop": 5.2,   "temp": 23.0, "fifa": 1490, "latam": false, "host": false, "flag": "🇨🇷", "conf": "CONCACAF" },
+  "Haiti":       { "gdp": 2,  "pop": 11.7,  "temp": 25.0, "fifa": 1440, "latam": false, "host": false, "flag": "🇭🇹", "conf": "CONCACAF" },
+  "Curacao":     { "gdp": 25, "pop": 0.15,  "temp": 28.0, "fifa": 1410, "latam": false, "host": false, "flag": "🇨🇼", "conf": "CONCACAF" },
 
   "Morocco":      { "gdp": 4,  "pop": 37.7,  "temp": 17.5, "fifa": 1680, "latam": false, "host": false, "flag": "🇲🇦", "conf": "CAF" },
   "Senegal":      { "gdp": 2,  "pop": 18.1,  "temp": 28.0, "fifa": 1620, "latam": false, "host": false, "flag": "🇸🇳", "conf": "CAF" },
@@ -40,6 +47,9 @@
   "Cameroon":     { "gdp": 2,  "pop": 27.2,  "temp": 24.0, "fifa": 1530, "latam": false, "host": false, "flag": "🇨🇲", "conf": "CAF" },
   "Ghana":        { "gdp": 2,  "pop": 32.7,  "temp": 27.0, "fifa": 1510, "latam": false, "host": false, "flag": "🇬🇭", "conf": "CAF" },
   "Tunisia":      { "gdp": 4,  "pop": 12.0,  "temp": 20.0, "fifa": 1540, "latam": false, "host": false, "flag": "🇹🇳", "conf": "CAF" },
+  "Algeria":      { "gdp": 5,  "pop": 45.4,  "temp": 15.0, "fifa": 1495, "latam": false, "host": false, "flag": "🇩🇿", "conf": "CAF" },
+  "Cape Verde":   { "gdp": 4,  "pop": 0.6,   "temp": 24.0, "fifa": 1435, "latam": false, "host": false, "flag": "🇨🇻", "conf": "CAF" },
+  "Congo DR":     { "gdp": 0.6,"pop": 102.3, "temp": 24.0, "fifa": 1445, "latam": false, "host": false, "flag": "🇨🇩", "conf": "CAF" },
 
   "Japan":        { "gdp": 34, "pop": 125.7, "temp": 14.0, "fifa": 1720, "latam": false, "host": false, "flag": "🇯🇵", "conf": "AFC" },
   "South Korea":  { "gdp": 34, "pop": 51.7,  "temp": 12.5, "fifa": 1660, "latam": false, "host": false, "flag": "🇰🇷", "conf": "AFC" },
@@ -50,6 +60,7 @@
   "Jordan":       { "gdp": 5,  "pop": 10.8,  "temp": 17.5, "fifa": 1490, "latam": false, "host": false, "flag": "🇯🇴", "conf": "AFC" },
   "Qatar":        { "gdp": 52, "pop": 3.0,   "temp": 28.0, "fifa": 1490, "latam": false, "host": false, "flag": "🇶🇦", "conf": "AFC" },
   "Indonesia":    { "gdp": 5,  "pop": 277.5, "temp": 27.0, "fifa": 1460, "latam": false, "host": false, "flag": "🇮🇩", "conf": "AFC" },
+  "Iraq":         { "gdp": 7,  "pop": 43.5,  "temp": 22.5, "fifa": 1455, "latam": false, "host": false, "flag": "🇮🇶", "conf": "AFC" },
 
   "New Zealand":  { "gdp": 47, "pop": 5.1,   "temp": 12.0, "fifa": 1410, "latam": false, "host": false, "flag": "🇳🇿", "conf": "OFC" }
 }

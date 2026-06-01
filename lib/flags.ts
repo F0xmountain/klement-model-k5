@@ -18,6 +18,10 @@ export const FLAG_CODES: Record<string, string> = {
   'Slovakia':      'sk',
   'Scotland':      'gb-sct',
   'Hungary':       'hu',
+  'Czechia':       'cz',
+  'Bosnia-Herz':   'ba',
+  'Sweden':        'se',
+  'Norway':        'no',
   // CONMEBOL
   'Argentina':     'ar',
   'Brazil':        'br',
@@ -33,6 +37,8 @@ export const FLAG_CODES: Record<string, string> = {
   'Panama':        'pa',
   'Honduras':      'hn',
   'Costa Rica':    'cr',
+  'Haiti':         'ht',
+  'Curacao':       'cw',
   // CAF
   'Morocco':       'ma',
   'Senegal':       'sn',
@@ -43,6 +49,9 @@ export const FLAG_CODES: Record<string, string> = {
   'Cameroon':      'cm',
   'Ghana':         'gh',
   'Tunisia':       'tn',
+  'Algeria':       'dz',
+  'Cape Verde':    'cv',
+  'Congo DR':      'cd',
   // AFC
   'Japan':         'jp',
   'South Korea':   'kr',
@@ -53,6 +62,7 @@ export const FLAG_CODES: Record<string, string> = {
   'Jordan':        'jo',
   'Qatar':         'qa',
   'Indonesia':     'id',
+  'Iraq':          'iq',
   // OFC
   'New Zealand':   'nz',
 }

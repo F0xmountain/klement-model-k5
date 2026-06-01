@@ -1,18 +1,19 @@
 import type { KnockoutMatch } from '../types'
 
+// Official FIFA World Cup 2026 draw (December 5, 2024, Washington D.C.)
 export const GROUPS: Record<string, string[]> = {
-  A: ['Netherlands', 'USA', 'Morocco', 'New Zealand'],
-  B: ['France', 'Canada', 'Senegal', 'Japan'],
-  C: ['England', 'Mexico', 'Ivory Coast', 'Indonesia'],
-  D: ['Spain', 'Honduras', 'Nigeria', 'Uzbekistan'],
-  E: ['Portugal', 'Jamaica', 'Egypt', 'South Korea'],
-  F: ['Germany', 'Colombia', 'Cameroon', 'Jordan'],
-  G: ['Belgium', 'Ecuador', 'South Africa', 'Qatar'],
-  H: ['Croatia', 'Venezuela', 'Ghana', 'Saudi Arabia'],
-  I: ['Switzerland', 'Uruguay', 'Tunisia', 'Iran'],
-  J: ['Denmark', 'Argentina', 'Turkey', 'Australia'],
-  K: ['Serbia', 'Brazil', 'Slovakia', 'Costa Rica'],
-  L: ['Austria', 'Scotland', 'Hungary', 'Panama'],
+  A: ['Mexico',      'South Korea',  'South Africa',       'Czechia'],
+  B: ['Canada',      'Switzerland',  'Qatar',              'Bosnia-Herz'],
+  C: ['Brazil',      'Morocco',      'Scotland',           'Haiti'],
+  D: ['USA',         'Paraguay',     'Australia',          'Turkey'],
+  E: ['Germany',     'Curacao',      'Ivory Coast',        'Ecuador'],
+  F: ['Netherlands', 'Japan',        'Sweden',             'Tunisia'],
+  G: ['Belgium',     'Egypt',        'Iran',               'New Zealand'],
+  H: ['Spain',       'Cape Verde',   'Saudi Arabia',       'Uruguay'],
+  I: ['France',      'Senegal',      'Iraq',               'Norway'],
+  J: ['Argentina',   'Algeria',      'Austria',            'Jordan'],
+  K: ['Portugal',    'Congo DR',     'Uzbekistan',         'Colombia'],
+  L: ['England',     'Croatia',      'Ghana',              'Panama'],
 }
 
 export const ROUNDS: Record<string, KnockoutMatch[]> = {
