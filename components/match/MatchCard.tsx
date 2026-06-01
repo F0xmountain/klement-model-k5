@@ -1,6 +1,5 @@
 import { matchP, teamData } from '@/lib/klement'
 import WDLBar from '@/components/ui/WDLBar'
-import Tag from '@/components/ui/Tag'
 
 interface Props {
   teamA: string
@@ -14,36 +13,26 @@ export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
   const tA = teamData(teamA)
   const tB = teamData(teamB)
 
-  const borderCls = isFinal
-    ? 'border-2 border-[#18A84A]/30 shadow-[0_0_24px_rgba(24,168,74,0.12)]'
-    : 'border border-[#E2E6EC]'
+  const cardStyle: React.CSSProperties = isFinal
+    ? { border: '2px solid var(--color-g)', boxShadow: '0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-g)' }
+    : { border: '1px solid var(--color-brd)', boxShadow: '3px 3px 0 var(--color-brd)' }
 
   return (
-    <div className={`glass-card rounded-xl p-4 ${borderCls}`}>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 flex-1">
-          <span className="text-2xl">{tA?.flag ?? '🏳'}</span>
-          <div>
-            <p className={`font-heading font-700 text-sm ${k === teamA ? 'text-green' : 'text-[#0D1117]'}`}>
-              {teamA}
-            </p>
-            <p className="text-xs text-[#8892A0]">{tA?.conf}</p>
-          </div>
-          {k === teamA && <Tag variant="green">Klement ✓</Tag>}
+    <div style={{ ...cardStyle, padding: 16, background: 'var(--color-bg)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: 8, alignItems: 'center', marginBottom: 10 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
+          <span style={{ fontSize: 24 }}>{tA?.flag ?? '🏳'}</span>
+          <span style={{ fontSize: 7, color: k === teamA ? 'var(--color-g)' : 'var(--color-txt)' }}>{teamA}</span>
+          {k === teamA && <span className="k-badge">K✓</span>}
         </div>
-        <span className="text-xs font-semibold text-[#8892A0] px-2">VS</span>
-        <div className="flex items-center gap-2 flex-1 justify-end">
-          {k === teamB && <Tag variant="green">Klement ✓</Tag>}
-          <div className="text-right">
-            <p className={`font-heading font-700 text-sm ${k === teamB ? 'text-green' : 'text-[#0D1117]'}`}>
-              {teamB}
-            </p>
-            <p className="text-xs text-[#8892A0]">{tB?.conf}</p>
-          </div>
-          <span className="text-2xl">{tB?.flag ?? '🏳'}</span>
+        <div style={{ textAlign: 'center', fontSize: 7, color: 'var(--color-muted)' }}>VS</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+          <span style={{ fontSize: 24 }}>{tB?.flag ?? '🏳'}</span>
+          <span style={{ fontSize: 7, color: k === teamB ? 'var(--color-g)' : 'var(--color-txt)' }}>{teamB}</span>
+          {k === teamB && <span className="k-badge">K✓</span>}
         </div>
       </div>
-      <div className="panel-blue pl-3 rounded-r-md">
+      <div style={{ borderLeft: '3px solid var(--color-b)', paddingLeft: 8 }}>
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
       </div>
     </div>

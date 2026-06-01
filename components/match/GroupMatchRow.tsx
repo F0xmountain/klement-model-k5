@@ -7,35 +7,37 @@ interface Props {
   result?: WDL
 }
 
-const resultBadge: Record<WDL, { label: string; cls: string }> = {
-  A: { label: 'W / L', cls: 'text-blue' },
-  D: { label: 'D / D', cls: 'text-[#8892A0]' },
-  B: { label: 'L / W', cls: 'text-red' },
-}
-
 export default function GroupMatchRow({ teamA, teamB, result }: Props) {
   const { pA, dr, pB } = matchP(teamA, teamB)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const fmtPct = (v: number) => `${(v * 100).toFixed(0)}%`
 
+  const resultColor = result === 'A' ? 'var(--color-r)' : result === 'B' ? 'var(--color-b)' : 'var(--color-muted)'
+  const resultLabel = result === 'A' ? 'W / L' : result === 'B' ? 'L / W' : 'D / D'
+
   return (
-    <div className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-[#F4F6F9] transition-colors text-sm">
-      <span>{tA?.flag}</span>
-      <span className="font-medium text-[#0D1117] min-w-[80px]">{teamA}</span>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      padding: '6px 8px',
+      fontSize: 7,
+      borderBottom: '1px solid var(--color-brd)',
+    }}>
+      <span style={{ fontSize: 14 }}>{tA?.flag}</span>
+      <span style={{ color: 'var(--color-txt)', minWidth: 64 }}>{teamA}</span>
       {result ? (
-        <span className={`mx-auto font-semibold text-xs ${resultBadge[result].cls}`}>
-          {resultBadge[result].label}
-        </span>
+        <span style={{ flex: 1, textAlign: 'center', color: resultColor, fontWeight: 'bold' }}>{resultLabel}</span>
       ) : (
-        <div className="flex gap-2 mx-auto text-xs text-[#8892A0]">
-          <span className="text-blue">{fmtPct(pA)}</span>
-          <span>{fmtPct(dr)}</span>
-          <span className="text-red">{fmtPct(pB)}</span>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: 6 }}>
+          <span style={{ color: 'var(--color-r)' }}>{fmtPct(pA)}</span>
+          <span style={{ color: 'var(--color-muted)' }}>{fmtPct(dr)}</span>
+          <span style={{ color: 'var(--color-b)' }}>{fmtPct(pB)}</span>
         </div>
       )}
-      <span className="font-medium text-[#0D1117] min-w-[80px] text-right">{teamB}</span>
-      <span>{tB?.flag}</span>
+      <span style={{ color: 'var(--color-txt)', minWidth: 64, textAlign: 'right' }}>{teamB}</span>
+      <span style={{ fontSize: 14 }}>{tB?.flag}</span>
     </div>
   )
 }

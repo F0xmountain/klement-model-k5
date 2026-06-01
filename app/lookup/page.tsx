@@ -1,11 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { matchP, teamNames, teamData } from '@/lib/klement'
-import PageTransition from '@/components/ui/PageTransition'
 import SectionLabel from '@/components/ui/SectionLabel'
 import WDLBar from '@/components/ui/WDLBar'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
-import DecoBalls from '@/components/ui/DecoBalls'
 
 const allTeams = teamNames().sort()
 
@@ -17,70 +15,78 @@ export default function LookupPage() {
   const tA = teamData(teamA)
   const tB = teamData(teamB)
 
-  return (
-    <PageTransition>
-      <div className="relative max-w-3xl mx-auto px-4 py-10 space-y-8">
-        <DecoBalls variant="blue" />
-        <div className="fade-section">
-          <SectionLabel>Match Lookup</SectionLabel>
-          <h1 className="font-heading font-800 text-3xl text-[#0D1117]">
-            Pick a <span className="hl">matchup</span>
-          </h1>
-        </div>
+  const selectStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '8px 10px',
+    fontSize: 8,
+    fontFamily: 'inherit',
+    border: '2px solid var(--color-brd2)',
+    background: 'var(--color-bg)',
+    color: 'var(--color-txt)',
+    cursor: 'pointer',
+    boxShadow: '3px 3px 0 var(--color-brd)',
+    appearance: 'none' as const,
+    outline: 'none',
+  }
 
-        <div className="fade-section fade-delay-1 grid grid-cols-2 gap-4">
-          {([
-            { value: teamA, set: setTeamA, label: 'Team A', flag: tA?.flag ?? '' },
-            { value: teamB, set: setTeamB, label: 'Team B', flag: tB?.flag ?? '' },
-          ] as const).map(({ value, set, label, flag }) => (
-            <div key={label} className="space-y-1">
-              <label className="text-xs font-medium text-[#8892A0]">{label}</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg pointer-events-none">{flag}</span>
-                <select
-                  value={value}
-                  onChange={e => set(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 text-sm font-medium border border-[#E2E6EC] rounded-xl bg-white text-[#0D1117] focus:outline-none focus:border-blue appearance-none cursor-pointer"
-                >
-                  {allTeams.map(t => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-              </div>
+  return (
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
+      <div className="fade-in" style={{ marginBottom: 24 }}>
+        <SectionLabel>Match Lookup</SectionLabel>
+        <h1 style={{ fontSize: 14, color: 'var(--color-r)', marginTop: 4 }}>
+          PICK A MATCHUP
+        </h1>
+      </div>
+
+      <div className="fade-in delay-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+        {([
+          { label: 'TEAM A', value: teamA, set: setTeamA, flag: tA?.flag ?? '' },
+          { label: 'TEAM B', value: teamB, set: setTeamB, flag: tB?.flag ?? '' },
+        ] as const).map(({ label, value, set, flag }) => (
+          <div key={label}>
+            <p style={{ fontSize: 6, color: 'var(--color-muted)', marginBottom: 6 }}>{label}</p>
+            <div style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', fontSize: 16, pointerEvents: 'none' }}>{flag}</span>
+              <select
+                value={value}
+                onChange={e => set(e.target.value)}
+                style={{ ...selectStyle, paddingLeft: 32 }}
+              >
+                {allTeams.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="fade-in delay-2" style={{ border: '1px solid var(--color-brd)', boxShadow: '4px 4px 0 var(--color-brd)', padding: 20, marginBottom: 24 }}>
+        <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginTop: 20 }}>
+          {[
+            { label: teamA, value: pA, flag: tA?.flag ?? '', color: 'var(--color-r)', border: 'var(--color-r)' },
+            { label: 'DRAW', value: dr,  flag: '—',           color: 'var(--color-muted)', border: 'var(--color-brd2)' },
+            { label: teamB, value: pB, flag: tB?.flag ?? '', color: 'var(--color-b)', border: 'var(--color-b)' },
+          ].map(({ label, value, flag, color, border }) => (
+            <div key={label} style={{ background: 'var(--color-surf)', border: `1px solid var(--color-brd)`, borderTop: `3px solid ${border}`, padding: 12, textAlign: 'center' }}>
+              <div style={{ fontSize: 20, marginBottom: 6 }}>{flag}</div>
+              <p style={{ fontSize: 14, color, marginBottom: 4 }}>{(value * 100).toFixed(1)}%</p>
+              <p style={{ fontSize: 6, color: 'var(--color-muted)' }}>{label}</p>
             </div>
           ))}
         </div>
-
-        <div className="fade-section fade-delay-2 glass-card rounded-2xl p-5 space-y-5">
-          <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
-          <div className="grid grid-cols-3 gap-3 text-center">
-            {[
-              { label: teamA, value: pA, flag: tA?.flag ?? '', cls: 'text-blue', border: 'border-l-4 border-l-blue' },
-              { label: 'Draw',  value: dr,  flag: '🤝', cls: 'text-[#8892A0]', border: '' },
-              { label: teamB, value: pB, flag: tB?.flag ?? '', cls: 'text-red',  border: 'border-l-4 border-l-red' },
-            ].map(({ label, value, flag, cls, border }) => (
-              <div key={label} className={`bg-[#F4F6F9] rounded-xl p-4 ${border}`}>
-                <div className="text-2xl mb-1">{flag}</div>
-                <p className={`font-heading font-800 text-2xl ${cls}`}>
-                  {(value * 100).toFixed(1)}%
-                </p>
-                <p className="text-xs text-[#8892A0] truncate mt-0.5">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="fade-section fade-delay-3 grid md:grid-cols-2 gap-6">
-          <div className="glass-card rounded-2xl p-5 panel-blue">
-            <h3 className="font-heading font-700 text-sm text-blue mb-4">{teamA}</h3>
-            <FactorBreakdown name={teamA} />
-          </div>
-          <div className="glass-card rounded-2xl p-5 panel-red">
-            <h3 className="font-heading font-700 text-sm text-red mb-4">{teamB}</h3>
-            <FactorBreakdown name={teamB} />
-          </div>
-        </div>
       </div>
-    </PageTransition>
+
+      <div className="fade-in delay-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        {[
+          { team: teamA, borderColor: 'var(--color-r)' },
+          { team: teamB, borderColor: 'var(--color-b)' },
+        ].map(({ team, borderColor }) => (
+          <div key={team} style={{ border: '1px solid var(--color-brd)', borderLeft: `3px solid ${borderColor}`, boxShadow: '3px 3px 0 var(--color-brd)', padding: 16 }}>
+            <p style={{ fontSize: 8, color: 'var(--color-txt)', marginBottom: 16 }}>{team}</p>
+            <FactorBreakdown name={team} />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

@@ -1,30 +1,23 @@
-import PageTransition from '@/components/ui/PageTransition'
 import SectionLabel from '@/components/ui/SectionLabel'
 import GroupCard from '@/components/match/GroupCard'
-import DecoBalls from '@/components/ui/DecoBalls'
 import { GROUPS } from '@/lib/fixtures'
 
 export default function GroupsPage() {
   return (
-    <PageTransition>
-      <div className="relative max-w-6xl mx-auto px-4 py-10 space-y-8">
-        <DecoBalls variant="blue" />
-        <div className="fade-section">
-          <SectionLabel>Group Stage</SectionLabel>
-          <h1 className="font-heading font-800 text-3xl text-[#0D1117]">
-            12 groups — <span className="hl">simulated</span>
-          </h1>
-          <p className="text-[#4A5260] mt-2 text-sm">
-            Each group is simulated once on load. Refresh for a new set of results.
-          </p>
-        </div>
-
-        <div className="fade-section fade-delay-1 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Object.entries(GROUPS).map(([group, teams]) => (
-            <GroupCard key={group} group={group} teams={teams} />
-          ))}
-        </div>
+    <div style={{ maxWidth: 960, margin: '0 auto', padding: '32px 24px' }}>
+      <div className="fade-in" style={{ marginBottom: 24 }}>
+        <SectionLabel>Group Stage</SectionLabel>
+        <h1 style={{ fontSize: 14, color: 'var(--color-r)', marginTop: 4 }}>12 GROUPS — SIMULATED</h1>
+        <p style={{ fontSize: 7, color: 'var(--color-muted)', lineHeight: 2, marginTop: 8 }}>
+          EACH GROUP IS SIMULATED ONCE ON LOAD. REFRESH FOR A NEW SET OF RESULTS.
+        </p>
       </div>
-    </PageTransition>
+
+      <div className="fade-in delay-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+        {Object.entries(GROUPS).map(([group, teams]) => (
+          <GroupCard key={group} group={group} teams={teams} />
+        ))}
+      </div>
+    </div>
   )
 }

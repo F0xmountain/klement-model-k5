@@ -7,29 +7,29 @@ interface Props {
 }
 
 export default function WDLBar({ pA, dr, pB, labelA = 'Win', labelB = 'Win' }: Props) {
-  const fmtPct = (v: number) => `${(v * 100).toFixed(0)}%`
+  const pAp = Math.round(pA * 100)
+  const drp = Math.round(dr * 100)
+  const pBp = Math.round(pB * 100)
 
   return (
-    <div className="w-full space-y-1.5">
-      <div className="flex rounded-full overflow-hidden h-3">
-        <div
-          className="bg-blue transition-all duration-500"
-          style={{ width: `${pA * 100}%` }}
-        />
-        <div
-          className="bg-[#C8CDD6] transition-all duration-500"
-          style={{ width: `${dr * 100}%` }}
-        />
-        <div
-          className="bg-red transition-all duration-500"
-          style={{ width: `${pB * 100}%` }}
-        />
+    <div style={{ width: '100%' }}>
+      <div style={{
+        display: 'flex',
+        height: 20,
+        border: '2px solid var(--color-brd2)',
+        boxShadow: '3px 3px 0 var(--color-brd)',
+        overflow: 'hidden',
+      }}>
+        <div style={{ flex: pAp, background: 'var(--color-r)', transition: 'flex 0.3s' }} />
+        <div style={{ flex: drp, background: 'var(--color-surf)', transition: 'flex 0.3s' }} />
+        <div style={{ flex: pBp, background: 'var(--color-b)', transition: 'flex 0.3s' }} />
       </div>
-      <div className="flex justify-between text-xs font-medium">
-        <span className="text-blue">{labelA} {fmtPct(pA)}</span>
-        <span className="text-[#8892A0]">Draw {fmtPct(dr)}</span>
-        <span className="text-red">{labelB} {fmtPct(pB)}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 7 }}>
+        <span style={{ color: 'var(--color-r)' }}>{labelA} {pAp}%</span>
+        <span style={{ color: 'var(--color-muted)' }}>DRAW {drp}%</span>
+        <span style={{ color: 'var(--color-b)' }}>{labelB} {pBp}%</span>
       </div>
+      <div className="marching" />
     </div>
   )
 }

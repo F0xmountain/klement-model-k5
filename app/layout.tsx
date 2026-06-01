@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Press_Start_2P } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/ui/Nav'
-import ClientLayout from '@/components/ui/ClientLayout'
 
-const jakarta = Plus_Jakarta_Sans({
+const pixelFont = Press_Start_2P({
+  weight: '400',
   subsets: ['latin'],
-  variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-pixel',
 })
 
 export const metadata: Metadata = {
@@ -18,12 +17,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={jakarta.variable}>
-      <body className="min-h-screen flex flex-col font-sans antialiased bg-white">
+    <html lang="en" className={pixelFont.variable}>
+      <body className="min-h-screen flex flex-col" style={{ background: 'var(--color-bg)' }}>
         <Nav />
-        <main className="flex-1">
-          <ClientLayout>{children}</ClientLayout>
-        </main>
+        <main className="flex-1">{children}</main>
       </body>
     </html>
   )

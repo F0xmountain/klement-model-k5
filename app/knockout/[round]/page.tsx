@@ -1,9 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import PageTransition from '@/components/ui/PageTransition'
 import SectionLabel from '@/components/ui/SectionLabel'
 import MatchCard from '@/components/match/MatchCard'
-import DecoBalls from '@/components/ui/DecoBalls'
 import { ROUNDS, ROUND_LABELS } from '@/lib/fixtures'
 
 const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
@@ -23,64 +21,58 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
   const currentIdx = ROUND_ORDER.indexOf(round as Round)
 
   return (
-    <PageTransition>
-      <div className="relative max-w-3xl mx-auto px-4 py-10 space-y-8">
-        <DecoBalls variant={isFinal ? 'green' : 'mix'} />
-        <div className="fade-section">
-          <SectionLabel>Knockout Stage</SectionLabel>
-          <h1 className={`font-heading font-800 text-3xl text-[#0D1117] ${isFinal ? 'hl-green' : ''}`}>
-            {isFinal ? '🏆 ' : ''}{label}
-          </h1>
-          {isFinal && (
-            <p className="text-[#4A5260] mt-2 text-sm">
-              Klement&apos;s predicted final — the model&apos;s headline call.
-            </p>
-          )}
-        </div>
-
-        <nav className="fade-section fade-delay-1 flex gap-2 flex-wrap">
-          {ROUND_ORDER.map((r, i) => (
-            <Link
-              key={r}
-              href={`/knockout/${r}`}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                r === round
-                  ? 'bg-blue text-white'
-                  : i < currentIdx
-                  ? 'bg-[#F4F6F9] text-[#8892A0]'
-                  : 'bg-[#F4F6F9] text-[#4A5260] hover:bg-[#EFF1F5]'
-              }`}
-            >
-              {ROUND_LABELS[r]}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="fade-section fade-delay-2 space-y-4">
-          {matches.map((m, i) => (
-            <MatchCard key={i} teamA={m.teamA} teamB={m.teamB} k={m.k} isFinal={isFinal} />
-          ))}
-        </div>
-
-        <div className="fade-section fade-delay-3 flex justify-between">
-          {currentIdx > 0 && (
-            <Link
-              href={`/knockout/${ROUND_ORDER[currentIdx - 1]}`}
-              className="text-sm text-[#4A5260] hover:text-blue transition-colors"
-            >
-              ← {ROUND_LABELS[ROUND_ORDER[currentIdx - 1]]}
-            </Link>
-          )}
-          {currentIdx < ROUND_ORDER.length - 1 && (
-            <Link
-              href={`/knockout/${ROUND_ORDER[currentIdx + 1]}`}
-              className="text-sm text-blue hover:text-blue-light transition-colors ml-auto"
-            >
-              {ROUND_LABELS[ROUND_ORDER[currentIdx + 1]]} →
-            </Link>
-          )}
-        </div>
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
+      <div className="fade-in" style={{ marginBottom: 24 }}>
+        <SectionLabel>Knockout Stage</SectionLabel>
+        <h1 style={{ fontSize: 14, color: isFinal ? 'var(--color-g)' : 'var(--color-r)', marginTop: 4 }}>
+          {isFinal ? '🏆 ' : ''}{label.toUpperCase()}
+        </h1>
+        {isFinal && (
+          <p style={{ fontSize: 7, color: 'var(--color-muted)', lineHeight: 2, marginTop: 8 }}>
+            KLEMENT&apos;S PREDICTED FINAL — THE MODEL&apos;S HEADLINE CALL.
+          </p>
+        )}
       </div>
-    </PageTransition>
+
+      {/* Round tabs */}
+      <nav className="fade-in delay-1" style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 24 }}>
+        {ROUND_ORDER.map((r, i) => (
+          <Link
+            key={r}
+            href={`/knockout/${r}`}
+            style={{
+              padding: '6px 10px',
+              fontSize: 6,
+              textDecoration: 'none',
+              fontFamily: 'inherit',
+              background: r === round ? 'var(--color-r-bg)' : 'var(--color-surf)',
+              color: r === round ? 'var(--color-r)' : i < currentIdx ? 'var(--color-muted)' : 'var(--color-txt)',
+              border: r === round ? '1px solid var(--color-r-sh)' : '1px solid var(--color-brd)',
+            }}
+          >
+            {ROUND_LABELS[r].toUpperCase()}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="fade-in delay-2" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {matches.map((m, i) => (
+          <MatchCard key={i} teamA={m.teamA} teamB={m.teamB} k={m.k} isFinal={isFinal} />
+        ))}
+      </div>
+
+      <div className="fade-in delay-3" style={{ display: 'flex', justifyContent: 'space-between', marginTop: 24, fontSize: 7 }}>
+        {currentIdx > 0 && (
+          <Link href={`/knockout/${ROUND_ORDER[currentIdx - 1]}`} style={{ color: 'var(--color-muted)', textDecoration: 'none', fontFamily: 'inherit' }}>
+            ← {ROUND_LABELS[ROUND_ORDER[currentIdx - 1]].toUpperCase()}
+          </Link>
+        )}
+        {currentIdx < ROUND_ORDER.length - 1 && (
+          <Link href={`/knockout/${ROUND_ORDER[currentIdx + 1]}`} style={{ color: 'var(--color-b)', textDecoration: 'none', fontFamily: 'inherit', marginLeft: 'auto' }}>
+            {ROUND_LABELS[ROUND_ORDER[currentIdx + 1]].toUpperCase()} →
+          </Link>
+        )}
+      </div>
+    </div>
   )
 }

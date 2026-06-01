@@ -1,19 +1,32 @@
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 
-type Variant = 'primary' | 'green' | 'default' | 'ghost'
+type Variant = 'red' | 'blue' | 'green' | 'outline-blue' | 'primary' | 'default' | 'ghost'
 type Size = 'sm' | 'md' | 'lg'
 
-const variantStyles: Record<Variant, string> = {
-  primary: 'bg-blue text-white hover:bg-blue-light shadow-sm',
-  green:   'bg-green text-white hover:bg-green-light shadow-sm',
-  default: 'bg-[#F4F6F9] text-[#0D1117] border border-[#E2E6EC] hover:bg-[#EFF1F5]',
-  ghost:   'text-[#4A5260] hover:text-[#0D1117] hover:bg-[#F4F6F9]',
+const variantStyles: Record<string, CSSProperties> = {
+  red:          { background: 'var(--color-r)',    color: '#fff', boxShadow: '4px 4px 0 var(--color-r-sh)' },
+  blue:         { background: 'var(--color-b)',    color: '#fff', boxShadow: '4px 4px 0 var(--color-b-sh)' },
+  green:        { background: 'var(--color-g)',    color: '#fff', boxShadow: '4px 4px 0 var(--color-g-sh)' },
+  'outline-blue': { background: 'transparent', color: 'var(--color-b)', border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)' },
+  primary:      { background: 'var(--color-r)',    color: '#fff', boxShadow: '4px 4px 0 var(--color-r-sh)' },
+  default:      { background: 'var(--color-surf)', color: 'var(--color-txt)', border: '2px solid var(--color-brd2)', boxShadow: '4px 4px 0 var(--color-brd)' },
+  ghost:        { background: 'transparent', color: 'var(--color-muted)', border: '1px solid var(--color-brd)' },
 }
 
-const sizeStyles: Record<Size, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base',
+const baseStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 6,
+  padding: '10px 16px',
+  fontSize: 8,
+  fontFamily: 'inherit',
+  cursor: 'pointer',
+  textDecoration: 'none',
+  border: 'none',
+  outline: 'none',
+  transition: 'transform 0.05s, box-shadow 0.05s',
 }
 
 interface BaseProps {
@@ -21,6 +34,7 @@ interface BaseProps {
   size?: Size
   className?: string
   children: React.ReactNode
+  style?: CSSProperties
 }
 
 interface ButtonProps extends BaseProps {
@@ -39,16 +53,22 @@ interface LinkProps extends BaseProps {
 
 type Props = ButtonProps | LinkProps
 
-export default function Btn({ variant = 'default', size = 'md', className = '', children, ...rest }: Props) {
-  const base = `inline-flex items-center justify-center gap-1.5 font-medium rounded-lg transition-colors cursor-pointer ${variantStyles[variant]} ${sizeStyles[size]} ${className}`
+export default function Btn({ variant = 'default', size: _size, className = '', children, ...rest }: Props) {
+  const vs = variantStyles[variant] ?? variantStyles.default
+  const combined = { ...baseStyle, ...vs, ...rest.style }
 
   if (rest.href !== undefined) {
-    return <Link href={rest.href} className={base}>{children}</Link>
+    return (
+      <Link href={rest.href} style={combined} className={`px-btn ${className}`}>
+        {children}
+      </Link>
+    )
   }
 
   return (
     <button
-      className={base}
+      style={combined}
+      className={`px-btn ${className}`}
       onClick={rest.onClick}
       type={rest.type ?? 'button'}
       disabled={rest.disabled}

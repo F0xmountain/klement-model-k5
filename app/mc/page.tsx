@@ -2,10 +2,9 @@
 import { useState, useCallback } from 'react'
 import { simKO, teamData } from '@/lib/klement'
 import { ROUNDS } from '@/lib/fixtures'
-import PageTransition from '@/components/ui/PageTransition'
 import SectionLabel from '@/components/ui/SectionLabel'
 import Btn from '@/components/ui/Btn'
-import DecoBalls from '@/components/ui/DecoBalls'
+import PixelBar from '@/components/ui/PixelBar'
 
 type ChampCounts = Record<string, number>
 
@@ -48,64 +47,60 @@ export default function MCPage() {
   const maxCount = sorted ? sorted[0]?.[1] ?? 1 : 1
 
   return (
-    <PageTransition>
-      <div className="relative max-w-3xl mx-auto px-4 py-10 space-y-8">
-        <DecoBalls variant="mix" />
-        <div className="fade-section">
-          <SectionLabel>Monte Carlo Simulator</SectionLabel>
-          <h1 className="font-heading font-800 text-3xl text-[#0D1117]">
-            Run the <span className="hl">tournament</span>
-          </h1>
-          <p className="text-[#4A5260] mt-2 text-sm">
-            Each simulation runs the full 32-team bracket with random outcomes
-            sampled from the model&apos;s W/D/L probabilities.
-          </p>
-        </div>
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
+      <div className="fade-in" style={{ marginBottom: 24 }}>
+        <SectionLabel>Monte Carlo Simulator</SectionLabel>
+        <h1 style={{ fontSize: 14, color: 'var(--color-r)', marginTop: 4 }}>RUN THE TOURNAMENT</h1>
+        <p style={{ fontSize: 7, color: 'var(--color-muted)', lineHeight: 2, marginTop: 8 }}>
+          EACH SIMULATION RUNS THE FULL 32-TEAM BRACKET WITH RANDOM OUTCOMES
+          SAMPLED FROM THE MODEL&apos;S W/D/L PROBABILITIES.
+        </p>
+      </div>
 
-        <div className="fade-section fade-delay-1 glass-card rounded-2xl p-5 space-y-4">
-          <div className="flex items-center gap-4">
-            <label className="text-sm font-medium text-[#0D1117] w-32">Simulations</label>
-            <input
-              type="range"
-              min={100} max={5000} step={100}
-              value={n}
-              onChange={e => setN(Number(e.target.value))}
-              className="flex-1 accent-[#1A5FE8]"
-            />
-            <span className="font-heading font-700 text-lg text-[#0D1117] w-16 text-right">{n.toLocaleString()}</span>
-          </div>
-          <Btn variant="primary" size="md" onClick={run} disabled={running}>
-            {running ? 'Running…' : `Run ${n.toLocaleString()} simulations →`}
-          </Btn>
+      <div className="fade-in delay-1" style={{ border: '1px solid var(--color-brd)', boxShadow: '4px 4px 0 var(--color-brd)', padding: 20, marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+          <label style={{ fontSize: 7, color: 'var(--color-txt)', minWidth: 96 }}>SIMULATIONS</label>
+          <input
+            type="range"
+            min={100} max={5000} step={100}
+            value={n}
+            onChange={e => setN(Number(e.target.value))}
+            style={{ flex: 1, accentColor: 'var(--color-g)' }}
+          />
+          <span style={{ fontSize: 10, color: 'var(--color-g)', minWidth: 48, textAlign: 'right' }}>{n.toLocaleString()}</span>
         </div>
+        <Btn variant="green" onClick={run} disabled={running}>
+          {running ? '⏳ RUNNING...' : `RUN ${n.toLocaleString()} SIMULATIONS →`}
+        </Btn>
+      </div>
 
-        {sorted && (
-          <div className="fade-section fade-delay-2 space-y-3">
-            <SectionLabel>Champion Distribution</SectionLabel>
+      {sorted && (
+        <div className="fade-in delay-2">
+          <SectionLabel>Champion Distribution</SectionLabel>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {sorted.map(([team, count], i) => {
               const t = teamData(team)
               const pct = ((count / n) * 100).toFixed(1)
               const barWidth = (count / maxCount) * 100
               return (
-                <div key={team} className="flex items-center gap-3">
-                  <span className="text-xs text-[#8892A0] w-4 text-right">{i + 1}</span>
-                  <span className="text-lg w-7">{t?.flag}</span>
-                  <span className="text-sm font-medium text-[#0D1117] w-28 truncate">{team}</span>
-                  <div className="flex-1 h-6 bg-[#EFF1F5] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-blue rounded-full transition-all duration-700 flex items-center justify-end pr-2"
-                      style={{ width: `${barWidth}%` }}
-                    >
-                      <span className="text-white text-xs font-semibold whitespace-nowrap">{pct}%</span>
-                    </div>
+                <div key={team} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 6, color: 'var(--color-muted)', minWidth: 16, textAlign: 'right' }}>{i + 1}</span>
+                  <span style={{ fontSize: 16, minWidth: 24 }}>{t?.flag}</span>
+                  <span style={{ fontSize: 7, color: 'var(--color-txt)', minWidth: 96 }}>{team}</span>
+                  <div style={{ flex: 1 }}>
+                    <PixelBar value={barWidth} color="var(--color-g-mid)" />
                   </div>
-                  <span className="text-xs text-[#8892A0] w-14 text-right">{count}×</span>
+                  <span style={{ fontSize: 7, color: 'var(--color-g)', minWidth: 36, textAlign: 'right' }}>{pct}%</span>
+                  <span style={{ fontSize: 6, color: 'var(--color-muted)', minWidth: 32, textAlign: 'right' }}>{count}×</span>
                 </div>
               )
             })}
           </div>
-        )}
-      </div>
-    </PageTransition>
+          <p style={{ marginTop: 20, fontSize: 6, color: 'var(--color-muted)', lineHeight: 2 }}>
+            {n} SIMULATIONS COMPLETE. 45% VARIANCE IS UNMODELLED NOISE.
+          </p>
+        </div>
+      )}
+    </div>
   )
 }
