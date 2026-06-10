@@ -65,6 +65,10 @@ export const FLAG_CODES: Record<string, string> = {
   'Iraq':          'iq',
   // OFC
   'New Zealand':   'nz',
+  // Other WC winners/hosts not in the 2026 lineup
+  'Italy':         'it',
+  'Chile':         'cl',
+  'Russia':        'ru',
 }
 
 export function flagUrl(name: string, w = 40, h = 30): string {

@@ -10,6 +10,7 @@
     "groups": "GROEPEN",
     "bracket": "BRACKET",
     "myBracket": "MIJN BRACKET",
+    "stats": "STATS",
     "about": "OVER",
     "switchToEnglish": "Naar Engels",
     "switchToDutch": "Naar Nederlands",
@@ -162,5 +163,30 @@
     "comparisonTitle": "JOUW PICKS VS KLEMENT",
     "tableFilled": "INGEVULD",
     "tableMatchesK": "= KLEMENT"
+  },
+  "stats": {
+    "pageTitle": "STATISTIEKEN",
+    "pageDescription": "ELO-TRENDS, FACTORVERGELIJKINGEN EN WK-GESCHIEDENIS — DE DATA ACHTER HET MODEL.",
+    "eloTitle": "ELO-RATING TREND",
+    "eloDescription": "ELO-RATINGS PER KWARTAAL SINDS 2016, BRON: ELORATINGS.NET. KIES 1–6 TEAMS OM TE VERGELIJKEN.",
+    "addTeam": "TEAM TOEVOEGEN",
+    "removeTeam": "Verwijder {team}",
+    "radarTitle": "FACTORVERGELIJKING",
+    "radarDescription": "DE VIJF MODELFACTOREN, GENORMALISEERD NAAR 0–100, VOOR TWEE TEAMS NAAST ELKAAR.",
+    "historyTitle": "WK-GESCHIEDENIS",
+    "historyDescription": "ELKE WK-WINNAAR, FINALIST EN GASTLAND SINDS 1930. GEMARKEERDE TEAMS DOEN MEE IN 2026.",
+    "colYear": "JAAR",
+    "colWinner": "WINNAAR",
+    "colRunnerUp": "FINALIST",
+    "colHost": "GASTLAND",
+    "qualified2026": "WK 2026"
+  },
+  "news": {
+    "title": "TEAMNIEUWS",
+    "description": "RECENTE WK 2026-HEADLINES VOOR HET GEKOZEN TEAM, VAN DE AFGELOPEN 7 DAGEN.",
+    "loading": "NIEUWS LADEN...",
+    "error": "NIEUWS NIET BESCHIKBAAR. PROBEER HET LATER OPNIEUW.",
+    "noResults": "GEEN RECENT NIEUWS GEVONDEN VOOR DIT TEAM.",
+    "disclaimer": "LINKS OPENEN OP EEN EXTERNE SITE."
   }
 }

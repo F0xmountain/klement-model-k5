@@ -9,19 +9,19 @@ function clamp(v: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, v))
 }
 
-function fG(gdp: number) {
+export function fG(gdp: number) {
   return clamp(1 - ((gdp - 35) / 35) ** 2, 0, 1)
 }
 
-function fP(pop: number, latam: boolean) {
+export function fP(pop: number, latam: boolean) {
   return clamp((Math.log(pop) / Math.log(200)) * (latam ? 1 : 0.3), 0, 1)
 }
 
-function fT(temp: number) {
+export function fT(temp: number) {
   return clamp(1 - Math.abs(temp - 14) / 22, 0, 1)
 }
 
-function fF(fifa: number) {
+export function fF(fifa: number) {
   return clamp((fifa - 1400) / 600, 0, 1)
 }
 

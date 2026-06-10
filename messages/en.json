@@ -10,6 +10,7 @@
     "groups": "GROUPS",
     "bracket": "BRACKET",
     "myBracket": "MY BRACKET",
+    "stats": "STATS",
     "about": "ABOUT",
     "switchToEnglish": "Switch to English",
     "switchToDutch": "Switch to Dutch",
@@ -162,5 +163,30 @@
     "comparisonTitle": "YOUR PICKS VS KLEMENT",
     "tableFilled": "FILLED",
     "tableMatchesK": "= KLEMENT"
+  },
+  "stats": {
+    "pageTitle": "STATISTICS",
+    "pageDescription": "ELO RATING TRENDS, FACTOR COMPARISONS AND WORLD CUP HISTORY — THE DATA BEHIND THE MODEL.",
+    "eloTitle": "ELO RATING TREND",
+    "eloDescription": "QUARTERLY ELO RATINGS SINCE 2016, SOURCED FROM ELORATINGS.NET. PICK 1–6 TEAMS TO COMPARE.",
+    "addTeam": "ADD TEAM",
+    "removeTeam": "Remove {team}",
+    "radarTitle": "FACTOR COMPARISON",
+    "radarDescription": "THE FIVE MODEL FACTORS, NORMALISED TO 0–100, FOR TWO TEAMS SIDE BY SIDE.",
+    "historyTitle": "WORLD CUP HISTORY",
+    "historyDescription": "EVERY WORLD CUP WINNER, RUNNER-UP AND HOST SINCE 1930. HIGHLIGHTED TEAMS ARE PLAYING IN 2026.",
+    "colYear": "YEAR",
+    "colWinner": "WINNER",
+    "colRunnerUp": "RUNNER-UP",
+    "colHost": "HOST",
+    "qualified2026": "WC 2026"
+  },
+  "news": {
+    "title": "TEAM NEWS",
+    "description": "RECENT WORLD CUP 2026 HEADLINES FOR THE SELECTED TEAM, FROM THE LAST 7 DAYS.",
+    "loading": "LOADING NEWS...",
+    "error": "NEWS UNAVAILABLE RIGHT NOW. TRY AGAIN LATER.",
+    "noResults": "NO RECENT NEWS FOUND FOR THIS TEAM.",
+    "disclaimer": "LINKS OPEN ON AN EXTERNAL SITE."
   }
 }
