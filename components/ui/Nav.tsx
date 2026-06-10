@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
@@ -27,61 +28,79 @@ export default function Nav() {
   const pathname = usePathname()
   const router = useRouter()
   const locale = useLocale()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [prevRoute, setPrevRoute] = useState(`${pathname}|${locale}`)
 
   const isActive = (href: string) =>
     href === '/knockout/r32' ? pathname.startsWith('/knockout') : pathname === href
+
+  const route = `${pathname}|${locale}`
+  if (route !== prevRoute) {
+    setPrevRoute(route)
+    setMenuOpen(false)
+  }
 
   return (
     <nav className="nav">
       <Link href="/" className="nav-logo">
         <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>Klement
       </Link>
-      <div className="nav-links">
-        {linkHrefs.map((href, i) => (
-          <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
-            {t(linkKeys[i])}
-          </Link>
-        ))}
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 2, paddingRight: 8, flexShrink: 0 }}>
-        {routing.locales.map(loc => (
-          <button
-            key={loc}
-            onClick={() => router.replace(pathname, { locale: loc })}
-            className={`nav-link${locale === loc ? ' active' : ''}`}
-            style={{
-              padding: '0 10px',
-              background: 'none',
-              border: 'none',
-              borderRight: '1px solid var(--color-brd)',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-            aria-label={t(loc === 'en' ? 'switchToEnglish' : 'switchToDutch')}
+      <button
+        className="nav-hamburger"
+        onClick={() => setMenuOpen(o => !o)}
+        aria-label={t(menuOpen ? 'closeMenu' : 'openMenu')}
+        aria-expanded={menuOpen}
+      >
+        {menuOpen ? '✕' : '☰'}
+      </button>
+      <div className={`nav-menu${menuOpen ? ' open' : ''}`}>
+        <div className="nav-links">
+          {linkHrefs.map((href, i) => (
+            <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
+              {t(linkKeys[i])}
+            </Link>
+          ))}
+        </div>
+        <div className="nav-extra">
+          {routing.locales.map(loc => (
+            <button
+              key={loc}
+              onClick={() => router.replace(pathname, { locale: loc })}
+              className={`nav-link${locale === loc ? ' active' : ''}`}
+              style={{
+                padding: '0 10px',
+                background: 'none',
+                border: 'none',
+                borderRight: '1px solid var(--color-brd)',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+              aria-label={t(loc === 'en' ? 'switchToEnglish' : 'switchToDutch')}
+            >
+              {loc.toUpperCase()}
+            </button>
+          ))}
+          <a
+            href="https://x.com/klementworldcup"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-link"
+            style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
+            aria-label={t('followX')}
           >
-            {loc.toUpperCase()}
-          </button>
-        ))}
-        <a
-          href="https://x.com/klementworldcup"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="nav-link"
-          style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
-          aria-label={t('followX')}
-        >
-          <XIcon />
-        </a>
-        <a
-          href="https://github.com/x-cookie/klement-model-k5"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="nav-link"
-          style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
-          aria-label={t('viewGithub')}
-        >
-          <GitHubIcon />
-        </a>
+            <XIcon />
+          </a>
+          <a
+            href="https://github.com/x-cookie/klement-model-k5"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-link"
+            style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
+            aria-label={t('viewGithub')}
+          >
+            <GitHubIcon />
+          </a>
+        </div>
       </div>
     </nav>
   )

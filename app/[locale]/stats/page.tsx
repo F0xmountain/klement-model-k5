@@ -25,6 +25,10 @@ export default function StatsPage() {
         <div style={{ marginTop: 40 }}>
           <WCHistoryTable />
         </div>
+
+        <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 32, fontStyle: 'italic', textAlign: 'center' }}>
+          {t('disclaimer')}
+        </div>
       </div>
     </div>
   )

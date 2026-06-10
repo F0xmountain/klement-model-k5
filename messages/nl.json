@@ -16,7 +16,9 @@
     "switchToEnglish": "Naar Engels",
     "switchToDutch": "Naar Nederlands",
     "followX": "Volg op X",
-    "viewGithub": "Bekijk op GitHub"
+    "viewGithub": "Bekijk op GitHub",
+    "openMenu": "Menu openen",
+    "closeMenu": "Menu sluiten"
   },
   "footer": {
     "copyright": "© 2026 KLEMENT MODEL · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
@@ -180,7 +182,8 @@
     "colWinner": "WINNAAR",
     "colRunnerUp": "FINALIST",
     "colHost": "GASTLAND",
-    "qualified2026": "WK 2026"
+    "qualified2026": "WK 2026",
+    "disclaimer": "DIT IS GEEN FINANCIEEL ADVIES. WK-VOORSPELLINGEN ZIJN PROBABILISTISCH EN INHERENT ONZEKER."
   },
   "news": {
     "title": "TEAMNIEUWS",

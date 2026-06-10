@@ -16,7 +16,9 @@
     "switchToEnglish": "Switch to English",
     "switchToDutch": "Switch to Dutch",
     "followX": "Follow on X",
-    "viewGithub": "View on GitHub"
+    "viewGithub": "View on GitHub",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "footer": {
     "copyright": "© 2026 KLEMENT MODEL · ALL SIMULATIONS RUN IN-BROWSER",
@@ -180,7 +182,8 @@
     "colWinner": "WINNER",
     "colRunnerUp": "RUNNER-UP",
     "colHost": "HOST",
-    "qualified2026": "WC 2026"
+    "qualified2026": "WC 2026",
+    "disclaimer": "THIS IS NOT FINANCIAL ADVICE. WORLD CUP PREDICTIONS ARE PROBABILISTIC AND INHERENTLY UNCERTAIN."
   },
   "news": {
     "title": "TEAM NEWS",

@@ -27,6 +27,10 @@ WC26 Klement is a Next.js app that surfaces Joachim Klement's econometric World 
 - **Monte Carlo** — Run 100–5,000 full tournament simulations in the browser; see the champion distribution sorted by frequency
 - **Model Explainer** — Formula, factor weights, the luck component (σ = 0.28), and Klement's sources
 - **Live Rankings** — GitHub Actions fetches the FIFA API every Thursday and patches `teams.json`, then triggers ISR revalidation
+- **My Bracket** — Pick a winner for every knockout match (R32 → Final), saved to your browser's localStorage and compared against Klement's picks
+- **Stats** — Elo rating trends since 2016, a 5-factor radar comparison between teams, and a full World Cup history table since 1930
+- **Live** — Polymarket "World Cup Winner" odds vs. the model's own Monte Carlo simulation, plus recent team news headlines
+- **NL/EN** — Full Dutch/English UI via `next-intl`, with a language switcher in the nav and a hamburger menu on mobile
 
 ---
 
@@ -42,6 +46,9 @@ WC26 Klement is a Next.js app that surfaces Joachim Klement's econometric World 
 | Trionda Light design | Color system inspired by the Adidas Trionda FIFA WC 2026 ball |
 | Glass aesthetic | Subtle `backdrop-filter` glass cards + color panel strips (blue/red/green) |
 | Plus Jakarta Sans | Geometric sans heading font paired with Inter for body copy |
+| NL/EN i18n | `next-intl` locale routing (`/en`, `/nl`), full UI translation, responsive nav |
+| Live odds | `/api/polymarket` fetches live Polymarket "World Cup Winner" prices, with a static fallback |
+| Team news | `/api/news/[team]` fetches recent World Cup headlines per team via NewsAPI |
 
 ---
 
@@ -237,6 +244,10 @@ klement-model/
 - Design system inspired by the Adidas Trionda — official match ball of FIFA World Cup 2026.
 
 This project is an independent fan tool and is not affiliated with or endorsed by Panmure Liberum, FIFA, or Adidas.
+
+## Contributors
+
+- [F0xmountain](https://github.com/F0xmountain) — NL/EN i18n, My Bracket, Stats, Live (Polymarket odds + team news)
 
 ## License
 
