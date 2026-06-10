@@ -1,8 +1,8 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { simResult, calcStandings, teamData } from '@/lib/klement'
-import type { MatchResult } from '@/types'
+import type { MatchResult, Standing } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -19,26 +19,33 @@ function buildFixtures(teams: string[]): [string, string][] {
   return pairs
 }
 
+function simulate(teams: string[]): { standings: Standing[]; results: MatchResult[] } {
+  const results: MatchResult[] = buildFixtures(teams).map(([a, b]) => ({
+    teamA: a, teamB: b, result: simResult(a, b),
+  }))
+  return { standings: calcStandings(teams, results), results }
+}
+
 export default function GroupCard({ group, teams }: Props) {
   const t = useTranslations('groups')
   const [open, setOpen] = useState(false)
-  const [tick, setTick] = useState(0)
+  const [{ standings, results }, setData] = useState<{ standings: Standing[]; results: MatchResult[] }>(
+    () => ({ standings: calcStandings(teams, []), results: [] })
+  )
 
-  const { standings, results } = useMemo(() => {
-    const fixtures = buildFixtures(teams)
-    const results: MatchResult[] = fixtures.map(([a, b]) => ({
-      teamA: a, teamB: b, result: simResult(a, b),
-    }))
-    return { standings: calcStandings(teams, results), results }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teams, tick])
+  useEffect(() => {
+    // Math.random()-based simulation must run client-side only, after hydration,
+    // so the server-rendered standings (zeros) match the client's first render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setData(simulate(teams))
+  }, [teams])
 
   return (
     <div className="group-card">
       <div className="group-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span>{t('groupLabel')} {group}</span>
         <button
-          onClick={() => setTick(prev => prev + 1)}
+          onClick={() => setData(simulate(teams))}
           title={t('resimulate')}
           style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: 'var(--color-b)', padding: 0, lineHeight: 1 }}
         >🎲</button>
