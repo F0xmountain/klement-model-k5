@@ -11,6 +11,7 @@
     "bracket": "BRACKET",
     "myBracket": "MIJN BRACKET",
     "stats": "STATS",
+    "live": "LIVE",
     "about": "OVER",
     "switchToEnglish": "Naar Engels",
     "switchToDutch": "Naar Nederlands",
@@ -188,5 +189,17 @@
     "error": "NIEUWS NIET BESCHIKBAAR. PROBEER HET LATER OPNIEUW.",
     "noResults": "GEEN RECENT NIEUWS GEVONDEN VOOR DIT TEAM.",
     "disclaimer": "LINKS OPENEN OP EEN EXTERNE SITE."
+  },
+  "live": {
+    "pageTitle": "LIVE",
+    "pageDescription": "VOORSPELMARKTKANSEN EN HET LAATSTE NIEUWS — ELKE PAAR MINUTEN BIJGEWERKT.",
+    "marketTitle": "POLYMARKET — WK-WINNAAR",
+    "marketDescription": "TOP 10 TEAMS OP BASIS VAN GEÏMPLICEERDE KANS OM HET WK 2026 TE WINNEN, T.O.V. DE EIGEN SIMULATIE VAN HET MODEL.",
+    "live": "LIVE",
+    "updated": "BIJGEWERKT {time}",
+    "modelLabel": "MODEL",
+    "loading": "MARKTKANSEN LADEN...",
+    "error": "MARKTDATA NU NIET BESCHIKBAAR.",
+    "disclaimer": "DIT IS GEEN FINANCIEEL ADVIES. WK-VOORSPELLINGEN ZIJN PROBABILISTISCH EN INHERENT ONZEKER."
   }
 }

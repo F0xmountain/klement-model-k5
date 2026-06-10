@@ -216,6 +216,15 @@ main { flex: 1; }
   margin-bottom: 8px;
 }
 
+/* ── Polymarket widget row ── */
+.pm-row {
+  display: grid;
+  grid-template-columns: 22px 1fr 120px 44px 70px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
 /* ── Group card ── */
 .group-card { background: var(--color-bg); border: 2px solid var(--color-brd2); box-shadow: 3px 3px 0 var(--color-brd); }
 .group-header { background: var(--color-b-bg); border-bottom: 2px solid var(--color-b-sh); padding: 10px 14px; font-size: 10px; color: var(--color-b); letter-spacing: 1px; }

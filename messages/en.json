@@ -11,6 +11,7 @@
     "bracket": "BRACKET",
     "myBracket": "MY BRACKET",
     "stats": "STATS",
+    "live": "LIVE",
     "about": "ABOUT",
     "switchToEnglish": "Switch to English",
     "switchToDutch": "Switch to Dutch",
@@ -188,5 +189,17 @@
     "error": "NEWS UNAVAILABLE RIGHT NOW. TRY AGAIN LATER.",
     "noResults": "NO RECENT NEWS FOUND FOR THIS TEAM.",
     "disclaimer": "LINKS OPEN ON AN EXTERNAL SITE."
+  },
+  "live": {
+    "pageTitle": "LIVE",
+    "pageDescription": "PREDICTION MARKET ODDS AND THE LATEST HEADLINES — REFRESHED EVERY FEW MINUTES.",
+    "marketTitle": "POLYMARKET — WORLD CUP WINNER",
+    "marketDescription": "TOP 10 TEAMS BY IMPLIED PROBABILITY OF WINNING THE 2026 WORLD CUP, VS. THE MODEL'S OWN SIMULATION.",
+    "live": "LIVE",
+    "updated": "UPDATED {time}",
+    "modelLabel": "MODEL",
+    "loading": "LOADING MARKET ODDS...",
+    "error": "MARKET DATA UNAVAILABLE RIGHT NOW.",
+    "disclaimer": "THIS IS NOT FINANCIAL ADVICE. WORLD CUP PREDICTIONS ARE PROBABILISTIC AND INHERENTLY UNCERTAIN."
   }
 }
