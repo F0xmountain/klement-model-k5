@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { matchP, teamNames, teamData, simResult } from '@/lib/klement'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -12,17 +13,19 @@ import { PM_GAP_THRESHOLD } from '@/lib/polymarket'
 const allTeams = teamNames().sort()
 const SIM_N = 500
 
-function upsetLabel(pA: number, pB: number): { text: string; color: string } | null {
+function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite' | 'upsetPotential'; color: string } | null {
   const gap = Math.abs(pA - pB)
-  if (gap < 0.1) return { text: '⚔ COIN FLIP', color: 'var(--color-muted)' }
-  if (gap > 0.55) return { text: '⚡ HEAVY FAVOURITE', color: 'var(--color-r)' }
-  if (gap > 0.35) return { text: '⚡ UPSET POTENTIAL', color: 'var(--color-r)' }
+  if (gap < 0.1) return { key: 'coinFlip', color: 'var(--color-muted)' }
+  if (gap > 0.55) return { key: 'heavyFavourite', color: 'var(--color-r)' }
+  if (gap > 0.35) return { key: 'upsetPotential', color: 'var(--color-r)' }
   return null
 }
 
 interface SimData { w: number; d: number; l: number }
 
 export default function VersusPage() {
+  const t = useTranslations('versus')
+  const tc = useTranslations('common')
   const [teamA, setTeamA] = useState('Netherlands')
   const [teamB, setTeamB] = useState('Portugal')
   const [sim, setSim] = useState<SimData | null>(null)
@@ -69,13 +72,13 @@ export default function VersusPage() {
       <div style={{ position: 'relative', zIndex: 1 }}>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-          <div className="section-title" style={{ marginBottom: 0 }}>VERSUS</div>
-          <button className="px-btn" onClick={surpriseMe} style={{ fontSize: 8, padding: '6px 12px' }}>🎲 RANDOM</button>
+          <div className="section-title" style={{ marginBottom: 0 }}>{t('title')}</div>
+          <button className="px-btn" onClick={surpriseMe} style={{ fontSize: 8, padding: '6px 12px' }}>{t('randomBtn')}</button>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 16, alignItems: 'center', marginBottom: 24 }}>
           <TeamSelect teams={allTeams} value={teamA} onChange={v => { setTeamA(v); setSim(null) }} />
-          <div style={{ fontSize: 14, color: 'var(--color-r)', textAlign: 'center', fontWeight: 'bold', padding: '0 8px' }}>VS</div>
+          <div style={{ fontSize: 14, color: 'var(--color-r)', textAlign: 'center', fontWeight: 'bold', padding: '0 8px' }}>{tc('vs')}</div>
           <TeamSelect teams={allTeams} value={teamB} onChange={v => { setTeamB(v); setSim(null) }} />
         </div>
 
@@ -103,21 +106,21 @@ export default function VersusPage() {
                 cursor: 'pointer',
               }}
             >
-              {upset.text} — SIMULATE ▶
+              {t(upset.key)} — {t('simulate')}
             </button>
 
             {sim && (
               <div style={{ display: 'flex', gap: 8, fontSize: 8 }}>
                 <span style={{ color: 'var(--color-r)', border: '1px solid var(--color-r)', padding: '4px 8px', backgroundColor: 'var(--color-r-bg)' }}>
-                  {teamA.split(' ')[0].toUpperCase()} WIN {Math.round(sim.w / SIM_N * 100)}%
+                  {teamA.split(' ')[0].toUpperCase()} {t('win')} {Math.round(sim.w / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-muted)', border: '1px solid var(--color-brd)', padding: '4px 8px' }}>
-                  DRAW {Math.round(sim.d / SIM_N * 100)}%
+                  {tc('draw')} {Math.round(sim.d / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-b)', border: '1px solid var(--color-b)', padding: '4px 8px', backgroundColor: 'var(--color-b-bg)' }}>
-                  {teamB.split(' ')[0].toUpperCase()} WIN {Math.round(sim.l / SIM_N * 100)}%
+                  {teamB.split(' ')[0].toUpperCase()} {t('win')} {Math.round(sim.l / SIM_N * 100)}%
                 </span>
-                <span style={{ color: 'var(--color-muted)', fontSize: 7, alignSelf: 'center' }}>{SIM_N} SIMS</span>
+                <span style={{ color: 'var(--color-muted)', fontSize: 7, alignSelf: 'center' }}>{SIM_N} {t('simsLabel')}</span>
               </div>
             )}
           </div>

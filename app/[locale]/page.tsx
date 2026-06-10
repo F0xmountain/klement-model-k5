@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import PixelBar from '@/components/ui/PixelBar'
 import PixelParticles from '@/components/ui/PixelParticles'
@@ -6,14 +7,17 @@ import FlagImg from '@/components/ui/FlagImg'
 import PolymarketBtn from '@/components/ui/PolymarketBtn'
 
 const factors = [
-  { label: 'FIFA RANKING', pct: 45, color: 'var(--color-r)' },
-  { label: 'NATL WEALTH',  pct: 20, color: 'var(--color-g)' },
-  { label: 'CLIMATE',      pct: 15, color: 'var(--color-b)' },
-  { label: 'POPULATION',   pct: 15, color: 'var(--color-b)' },
-  { label: 'HOME EDGE',    pct: 5,  color: 'var(--color-r)' },
+  { key: 'fifa' as const,       pct: 45, color: 'var(--color-r)' },
+  { key: 'wealth' as const,     pct: 20, color: 'var(--color-g)' },
+  { key: 'climate' as const,    pct: 15, color: 'var(--color-b)' },
+  { key: 'population' as const, pct: 15, color: 'var(--color-b)' },
+  { key: 'homeEdge' as const,   pct: 5,  color: 'var(--color-r)' },
 ]
 
 export default function LandingPage() {
+  const t = useTranslations('home')
+  const tf = useTranslations('factors')
+
   return (
     <div className="page-enter">
 
@@ -26,27 +30,26 @@ export default function LandingPage() {
         <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 220px', gap: 32, alignItems: 'center' }}>
           {/* Left — text */}
           <div>
-            <div className="eyebrow fade-in">PANMURE LIBERUM · APRIL 2026</div>
+            <div className="eyebrow fade-in">{t('eyebrow')}</div>
             <div className="txt-shadow-r fade-in delay-1" style={{ fontSize: 22, color: 'var(--color-r)', lineHeight: 1.5, marginBottom: 16 }}>
-              WHO WINS THE<br />
-              <span style={{ color: 'var(--color-g)', textShadow: '3px 3px 0 var(--color-g-sh)' }}>2026 WORLD CUP?</span>
+              {t('heroLine1')}<br />
+              <span style={{ color: 'var(--color-g)', textShadow: '3px 3px 0 var(--color-g-sh)' }}>{t('heroLine2')}</span>
             </div>
             <div className="fade-in delay-2" style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2.2, maxWidth: 480, marginBottom: 28 }}>
-              AN ECONOMETRIC MODEL THAT CALLED 2014, 2018 AND 2022 CORRECTLY
-              — NOW RUNNING ON ALL 48 QUALIFIED NATIONS.
+              {t('heroSubtitle')}
             </div>
             <div className="fade-in delay-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
               <Link href="/versus" className="px-btn" style={{
                 fontFamily: 'inherit', fontSize: 10, padding: '12px 22px',
                 backgroundColor: 'var(--color-r)', color: '#fff', border: 'none',
                 boxShadow: '4px 4px 0 var(--color-r-sh)', textDecoration: 'none', display: 'inline-block',
-              }}>▶ PREDICT MATCH</Link>
+              }}>{t('ctaPredict')}</Link>
               <Link href="/about" className="px-btn" style={{
                 fontFamily: 'inherit', fontSize: 10, padding: '12px 22px',
                 backgroundColor: 'var(--color-bg)', color: 'var(--color-b)',
                 border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)',
                 textDecoration: 'none', display: 'inline-block',
-              }}>? HOW IT WORKS</Link>
+              }}>{t('ctaHowItWorks')}</Link>
               <span className="football-bounce" style={{ fontSize: 28, marginLeft: 8 }}>⚽</span>
             </div>
           </div>
@@ -79,9 +82,9 @@ export default function LandingPage() {
       {/* ── STATS BAR ── */}
       <div className="stats-bar">
         {[
-          { num: '48',   label: 'QUALIFIED TEAMS', color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
-          { num: '3',    label: 'CORRECT CALLS',  color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: '0.55', label: 'MODEL R²',         color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
+          { num: '48',   label: t('statsQualified'), color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
+          { num: '3',    label: t('statsCorrect'),  color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
+          { num: '0.55', label: t('statsR2'),         color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
         ].map(({ num, label, color, sh }) => (
           <div key={label} className="stat-cell">
             <span style={{ fontSize: 22, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>
@@ -94,7 +97,7 @@ export default function LandingPage() {
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="green" />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-title">TRACK RECORD</div>
+          <div className="section-title">{t('trackRecordTitle')}</div>
           <div className="record-grid">
             {[
               { year: '2014', team: 'Germany',   name: 'GERMANY',   emoji: '🇩🇪' },
@@ -102,7 +105,7 @@ export default function LandingPage() {
               { year: '2022', team: 'Argentina', name: 'ARGENTINA', emoji: '🇦🇷' },
             ].map(({ year, team, name, emoji }) => (
               <div key={year} className="record-card">
-                <div className="record-badge">✓ WIN</div>
+                <div className="record-badge">{t('recordBadge')}</div>
                 <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 10 }}>{year}</div>
                 <div style={{ marginBottom: 8 }}>
                   <FlagImg name={team} h={36} emoji={emoji} />
@@ -118,7 +121,7 @@ export default function LandingPage() {
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="green" />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-title">2026 PREDICTION</div>
+          <div className="section-title">{t('predictionTitle')}</div>
           <div className="pred-banner">
             <div className="dot-grid" style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
             <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -134,8 +137,8 @@ export default function LandingPage() {
                 NETHERLANDS<span className="blink">_</span>
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-g)', opacity: 0.75, lineHeight: 2.2 }}>
-                FIRST WORLD CUP TITLE IN HISTORY<br />
-                PATH: MOROCCO → CANADA → FRANCE → ARGENTINA → PORTUGAL
+                {t('predictionLine1')}<br />
+                {t('predictionPathLabel')} MOROCCO → CANADA → FRANCE → ARGENTINA → PORTUGAL
               </div>
               <PolymarketBtn
                 teamName="Netherlands"
@@ -150,11 +153,11 @@ export default function LandingPage() {
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="blue" />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-title">MODEL VARIABLES</div>
+          <div className="section-title">{t('modelVariablesTitle')}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            {factors.map(({ label, pct, color }) => (
-              <div key={label} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 42px', alignItems: 'center', gap: 14 }}>
-                <div style={{ fontSize: 9, color: 'var(--color-muted)' }}>{label}</div>
+            {factors.map(({ key, pct, color }) => (
+              <div key={key} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 42px', alignItems: 'center', gap: 14 }}>
+                <div style={{ fontSize: 9, color: 'var(--color-muted)' }}>{tf(key)}</div>
                 <PixelBar value={pct} color={color} />
                 <div style={{ fontSize: 9, color, textAlign: 'right', fontWeight: 'bold' }}>{pct}%</div>
               </div>

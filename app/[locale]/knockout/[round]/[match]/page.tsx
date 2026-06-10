@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { matchP, teamData } from '@/lib/klement'
-import { ROUNDS, ROUND_LABELS, makeSlug } from '@/lib/fixtures'
+import { ROUNDS, makeSlug } from '@/lib/fixtures'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
@@ -35,6 +36,9 @@ export default async function MatchPage({
   const isFinal = round === 'final'
   const pAp = Math.round(pA * 100)
   const pBp = Math.round(pB * 100)
+  const tr = await getTranslations('rounds')
+  const tc = await getTranslations('common')
+  const roundFull = tr(`${round}Full` as 'r32Full' | 'r16Full' | 'qfFull' | 'sfFull' | 'finalFull')
 
   return (
     <div className="page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -43,12 +47,12 @@ export default async function MatchPage({
 
         {/* Breadcrumb nav */}
         <div className="ko-tabs">
-          <Link href="/knockout/bracket" className="ko-tab">BRACKET</Link>
+          <Link href="/knockout/bracket" className="ko-tab">{tr('bracket')}</Link>
           <Link href={`/knockout/${round}`} className="ko-tab active">
-            {ROUND_LABELS[round]?.toUpperCase()}
+            {roundFull}
           </Link>
           <div className="ko-tab" style={{ color: 'var(--color-txt)', cursor: 'default' }}>
-            {teamA} vs {teamB}
+            {teamA} {tc('vs').toLowerCase()} {teamB}
           </div>
         </div>
 
@@ -81,17 +85,17 @@ export default async function MatchPage({
                 {teamA.toUpperCase()}
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>{tA?.conf}</div>
-              {k === teamA && <span className="k-badge">K✓ KLEMENT PICK</span>}
+              {k === teamA && <span className="k-badge">{tc('klementPickFull')}</span>}
               <div style={{ fontSize: 14, color: 'var(--color-r)', fontWeight: 'bold' }}>{pAp}%</div>
             </div>
 
             {/* VS */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 18, color: 'var(--color-r)', fontWeight: 'bold', marginBottom: 8 }}>VS</div>
+              <div style={{ fontSize: 18, color: 'var(--color-r)', fontWeight: 'bold', marginBottom: 8 }}>{tc('vs')}</div>
               <div style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1 }}>
-                {ROUND_LABELS[round]?.toUpperCase()}
+                {roundFull}
               </div>
-              {isFinal && <div style={{ fontSize: 8, color: 'var(--color-g)', marginTop: 6 }}>🏆 FINAL</div>}
+              {isFinal && <div style={{ fontSize: 8, color: 'var(--color-g)', marginTop: 6 }}>🏆 {tr('final')}</div>}
             </div>
 
             {/* Team B */}
@@ -109,7 +113,7 @@ export default async function MatchPage({
                 {teamB.toUpperCase()}
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>{tB?.conf}</div>
-              {k === teamB && <span className="k-badge">K✓ KLEMENT PICK</span>}
+              {k === teamB && <span className="k-badge">{tc('klementPickFull')}</span>}
               <div style={{ fontSize: 14, color: 'var(--color-b)', fontWeight: 'bold' }}>{pBp}%</div>
             </div>
           </div>

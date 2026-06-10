@@ -17,6 +17,9 @@
   --color-brd2:  #B0B0A8;
   --color-txt:   #1A1A1A;
   --color-muted: #888880;
+  --color-o:     #B5651D;
+  --color-o-bg:  #FDF1E0;
+  --color-o-sh:  #F5D2A0;
 }
 
 *, *::before, *::after { box-sizing: border-box; border-radius: 0 !important; }
@@ -352,6 +355,53 @@ main { flex: 1; }
   letter-spacing: 0.3px;
   display: inline-block;
   margin-top: 4px;
+}
+
+/* ── diff badge (my-bracket pick differs from Klement) ── */
+.diff-badge {
+  font-size: 7px;
+  color: var(--color-o);
+  background: var(--color-o-bg);
+  padding: 2px 5px;
+  border: 1px solid var(--color-o-sh);
+  letter-spacing: 0.3px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* ── My Bracket: pick slot ── */
+.pick-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  width: 100%;
+  cursor: pointer;
+  transition: background .1s, border-color .1s;
+}
+.pick-slot:hover:not(:disabled) { background: var(--color-surf); border-color: var(--color-brd); }
+.pick-slot:disabled { cursor: default; opacity: 0.45; }
+.pick-slot-selected { background: var(--color-o-bg) !important; border-color: var(--color-o-sh) !important; }
+.pick-slot-empty {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 9px;
+  color: var(--color-muted);
+  letter-spacing: 1px;
+  height: 100%;
+}
+
+/* ── My Bracket: champion banner ── */
+.champ-banner {
+  background: var(--color-o-bg);
+  border: 2px solid var(--color-o);
+  box-shadow: 4px 4px 0 var(--color-o-sh);
+  padding: 28px 24px;
+  text-align: center;
 }
 
 /* ── Animations ── */

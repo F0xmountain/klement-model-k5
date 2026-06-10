@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { matchP, teamData } from '@/lib/klement'
-import { ROUNDS, ROUND_LABELS, makeSlug } from '@/lib/fixtures'
+import { ROUNDS, makeSlug } from '@/lib/fixtures'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -18,16 +19,19 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
 
   const matches = ROUNDS[round as Round]
   const isFinal = round === 'final'
+  const tr = await getTranslations('rounds')
+  const tk = await getTranslations('knockout')
+  const tc = await getTranslations('common')
 
   return (
     <div className="page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
       <PixelParticles variant={isFinal ? 'green' : 'mix'} />
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div className="ko-tabs">
-        <Link href="/knockout/bracket" className="ko-tab">BRACKET</Link>
+        <Link href="/knockout/bracket" className="ko-tab">{tr('bracket')}</Link>
         {ROUND_ORDER.map(r => (
           <Link key={r} href={`/knockout/${r}`} className={`ko-tab${round === r ? ' active' : ''}`}>
-            {r.toUpperCase()}
+            {tr(r)}
           </Link>
         ))}
       </div>
@@ -35,8 +39,8 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
       <div style={{ padding: '36px 36px' }}>
         <div style={{ fontSize: 10, color: 'var(--color-muted)', marginBottom: 24, letterSpacing: 1 }}>
           {isFinal && <span className="trophy-pulse" style={{ marginRight: 8 }}>🏆</span>}
-          {ROUND_LABELS[round].toUpperCase()}
-          {isFinal && <span style={{ color: 'var(--color-g)', marginLeft: 12 }}>KLEMENT&apos;S HEADLINE CALL</span>}
+          {tr(`${round}Full` as 'r32Full' | 'r16Full' | 'qfFull' | 'sfFull' | 'finalFull')}
+          {isFinal && <span style={{ color: 'var(--color-g)', marginLeft: 12 }}>{tk('headlineCall')}</span>}
         </div>
 
         {matches.map((m, i) => {
@@ -65,7 +69,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
                 </div>
                 <div style={{ fontSize: 10, lineHeight: 1.8 }}>{m.teamA}</div>
                 <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 2 }}>{tA?.conf}</div>
-                {pickIsA && <span className="k-badge">K✓</span>}
+                {pickIsA && <span className="k-badge">{tc('klementPick')}</span>}
               </div>
 
               <div className="ko-mini-bar">
@@ -80,7 +84,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
                 </div>
                 <div style={{ fontSize: 10, lineHeight: 1.8 }}>{m.teamB}</div>
                 <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 2 }}>{tB?.conf}</div>
-                {!pickIsA && m.k === m.teamB && <span className="k-badge">K✓</span>}
+                {!pickIsA && m.k === m.teamB && <span className="k-badge">{tc('klementPick')}</span>}
               </div>
             </Link>
           )

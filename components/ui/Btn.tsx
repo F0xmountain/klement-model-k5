@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { CSSProperties } from 'react'
 
 type Variant = 'red' | 'blue' | 'green' | 'outline-blue' | 'primary' | 'default' | 'ghost'

@@ -1,6 +1,7 @@
 // components/ui/PolymarketBtn.tsx
 
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { pmUrl } from '@/lib/polymarket'
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function PolymarketBtn({ teamName, variant: _variant = 'match' }: Props) {
+  const t = useTranslations('polymarket')
   const url = pmUrl(teamName)
 
   return (
@@ -34,7 +36,7 @@ export default function PolymarketBtn({ teamName, variant: _variant = 'match' }:
           cursor: 'pointer',
         }}
       >
-        Trade on Polymarket
+        {t('cta')}
         <Image
           src="/poly-logo.jpeg"
           alt="Polymarket"
@@ -50,7 +52,7 @@ export default function PolymarketBtn({ teamName, variant: _variant = 'match' }:
         letterSpacing: '0.3px',
         lineHeight: 1.8,
       }}>
-        MODEL OUTPUT ONLY. NOT FINANCIAL ADVICE.
+        {t('disclaimer')}
       </div>
     </div>
   )

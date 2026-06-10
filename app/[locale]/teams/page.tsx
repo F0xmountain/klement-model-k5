@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { teamNames, teamData, sc } from '@/lib/klement'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
 import H2HList from '@/components/team/H2HList'
@@ -11,6 +12,7 @@ const allTeams = teamNames().sort()
 const ranked = [...allTeams].sort((a, b) => sc(b) - sc(a))
 
 export default function TeamsPage() {
+  const tt = useTranslations('teams')
   const [selected, setSelected] = useState('Netherlands')
   const [tab, setTab] = useState<'profile' | 'ranking'>('profile')
   const team = teamData(selected)
@@ -24,7 +26,7 @@ export default function TeamsPage() {
       <div style={{ display: 'flex', borderBottom: '2px solid var(--color-brd)', marginBottom: 24 }}>
         {(['profile', 'ranking'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} className={`ko-tab${tab === t ? ' active' : ''}`}>
-            {t === 'profile' ? 'TEAM PROFILE' : 'ALL TEAMS'}
+            {t === 'profile' ? tt('tabProfile') : tt('tabRanking')}
           </button>
         ))}
       </div>
@@ -35,8 +37,8 @@ export default function TeamsPage() {
             <thead>
               <tr>
                 <th style={{ textAlign: 'left' }}>#</th>
-                <th style={{ textAlign: 'left' }}>TEAM</th>
-                <th>SCORE</th>
+                <th style={{ textAlign: 'left' }}>{tt('colTeam')}</th>
+                <th>{tt('colScore')}</th>
                 <th>FIFA</th>
                 <th>CONF</th>
               </tr>
@@ -96,9 +98,9 @@ export default function TeamsPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
         {[
-          { num: score.toFixed(3), label: 'MODEL SCORE', color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: team?.fifa ?? '',  label: 'FIFA PTS',    color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
-          { num: `$${team?.gdp}k`, label: 'GDP/CAPITA',  color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
+          { num: score.toFixed(3), label: tt('scoreModelScore'), color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
+          { num: team?.fifa ?? '',  label: tt('scoreFifaPts'),    color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
+          { num: `$${team?.gdp}k`, label: tt('scoreGdpCapita'),  color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
         ].map(({ num, label, color, sh }) => (
           <div key={label} className="score-card">
             <span style={{ fontSize: 18, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>

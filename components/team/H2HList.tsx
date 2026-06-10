@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { matchP, teamNames, sc, teamData } from '@/lib/klement'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function H2HList({ name }: Props) {
+  const t = useTranslations('h2h')
   const opponents = teamNames()
     .filter(t => t !== name)
     .sort((a, b) => sc(b) - sc(a))
@@ -16,7 +18,7 @@ export default function H2HList({ name }: Props) {
 
   return (
     <div>
-      <div className="section-title">HEAD-TO-HEAD</div>
+      <div className="section-title">{t('title')}</div>
       {opponents.map(opp => {
         const { pA, dr, pB } = matchP(name, opp)
         const pAp = Math.round(pA * 100)

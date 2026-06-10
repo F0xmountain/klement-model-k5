@@ -1,6 +1,7 @@
 'use client'
 import { Fragment } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { ROUNDS, makeSlug } from '@/lib/fixtures'
 import { teamData } from '@/lib/klement'
 import FlagImg from '@/components/ui/FlagImg'
@@ -20,6 +21,7 @@ function matchY(round: number, idx: number): number {
 
 function TeamRow({ name, isPick }: { name: string; isPick: boolean }) {
   const t = teamData(name)
+  const tc = useTranslations('common')
   return (
     <div style={{
       display: 'flex',
@@ -43,7 +45,7 @@ function TeamRow({ name, isPick }: { name: string; isPick: boolean }) {
         minWidth: 0,
         lineHeight: 1,
       }}>{name}</span>
-      {isPick && <span style={{ fontSize: 6, color: 'var(--color-g)', flexShrink: 0 }}>K✓</span>}
+      {isPick && <span style={{ fontSize: 6, color: 'var(--color-g)', flexShrink: 0 }}>{tc('klementPick')}</span>}
     </div>
   )
 }
@@ -101,17 +103,18 @@ function ColConnector({ fromRound, count }: { fromRound: number; count: number }
 }
 
 const BRACKET_ROUNDS = [
-  { key: 'r32'   as const, label: 'R32',   connCount: 8 },
-  { key: 'r16'   as const, label: 'R16',   connCount: 4 },
-  { key: 'qf'    as const, label: 'QF',    connCount: 2 },
-  { key: 'sf'    as const, label: 'SF',    connCount: 1 },
-  { key: 'final' as const, label: 'FINAL', connCount: 0 },
+  { key: 'r32'   as const, connCount: 8 },
+  { key: 'r16'   as const, connCount: 4 },
+  { key: 'qf'    as const, connCount: 2 },
+  { key: 'sf'    as const, connCount: 1 },
+  { key: 'final' as const, connCount: 0 },
 ]
 
 // CSS grid: 5 match columns (1fr each) interleaved with 4 fixed connector columns
 const GRID_COLS = `1fr ${CONN_W}px 1fr ${CONN_W}px 1fr ${CONN_W}px 1fr ${CONN_W}px 1fr`
 
 export default function BracketView() {
+  const tr = useTranslations('rounds')
   return (
     <div style={{ paddingTop: 24, paddingBottom: 12 }}>
       <div style={{
@@ -119,7 +122,7 @@ export default function BracketView() {
         gridTemplateColumns: GRID_COLS,
         alignItems: 'start',
       }}>
-        {BRACKET_ROUNDS.map(({ key, label, connCount }, roundIdx) => {
+        {BRACKET_ROUNDS.map(({ key, connCount }, roundIdx) => {
           const matches = ROUNDS[key]
           return (
             <Fragment key={key}>
@@ -135,7 +138,7 @@ export default function BracketView() {
                   textAlign: 'center',
                   letterSpacing: 1,
                   fontWeight: key === 'final' ? 'bold' : 'normal',
-                }}>{label}</div>
+                }}>{tr(key)}</div>
 
                 {matches.map((m, i) => (
                   <MatchSlot

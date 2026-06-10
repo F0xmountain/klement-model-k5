@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import FlagImg from './FlagImg'
 
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function TeamSelect({ teams, value, onChange, style }: Props) {
+  const tr = useTranslations('teamSelect')
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const ref = useRef<HTMLDivElement>(null)
@@ -82,7 +84,7 @@ export default function TeamSelect({ teams, value, onChange, style }: Props) {
           <input
             ref={inputRef}
             type="text"
-            placeholder="SEARCH TEAMS..."
+            placeholder={tr('searchPlaceholder')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{

@@ -1,5 +1,6 @@
 'use client'
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 import { simKO, teamData } from '@/lib/klement'
 import { ROUNDS } from '@/lib/fixtures'
 import PixelBar from '@/components/ui/PixelBar'
@@ -34,23 +35,24 @@ function runSims(n: number): ChampCounts {
   return counts
 }
 
-// Realistic phase labels shown during loading
-const PHASES = [
-  'LOADING BRACKET DATA...',
-  'SEEDING ROUND OF 32...',
-  'SIMULATING KNOCKOUT ROUNDS...',
-  'RUNNING MONTE CARLO ENGINE...',
-  'AGGREGATING RESULTS...',
-  'SORTING CHAMPION TABLE...',
-]
-
 export default function MCPage() {
+  const t = useTranslations('mc')
   const [n, setN] = useState(1000)
   const [results, setResults] = useState<ChampCounts | null>(null)
   const [running, setRunning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [phase, setPhase] = useState('')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Realistic phase labels shown during loading
+  const PHASES = useMemo(() => [
+    t('phaseLoading'),
+    t('phaseSeeding'),
+    t('phaseSimulating'),
+    t('phaseEngine'),
+    t('phaseAggregating'),
+    t('phaseSorting'),
+  ], [t])
 
   const run = useCallback(() => {
     setRunning(true)
@@ -82,7 +84,7 @@ export default function MCPage() {
       setResults(res)
       setRunning(false)
     }, totalDelay)
-  }, [n])
+  }, [n, PHASES])
 
   const sorted = results
     ? Object.entries(results).sort((a, b) => b[1] - a[1]).slice(0, 8)
@@ -93,14 +95,14 @@ export default function MCPage() {
     <div className="sec page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
       <PixelParticles variant="mix" />
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <div className="section-title">MONTE CARLO SIMULATOR</div>
+        <div className="section-title">{t('title')}</div>
         <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 28 }}>
-          EACH SIMULATION RUNS THE FULL BRACKET WITH W/D/L PROBABILITIES FROM THE MODEL.
+          {t('description')}
         </div>
 
         {/* Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 10, color: 'var(--color-muted)' }}>SIMULATIONS</div>
+          <div style={{ fontSize: 10, color: 'var(--color-muted)' }}>{t('simulationsLabel')}</div>
           <div style={{ fontSize: 18, color: 'var(--color-b)' }}>{n.toLocaleString()}</div>
           <input
             type="range" min={100} max={5000} step={100} value={n}
@@ -119,7 +121,7 @@ export default function MCPage() {
               opacity: running ? 0.7 : 1,
             }}
           >
-            {running ? '⏳ RUNNING...' : '▶ RUN SIMULATIONS'}
+            {running ? t('running') : t('runBtn')}
           </button>
         </div>
 
@@ -143,7 +145,7 @@ export default function MCPage() {
         {/* Results */}
         {sorted && !running && (
           <>
-            <div className="section-title" style={{ marginTop: 4 }}>CHAMPION DISTRIBUTION</div>
+            <div className="section-title" style={{ marginTop: 4 }}>{t('championDistribution')}</div>
             {sorted.map(([team, count], i) => {
               const t = teamData(team)
               const pct = Math.round((count / n) * 100)
@@ -160,14 +162,14 @@ export default function MCPage() {
               )
             })}
             <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 20, lineHeight: 2.2 }}>
-              {n.toLocaleString()} SIMULATIONS COMPLETE. 45% VARIANCE IS UNMODELLED NOISE.
+              {n.toLocaleString()} {t('simulationsCompleteNote')}
             </div>
           </>
         )}
 
         {!sorted && !running && (
           <div style={{ fontSize: 10, color: 'var(--color-muted)', padding: '20px 0' }}>
-            PRESS RUN TO SIMULATE THE TOURNAMENT...
+            {t('idleMessage')}
           </div>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
+  const t = useTranslations('common')
   const { pA, dr, pB } = matchP(teamA, teamB)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
@@ -31,13 +33,13 @@ export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, ...teamAStyle }}>
           <FlagImg name={teamA} h={28} emoji={tA?.flag ?? '🏳️'} />
           <span style={{ fontSize: 9, color: k === teamA ? 'var(--color-g)' : 'var(--color-txt)', fontWeight: k === teamA ? 'bold' : 'normal' }}>{teamA}</span>
-          {k === teamA && <span className="k-badge">K✓</span>}
+          {k === teamA && <span className="k-badge">{t('klementPick')}</span>}
         </div>
-        <div style={{ textAlign: 'center', fontSize: 9, color: 'var(--color-muted)' }}>VS</div>
+        <div style={{ textAlign: 'center', fontSize: 9, color: 'var(--color-muted)' }}>{t('vs')}</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, ...teamBStyle }}>
           <FlagImg name={teamB} h={28} emoji={tB?.flag ?? '🏳️'} />
           <span style={{ fontSize: 9, color: k === teamB ? 'var(--color-g)' : 'var(--color-txt)', fontWeight: k === teamB ? 'bold' : 'normal' }}>{teamB}</span>
-          {k === teamB && <span className="k-badge">K✓</span>}
+          {k === teamB && <span className="k-badge">{t('klementPick')}</span>}
         </div>
       </div>
       <div style={{ borderLeft: '3px solid var(--color-b)', paddingLeft: 8 }}>

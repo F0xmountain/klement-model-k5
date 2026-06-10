@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "WC26 Klement — World Cup 2026 Predictor",
+    "description": "An econometric model that called 2014, 2018 and 2022 correctly — now running on all 48 teams."
+  },
+  "nav": {
+    "versus": "VERSUS",
+    "teams": "TEAMS",
+    "mc": "MONTE",
+    "groups": "GROUPS",
+    "bracket": "BRACKET",
+    "myBracket": "MY BRACKET",
+    "about": "ABOUT",
+    "switchToEnglish": "Switch to English",
+    "switchToDutch": "Switch to Dutch",
+    "followX": "Follow on X",
+    "viewGithub": "View on GitHub"
+  },
+  "footer": {
+    "copyright": "© 2026 KLEMENT MODEL · ALL SIMULATIONS RUN IN-BROWSER",
+    "source": "PANMURE LIBERUM ▲"
+  },
+  "common": {
+    "vs": "VS",
+    "draw": "DRAW",
+    "klementPick": "K✓",
+    "klementPickFull": "K✓ KLEMENT PICK"
+  },
+  "factorBreakdown": {
+    "title": "Factor Breakdown",
+    "fifa": "FIFA Ranking",
+    "gdp": "Wealth (GDP)",
+    "temp": "Climate (Temp)",
+    "pop": "Population",
+    "weightSuffix": "% wt",
+    "homeAdvantage": "Home advantage bonus"
+  },
+  "h2h": {
+    "title": "Head-to-Head"
+  },
+  "teamSelect": {
+    "searchPlaceholder": "SEARCH TEAMS..."
+  },
+  "polymarket": {
+    "cta": "Trade on Polymarket",
+    "disclaimer": "MODEL OUTPUT ONLY. NOT FINANCIAL ADVICE."
+  },
+  "rounds": {
+    "bracket": "BRACKET",
+    "r32": "R32",
+    "r16": "R16",
+    "qf": "QF",
+    "sf": "SF",
+    "final": "FINAL",
+    "r32Full": "ROUND OF 32",
+    "r16Full": "ROUND OF 16",
+    "qfFull": "QUARTER-FINALS",
+    "sfFull": "SEMI-FINALS",
+    "finalFull": "THE FINAL"
+  },
+  "knockout": {
+    "headlineCall": "KLEMENT'S HEADLINE CALL",
+    "bracketLegendTitle": "FULL BRACKET — KLEMENT'S PREDICTIONS",
+    "bracketLegend": "GREEN = KLEMENT PICK · CLICK ANY MATCH FOR DETAIL"
+  },
+  "groups": {
+    "resultWL": "W / L",
+    "resultLW": "L / W",
+    "resultDD": "D / D",
+    "pageTitle": "GROUP STAGE — 12 GROUPS",
+    "qualifiedLegend": "QUALIFIED TO ROUND OF 32",
+    "groupLabel": "GROUP",
+    "resimulate": "Re-simulate",
+    "colTeam": "TEAM",
+    "hideMatches": "▲ HIDE MATCHES",
+    "showMatches": "▼ SHOW MATCHES"
+  },
+  "home": {
+    "eyebrow": "PANMURE LIBERUM · APRIL 2026",
+    "heroLine1": "WHO WINS THE",
+    "heroLine2": "2026 WORLD CUP?",
+    "heroSubtitle": "AN ECONOMETRIC MODEL THAT CALLED 2014, 2018 AND 2022 CORRECTLY — NOW RUNNING ON ALL 48 QUALIFIED NATIONS.",
+    "ctaPredict": "▶ PREDICT MATCH",
+    "ctaHowItWorks": "? HOW IT WORKS",
+    "statsQualified": "QUALIFIED TEAMS",
+    "statsCorrect": "CORRECT CALLS",
+    "statsR2": "MODEL R²",
+    "trackRecordTitle": "TRACK RECORD",
+    "recordBadge": "✓ WIN",
+    "predictionTitle": "2026 PREDICTION",
+    "predictionLine1": "FIRST WORLD CUP TITLE IN HISTORY",
+    "predictionPathLabel": "PATH:",
+    "modelVariablesTitle": "MODEL VARIABLES"
+  },
+  "factors": {
+    "fifa": "FIFA RANKING",
+    "wealth": "NATL WEALTH",
+    "climate": "CLIMATE",
+    "population": "POPULATION",
+    "homeEdge": "HOME EDGE"
+  },
+  "versus": {
+    "title": "VERSUS",
+    "randomBtn": "🎲 RANDOM",
+    "coinFlip": "⚔ COIN FLIP",
+    "heavyFavourite": "⚡ HEAVY FAVOURITE",
+    "upsetPotential": "⚡ UPSET POTENTIAL",
+    "simulate": "SIMULATE ▶",
+    "win": "WIN",
+    "simsLabel": "SIMS"
+  },
+  "teams": {
+    "tabProfile": "TEAM PROFILE",
+    "tabRanking": "ALL TEAMS",
+    "colTeam": "TEAM",
+    "colScore": "SCORE",
+    "scoreModelScore": "MODEL SCORE",
+    "scoreFifaPts": "FIFA PTS",
+    "scoreGdpCapita": "GDP/CAPITA"
+  },
+  "about": {
+    "title": "ABOUT THE MODEL",
+    "introLine1": "BUILT BY JOACHIM KLEMENT OF PANMURE LIBERUM.",
+    "introLine2": "BASED ON HOFFMANN, GING & RAMASAMY (2002).",
+    "introLine3": "THE MODEL EXPLAINS 55% OF VARIANCE BETWEEN TEAMS.",
+    "introLine4": "THE REMAINING 45% IS NOISE — ENCODED IN σ=0.28.",
+    "formulaLabel": "FORMULA",
+    "factorWeightsTitle": "FACTOR WEIGHTS",
+    "quoteLine1": "“I BUILT THIS MODEL TO PROVE ECONOMETRICS",
+    "quoteLine2": "CAN'T PREDICT FOOTBALL. THEN IT DID.”",
+    "ctaPredictor": "▶ TRY THE PREDICTOR",
+    "ctaSimulations": "RUN SIMULATIONS"
+  },
+  "mc": {
+    "title": "MONTE CARLO SIMULATOR",
+    "description": "EACH SIMULATION RUNS THE FULL BRACKET WITH W/D/L PROBABILITIES FROM THE MODEL.",
+    "simulationsLabel": "SIMULATIONS",
+    "runBtn": "▶ RUN SIMULATIONS",
+    "running": "⏳ RUNNING...",
+    "phaseLoading": "LOADING BRACKET DATA...",
+    "phaseSeeding": "SEEDING ROUND OF 32...",
+    "phaseSimulating": "SIMULATING KNOCKOUT ROUNDS...",
+    "phaseEngine": "RUNNING MONTE CARLO ENGINE...",
+    "phaseAggregating": "AGGREGATING RESULTS...",
+    "phaseSorting": "SORTING CHAMPION TABLE...",
+    "championDistribution": "CHAMPION DISTRIBUTION",
+    "simulationsCompleteNote": "SIMULATIONS COMPLETE. 45% VARIANCE IS UNMODELLED NOISE.",
+    "idleMessage": "PRESS RUN TO SIMULATE THE TOURNAMENT..."
+  },
+  "myBracket": {
+    "title": "MY BRACKET",
+    "description": "PICK A WINNER FOR EVERY KNOCKOUT MATCH. YOUR PICKS ARE SAVED IN THIS BROWSER.",
+    "editorTitle": "FILL IN YOUR BRACKET",
+    "copyBtn": "COPY PICKS (JSON)",
+    "copied": "COPIED!",
+    "tbd": "TBD",
+    "diffBadge": "≠ K",
+    "championTitle": "YOUR CHAMPION",
+    "championEmpty": "COMPLETE YOUR BRACKET TO REVEAL YOUR CHAMPION",
+    "championDiffers": "KLEMENT PICKS {team}",
+    "matchesKlement": "MATCHES KLEMENT'S PICK",
+    "comparisonTitle": "YOUR PICKS VS KLEMENT",
+    "tableFilled": "FILLED",
+    "tableMatchesK": "= KLEMENT"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "WC26 Klement — WK 2026 Voorspeller",
+    "description": "Een econometrisch model dat 2014, 2018 en 2022 correct voorspelde — nu toegepast op alle 48 landen."
+  },
+  "nav": {
+    "versus": "VERSUS",
+    "teams": "TEAMS",
+    "mc": "MONTE",
+    "groups": "GROEPEN",
+    "bracket": "BRACKET",
+    "myBracket": "MIJN BRACKET",
+    "about": "OVER",
+    "switchToEnglish": "Naar Engels",
+    "switchToDutch": "Naar Nederlands",
+    "followX": "Volg op X",
+    "viewGithub": "Bekijk op GitHub"
+  },
+  "footer": {
+    "copyright": "© 2026 KLEMENT MODEL · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
+    "source": "PANMURE LIBERUM ▲"
+  },
+  "common": {
+    "vs": "VS",
+    "draw": "GELIJK",
+    "klementPick": "K✓",
+    "klementPickFull": "K✓ KLEMENT KEUZE"
+  },
+  "factorBreakdown": {
+    "title": "Factoranalyse",
+    "fifa": "FIFA-ranking",
+    "gdp": "Welvaart (BBP)",
+    "temp": "Klimaat (temp)",
+    "pop": "Bevolking",
+    "weightSuffix": "% gew.",
+    "homeAdvantage": "Thuisvoordeel bonus"
+  },
+  "h2h": {
+    "title": "Onderlinge Resultaten"
+  },
+  "teamSelect": {
+    "searchPlaceholder": "ZOEK TEAMS..."
+  },
+  "polymarket": {
+    "cta": "Verhandel op Polymarket",
+    "disclaimer": "ALLEEN MODELOUTPUT. GEEN FINANCIEEL ADVIES."
+  },
+  "rounds": {
+    "bracket": "BRACKET",
+    "r32": "R32",
+    "r16": "R16",
+    "qf": "QF",
+    "sf": "SF",
+    "final": "FINALE",
+    "r32Full": "RONDE VAN 32",
+    "r16Full": "RONDE VAN 16",
+    "qfFull": "KWARTFINALES",
+    "sfFull": "HALVE FINALES",
+    "finalFull": "DE FINALE"
+  },
+  "knockout": {
+    "headlineCall": "KLEMENTS HOOFDVOORSPELLING",
+    "bracketLegendTitle": "VOLLEDIGE BRACKET — VOORSPELLINGEN VAN KLEMENT",
+    "bracketLegend": "GROEN = KLEMENT KEUZE · KLIK OP EEN WEDSTRIJD VOOR DETAILS"
+  },
+  "groups": {
+    "resultWL": "W / L",
+    "resultLW": "L / W",
+    "resultDD": "D / D",
+    "pageTitle": "GROEPSFASE — 12 GROEPEN",
+    "qualifiedLegend": "GEPLAATST VOOR RONDE VAN 32",
+    "groupLabel": "GROEP",
+    "resimulate": "Opnieuw simuleren",
+    "colTeam": "TEAM",
+    "hideMatches": "▲ VERBERG WEDSTRIJDEN",
+    "showMatches": "▼ TOON WEDSTRIJDEN"
+  },
+  "home": {
+    "eyebrow": "PANMURE LIBERUM · APRIL 2026",
+    "heroLine1": "WIE WINT HET",
+    "heroLine2": "WK 2026?",
+    "heroSubtitle": "EEN ECONOMETRISCH MODEL DAT 2014, 2018 EN 2022 CORRECT VOORSPELDE — NU TOEGEPAST OP ALLE 48 GEKWALIFICEERDE LANDEN.",
+    "ctaPredict": "▶ VOORSPEL WEDSTRIJD",
+    "ctaHowItWorks": "? HOE HET WERKT",
+    "statsQualified": "GEKWALIFICEERDE TEAMS",
+    "statsCorrect": "CORRECTE VOORSPELLINGEN",
+    "statsR2": "MODEL R²",
+    "trackRecordTitle": "TRACK RECORD",
+    "recordBadge": "✓ GOED",
+    "predictionTitle": "VOORSPELLING 2026",
+    "predictionLine1": "EERSTE WK-TITEL OOIT",
+    "predictionPathLabel": "ROUTE:",
+    "modelVariablesTitle": "MODEL VARIABELEN"
+  },
+  "factors": {
+    "fifa": "FIFA-RANKING",
+    "wealth": "NAT. WELVAART",
+    "climate": "KLIMAAT",
+    "population": "BEVOLKING",
+    "homeEdge": "THUISVOORDEEL"
+  },
+  "versus": {
+    "title": "VERSUS",
+    "randomBtn": "🎲 WILLEKEURIG",
+    "coinFlip": "⚔ KOP OF MUNT",
+    "heavyFavourite": "⚡ GROTE FAVORIET",
+    "upsetPotential": "⚡ VERRASSINGSPOTENTIEEL",
+    "simulate": "SIMULEER ▶",
+    "win": "WINST",
+    "simsLabel": "SIMS"
+  },
+  "teams": {
+    "tabProfile": "TEAMPROFIEL",
+    "tabRanking": "ALLE TEAMS",
+    "colTeam": "TEAM",
+    "colScore": "SCORE",
+    "scoreModelScore": "MODEL SCORE",
+    "scoreFifaPts": "FIFA PTS",
+    "scoreGdpCapita": "BBP/INWONER"
+  },
+  "about": {
+    "title": "OVER HET MODEL",
+    "introLine1": "GEBOUWD DOOR JOACHIM KLEMENT VAN PANMURE LIBERUM.",
+    "introLine2": "GEBASEERD OP HOFFMANN, GING & RAMASAMY (2002).",
+    "introLine3": "HET MODEL VERKLAART 55% VAN DE VARIANTIE TUSSEN TEAMS.",
+    "introLine4": "DE OVERIGE 45% IS RUIS — VASTGELEGD IN σ=0.28.",
+    "formulaLabel": "FORMULE",
+    "factorWeightsTitle": "FACTORGEWICHTEN",
+    "quoteLine1": "“IK BOUWDE DIT MODEL OM TE BEWIJZEN DAT ECONOMETRIE",
+    "quoteLine2": "VOETBAL NIET KAN VOORSPELLEN. TOEN DEED HET TOCH.”",
+    "ctaPredictor": "▶ PROBEER DE VOORSPELLER",
+    "ctaSimulations": "START SIMULATIES"
+  },
+  "mc": {
+    "title": "MONTE CARLO SIMULATOR",
+    "description": "ELKE SIMULATIE DOORLOOPT HET VOLLEDIGE SCHEMA MET W/D/L-KANSEN UIT HET MODEL.",
+    "simulationsLabel": "SIMULATIES",
+    "runBtn": "▶ START SIMULATIES",
+    "running": "⏳ BEZIG...",
+    "phaseLoading": "BRACKETDATA LADEN...",
+    "phaseSeeding": "RONDE VAN 32 INDELEN...",
+    "phaseSimulating": "KNOCKOUTRONDES SIMULEREN...",
+    "phaseEngine": "MONTE CARLO ENGINE DRAAIEN...",
+    "phaseAggregating": "RESULTATEN VERZAMELEN...",
+    "phaseSorting": "KAMPIOENSTABEL SORTEREN...",
+    "championDistribution": "KAMPIOENSVERDELING",
+    "simulationsCompleteNote": "SIMULATIES VOLTOOID. 45% VARIANTIE IS NIET-GEMODELLEERDE RUIS.",
+    "idleMessage": "DRUK OP START OM HET TOERNOOI TE SIMULEREN..."
+  },
+  "myBracket": {
+    "title": "MIJN BRACKET",
+    "description": "KIES EEN WINNAAR VOOR ELKE KNOCKOUTWEDSTRIJD. JE PICKS WORDEN OPGESLAGEN IN DEZE BROWSER.",
+    "editorTitle": "VUL JE BRACKET IN",
+    "copyBtn": "KOPIEER PICKS (JSON)",
+    "copied": "GEKOPIEERD!",
+    "tbd": "NTB",
+    "diffBadge": "≠ K",
+    "championTitle": "JOUW KAMPIOEN",
+    "championEmpty": "VUL JE BRACKET VOLLEDIG IN OM JE KAMPIOEN TE ONTHULLEN",
+    "championDiffers": "KLEMENT KIEST {team}",
+    "matchesKlement": "GELIJK AAN KLEMENTS KEUZE",
+    "comparisonTitle": "JOUW PICKS VS KLEMENT",
+    "tableFilled": "INGEVULD",
+    "tableMatchesK": "= KLEMENT"
+  }
+}

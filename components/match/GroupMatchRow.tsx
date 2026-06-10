@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import FlagImg from '@/components/ui/FlagImg'
 import type { WDL } from '@/types'
@@ -9,13 +10,14 @@ interface Props {
 }
 
 export default function GroupMatchRow({ teamA, teamB, result }: Props) {
+  const t = useTranslations('groups')
   const { pA, dr, pB } = matchP(teamA, teamB)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const fmtPct = (v: number) => `${(v * 100).toFixed(0)}%`
 
   const resultColor = result === 'A' ? 'var(--color-r)' : result === 'B' ? 'var(--color-b)' : 'var(--color-muted)'
-  const resultLabel = result === 'A' ? 'W / L' : result === 'B' ? 'L / W' : 'D / D'
+  const resultLabel = result === 'A' ? t('resultWL') : result === 'B' ? t('resultLW') : t('resultDD')
 
   return (
     <div style={{

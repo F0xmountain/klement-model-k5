@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 interface Props {
   pA: number
   dr: number
@@ -7,6 +9,7 @@ interface Props {
 }
 
 export default function WDLBar({ pA, dr, pB, labelA = 'WIN', labelB = 'WIN' }: Props) {
+  const t = useTranslations('common')
   const pAp = Math.round(pA * 100)
   const drp = Math.round(dr * 100)
   const pBp = Math.round(pB * 100)
@@ -20,7 +23,7 @@ export default function WDLBar({ pA, dr, pB, labelA = 'WIN', labelB = 'WIN' }: P
       </div>
       <div className="wdl-labels">
         <span style={{ fontSize: 9, color: 'var(--color-r)' }}>{labelA} {pAp}%</span>
-        <span style={{ fontSize: 9, color: 'var(--color-muted)', textAlign: 'center' }}>DRAW {drp}%</span>
+        <span style={{ fontSize: 9, color: 'var(--color-muted)', textAlign: 'center' }}>{t('draw')} {drp}%</span>
         <span style={{ fontSize: 9, color: 'var(--color-b)', textAlign: 'right' }}>{labelB} {pBp}%</span>
       </div>
       <div className="marching" />

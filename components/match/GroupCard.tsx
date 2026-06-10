@@ -1,5 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { simResult, calcStandings, teamData } from '@/lib/klement'
 import type { MatchResult } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
@@ -19,6 +20,7 @@ function buildFixtures(teams: string[]): [string, string][] {
 }
 
 export default function GroupCard({ group, teams }: Props) {
+  const t = useTranslations('groups')
   const [open, setOpen] = useState(false)
   const [tick, setTick] = useState(0)
 
@@ -34,17 +36,17 @@ export default function GroupCard({ group, teams }: Props) {
   return (
     <div className="group-card">
       <div className="group-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span>GROUP {group}</span>
+        <span>{t('groupLabel')} {group}</span>
         <button
-          onClick={() => setTick(t => t + 1)}
-          title="Re-simulate"
+          onClick={() => setTick(prev => prev + 1)}
+          title={t('resimulate')}
           style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: 'var(--color-b)', padding: 0, lineHeight: 1 }}
         >🎲</button>
       </div>
       <table className="group-table">
         <thead>
           <tr>
-            <th>TEAM</th>
+            <th>{t('colTeam')}</th>
             <th>W</th><th>D</th><th>L</th>
             <th>PTS</th>
           </tr>
@@ -81,7 +83,7 @@ export default function GroupCard({ group, teams }: Props) {
           cursor: 'pointer', fontFamily: 'inherit',
         }}
       >
-        {open ? '▲ HIDE MATCHES' : '▼ SHOW MATCHES'}
+        {open ? t('hideMatches') : t('showMatches')}
       </button>
 
       {open && (

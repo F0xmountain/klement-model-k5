@@ -1,15 +1,10 @@
 'use client'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
 
-const links = [
-  { href: '/versus',       label: 'VERSUS'  },
-  { href: '/teams',        label: 'TEAMS'   },
-  { href: '/mc',           label: 'MONTE'   },
-  { href: '/groups',       label: 'GROUPS'  },
-  { href: '/knockout/r32', label: 'BRACKET' },
-  { href: '/about',        label: 'ABOUT'   },
-]
+const linkHrefs = ['/versus', '/teams', '/mc', '/groups', '/knockout/r32', '/my-bracket', '/about'] as const
+const linkKeys = ['versus', 'teams', 'mc', 'groups', 'bracket', 'myBracket', 'about'] as const
 
 function XIcon() {
   return (
@@ -28,7 +23,10 @@ function GitHubIcon() {
 }
 
 export default function Nav() {
+  const t = useTranslations('nav')
   const pathname = usePathname()
+  const router = useRouter()
+  const locale = useLocale()
 
   const isActive = (href: string) =>
     href === '/knockout/r32' ? pathname.startsWith('/knockout') : pathname === href
@@ -39,20 +37,38 @@ export default function Nav() {
         <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>Klement
       </Link>
       <div className="nav-links">
-        {links.map(({ href, label }) => (
+        {linkHrefs.map((href, i) => (
           <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
-            {label}
+            {t(linkKeys[i])}
           </Link>
         ))}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 2, paddingRight: 8, flexShrink: 0 }}>
+        {routing.locales.map(loc => (
+          <button
+            key={loc}
+            onClick={() => router.replace(pathname, { locale: loc })}
+            className={`nav-link${locale === loc ? ' active' : ''}`}
+            style={{
+              padding: '0 10px',
+              background: 'none',
+              border: 'none',
+              borderRight: '1px solid var(--color-brd)',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+            }}
+            aria-label={t(loc === 'en' ? 'switchToEnglish' : 'switchToDutch')}
+          >
+            {loc.toUpperCase()}
+          </button>
+        ))}
         <a
           href="https://x.com/klementworldcup"
           target="_blank"
           rel="noopener noreferrer"
           className="nav-link"
           style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
-          aria-label="Follow on X"
+          aria-label={t('followX')}
         >
           <XIcon />
         </a>
@@ -62,7 +78,7 @@ export default function Nav() {
           rel="noopener noreferrer"
           className="nav-link"
           style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
-          aria-label="View on GitHub"
+          aria-label={t('viewGithub')}
         >
           <GitHubIcon />
         </a>
