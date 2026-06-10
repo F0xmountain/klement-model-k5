@@ -19,10 +19,10 @@ export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
     : { border: '1px solid var(--color-brd)', boxShadow: '3px 3px 0 var(--color-brd)' }
 
   const teamAStyle: React.CSSProperties = k === teamA
-    ? { backgroundColor: 'var(--color-g-bg)', borderRadius: 2, padding: '6px 8px', border: '1px solid var(--color-g-sh)' }
+    ? { backgroundColor: 'var(--color-g-bg)', padding: '6px 8px', border: '1px solid var(--color-g-sh)' }
     : { padding: '6px 8px' }
   const teamBStyle: React.CSSProperties = k === teamB
-    ? { backgroundColor: 'var(--color-g-bg)', borderRadius: 2, padding: '6px 8px', border: '1px solid var(--color-g-sh)' }
+    ? { backgroundColor: 'var(--color-g-bg)', padding: '6px 8px', border: '1px solid var(--color-g-sh)' }
     : { padding: '6px 8px' }
 
   return (

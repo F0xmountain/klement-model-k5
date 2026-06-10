@@ -40,7 +40,7 @@ export default function PolymarketBtn({ teamName, variant: _variant = 'match' }:
           alt="Polymarket"
           width={18}
           height={18}
-          style={{ display: 'block', borderRadius: 3 }}
+          style={{ display: 'block' }}
         />
       </a>
       <div style={{
