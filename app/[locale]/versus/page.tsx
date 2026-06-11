@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { teamNames, teamData, simResult } from '@/lib/klement'
-import { matchP } from '@/lib/klement-custom'
+import { teamNames, teamData } from '@/lib/klement'
+import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -56,7 +56,7 @@ export default function VersusPage() {
   function runSim() {
     let w = 0, d = 0, l = 0
     for (let i = 0; i < SIM_N; i++) {
-      const r = simResult(teamA, teamB)
+      const r = simResultCustom(teamA, teamB)
       if (r === 'A') w++
       else if (r === 'D') d++
       else l++
@@ -93,6 +93,10 @@ export default function VersusPage() {
         </div>
 
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
+
+        <div style={{ marginTop: 8, fontSize: 8, color: 'var(--color-muted)' }}>
+          {t('teamStrengthSplit', { elo: ELO_WEIGHT * 100, fifa: FIFA_WEIGHT * 100 })}
+        </div>
 
         {(summaryA.length > 0 || summaryB.length > 0) && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>

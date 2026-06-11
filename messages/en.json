@@ -104,7 +104,8 @@
     "wealth": "NATL WEALTH",
     "climate": "CLIMATE",
     "population": "POPULATION",
-    "homeEdge": "HOME EDGE"
+    "homeEdge": "HOME EDGE",
+    "elo": "ELO"
   },
   "versus": {
     "title": "VERSUS",
@@ -114,7 +115,8 @@
     "upsetPotential": "⚡ UPSET POTENTIAL",
     "simulate": "SIMULATE ▶",
     "win": "WIN",
-    "simsLabel": "SIMS"
+    "simsLabel": "SIMS",
+    "teamStrengthSplit": "Team strength: Elo {elo}% + FIFA {fifa}%"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",

@@ -104,7 +104,8 @@
     "wealth": "NAT. WELVAART",
     "climate": "KLIMAAT",
     "population": "BEVOLKING",
-    "homeEdge": "THUISVOORDEEL"
+    "homeEdge": "THUISVOORDEEL",
+    "elo": "ELO"
   },
   "versus": {
     "title": "VERSUS",
@@ -114,7 +115,8 @@
     "upsetPotential": "⚡ VERRASSINGSPOTENTIEEL",
     "simulate": "SIMULEER ▶",
     "win": "WINST",
-    "simsLabel": "SIMS"
+    "simsLabel": "SIMS",
+    "teamStrengthSplit": "Teamsterkte: Elo {elo}% + FIFA {fifa}%"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",
