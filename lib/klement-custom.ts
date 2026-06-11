@@ -313,18 +313,47 @@ export function applyLeagueFactor(
   return shiftPA(probs, net)
 }
 
+// Logit-shift van ~-0.16 ≈ -4%-punt rond p=0.5 (zelfde schaal als de andere
+// post-hoc factoren). Een team met < 3 rustdagen levert ~4%-punt winkans in.
+const REST_PENALTY = -0.16
+const REST_DAYS_THRESHOLD = 3
+
+// Rustdagen-factor: een team dat minder dan REST_DAYS_THRESHOLD dagen geleden
+// speelde, raakt vermoeid en levert winkans in. Rustdagen worden meegegeven
+// (berekend uit results.json via lib/rest-days.ts); zonder data een no-op.
+// homeTeam/awayTeam staan in de signatuur voor symmetrie met de andere factoren.
+export function applyRestDaysFactor(
+  probs: MatchProbs,
+  _homeTeam: string,
+  _awayTeam: string,
+  homeRestDays?: number,
+  awayRestDays?: number
+): MatchProbs {
+  let net = 0
+  if (homeRestDays !== undefined && homeRestDays < REST_DAYS_THRESHOLD) net += REST_PENALTY
+  if (awayRestDays !== undefined && awayRestDays < REST_DAYS_THRESHOLD) net -= REST_PENALTY
+  return shiftPA(probs, net)
+}
+
+// Optionele rustdagen per team voor de rustdagen-factor in matchP.
+export interface RestDays {
+  home?: number
+  away?: number
+}
+
 // Drop-in vervanging van klement.ts's matchP: zelfde signatuur, nA/nB zijn
 // Engelse teamnamen uit lib/teams.json. Past Elo-weging, de altitude/travel/
-// experience-factoren en de blessure-status van sterspelers toe op de
-// basisberekening. venue is optioneel — zonder venue-data zijn de altitude-
-// en travel-factor een no-op.
-export function matchP(nA: string, nB: string, venue?: VenueInfo): MatchProbs {
+// experience/rustdagen-factoren en de blessure-status van sterspelers toe op de
+// basisberekening. venue en restDays zijn optioneel — zonder die data zijn de
+// betreffende factoren een no-op.
+export function matchP(nA: string, nB: string, venue?: VenueInfo, restDays?: RestDays): MatchProbs {
   let probs = matchPElo(nA, nB)
   probs = applyAltitudeFactor(probs, nA, nB, venue?.altitude ?? 0)
   probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
   probs = applyExperienceFactor(probs, nA, nB)
   probs = applyFormFactor(probs, nA, nB)
   probs = applyLeagueFactor(probs, nA, nB)
+  probs = applyRestDaysFactor(probs, nA, nB, restDays?.home, restDays?.away)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
   return applyStarPlayerModifier(probs, teamNlA, teamNlB)

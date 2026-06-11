@@ -2,10 +2,16 @@ import { getTranslations } from 'next-intl/server'
 import { isAdminAuthed } from '@/lib/admin-auth'
 import { GROUPS, makeSlug } from '@/lib/fixtures'
 import resultsRaw from '@/lib/results.json'
+import TimeAgo from '@/components/ui/TimeAgo'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
 import AdminResultsClient, { type ResultMatch, type ResultEntry } from '@/components/admin/AdminResultsClient'
 
 export const dynamic = 'force-dynamic'
+
+interface ResultsFile {
+  meta: { lastUpdated: string | null }
+  results: Record<string, ResultEntry>
+}
 
 function buildGroupMatches(): ResultMatch[] {
   const matches: ResultMatch[] = []
@@ -33,12 +39,17 @@ export default async function AdminResultsPage() {
   }
 
   const matches = buildGroupMatches()
-  const results = resultsRaw as Record<string, ResultEntry>
+  const file = resultsRaw as ResultsFile
 
   return (
     <div className="sec page-enter">
       <div className="section-title">{t('resultsPageTitle')}</div>
-      <AdminResultsClient matches={matches} initialResults={results} />
+      {file.meta.lastUpdated && (
+        <div style={{ fontSize: 9, color: 'var(--color-muted)', marginBottom: 16 }}>
+          {t('modelLastUpdated')} <TimeAgo iso={file.meta.lastUpdated} />
+        </div>
+      )}
+      <AdminResultsClient matches={matches} initialResults={file.results} />
     </div>
   )
 }

@@ -126,7 +126,8 @@
     "formAverage": "average",
     "formGood": "good",
     "expectedScore": "Expected: {a} – {b}",
-    "expectedScoreNote": "* Derived from win probabilities"
+    "expectedScoreNote": "* Derived from win probabilities",
+    "restWarning": "{team} played {days} days ago"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",
@@ -228,6 +229,7 @@
     "loginButton": "LOGIN",
     "loginError": "INCORRECT PASSWORD",
     "lastUpdated": "LAST UPDATED",
+    "modelLastUpdated": "Model last updated:",
     "save": "SAVE",
     "saving": "SAVING...",
     "saved": "SAVED",
@@ -299,6 +301,8 @@
     "configTitle": "TUNE THE MODEL",
     "configIntro": "Adjust the factor weights yourself in the model configurator (admin only — password required).",
     "configCta": "Adjust model weights",
+    "lastUpdated": "Model last updated:",
+    "mcLastUpdated": "Last updated:",
     "factors": {
       "gdp": { "name": "GDP per capita", "desc": "Wealthier countries invest more in football" },
       "pop": { "name": "Population", "desc": "Larger population = larger talent pool" },
@@ -313,5 +317,11 @@
       "travel": { "name": "Travel distance", "desc": "Distance from home country to venue" },
       "wcexp": { "name": "WC experience", "desc": "Number of previous World Cup appearances" }
     }
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{n} min ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago"
   }
 }

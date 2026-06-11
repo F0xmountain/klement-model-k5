@@ -126,7 +126,8 @@
     "formAverage": "gemiddelde",
     "formGood": "goede",
     "expectedScore": "Verwacht: {a} – {b}",
-    "expectedScoreNote": "* Afgeleid van winstkansen"
+    "expectedScoreNote": "* Afgeleid van winstkansen",
+    "restWarning": "{team} speelde {days} dagen geleden"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",
@@ -228,6 +229,7 @@
     "loginButton": "INLOGGEN",
     "loginError": "ONJUIST WACHTWOORD",
     "lastUpdated": "LAATST BIJGEWERKT",
+    "modelLastUpdated": "Model laatst bijgewerkt:",
     "save": "OPSLAAN",
     "saving": "BEZIG MET OPSLAAN...",
     "saved": "OPGESLAGEN",
@@ -299,6 +301,8 @@
     "configTitle": "STEM HET MODEL AF",
     "configIntro": "Pas de factorgewichten zelf aan in de modelconfigurator (alleen admin — wachtwoord vereist).",
     "configCta": "Pas modelgewichten aan",
+    "lastUpdated": "Model laatst bijgewerkt:",
+    "mcLastUpdated": "Laatst bijgewerkt:",
     "factors": {
       "gdp": { "name": "BBP per inwoner", "desc": "Rijkere landen investeren meer in voetbal" },
       "pop": { "name": "Bevolking", "desc": "Grotere bevolking = grotere talentenpool" },
@@ -313,5 +317,11 @@
       "travel": { "name": "Reisafstand", "desc": "Afstand van thuisland naar speelstad" },
       "wcexp": { "name": "WK-ervaring", "desc": "Aantal eerdere WK-deelnames" }
     }
+  },
+  "time": {
+    "justNow": "zojuist",
+    "minutesAgo": "{n} min geleden",
+    "hoursAgo": "{n}u geleden",
+    "daysAgo": "{n}d geleden"
   }
 }

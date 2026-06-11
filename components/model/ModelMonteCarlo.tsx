@@ -3,74 +3,47 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
-import { matchP } from '@/lib/klement-custom'
-import { ROUNDS } from '@/lib/fixtures'
+import { runMonteCarlo, type McResult } from '@/lib/monte-carlo'
+import TimeAgo from '@/components/ui/TimeAgo'
 import Btn from '@/components/ui/Btn'
 import FlagImg from '@/components/ui/FlagImg'
 
 const SIM_N = 2000
 
-interface RoundCounts {
-  qf: number
-  sf: number
-  final: number
-  champ: number
+interface Props {
+  initial: McResult | null
+  lastUpdated: string | null
 }
 
-// Knockout-winnaar volgens het volledige custom-model: de gelijkspelkans wordt
-// weggenormaliseerd zodat er altijd één team doorgaat (penalty-achtige resolutie).
-function koWinner(a: string, b: string): string {
-  const { pA, pB } = matchP(a, b)
-  return Math.random() < pA / (pA + pB) ? a : b
-}
-
-function runSims(n: number): Record<string, RoundCounts> {
-  const counts: Record<string, RoundCounts> = {}
-  const bump = (team: string, key: keyof RoundCounts) => {
-    const c = counts[team] ?? (counts[team] = { qf: 0, sf: 0, final: 0, champ: 0 })
-    c[key]++
-  }
-
-  for (let i = 0; i < n; i++) {
-    const r16 = ROUNDS.r32.map(m => koWinner(m.teamA, m.teamB))
-    const qf: string[] = []
-    for (let j = 0; j < r16.length; j += 2) qf.push(koWinner(r16[j], r16[j + 1]))
-    qf.forEach(t => bump(t, 'qf'))
-    const sf: string[] = []
-    for (let j = 0; j < qf.length; j += 2) sf.push(koWinner(qf[j], qf[j + 1]))
-    sf.forEach(t => bump(t, 'sf'))
-    const finalists: string[] = []
-    for (let j = 0; j < sf.length; j += 2) finalists.push(koWinner(sf[j], sf[j + 1]))
-    finalists.forEach(t => bump(t, 'final'))
-    bump(koWinner(finalists[0], finalists[1]), 'champ')
-  }
-  return counts
-}
-
-export default function ModelMonteCarlo() {
+export default function ModelMonteCarlo({ initial, lastUpdated }: Props) {
   const t = useTranslations('model')
-  const [counts, setCounts] = useState<Record<string, RoundCounts> | null>(null)
+  // Cache uit mc-cache.json heeft voorrang; live-resultaat overschrijft de tijdstempel.
+  const hasCache = !!initial && Object.keys(initial.teams).length > 0
+  const [data, setData] = useState<McResult | null>(hasCache ? initial : null)
+  const [stamp, setStamp] = useState<string | null>(hasCache ? lastUpdated : null)
   const [running, setRunning] = useState(false)
 
   const run = useCallback(() => {
     setRunning(true)
     // Laat de "running"-status renderen vóór de blokkerende lus
     setTimeout(() => {
-      setCounts(runSims(SIM_N))
+      setData(runMonteCarlo(SIM_N))
+      setStamp(new Date().toISOString())
       setRunning(false)
     }, 20)
   }, [])
 
-  // Initiële run ná mount (niet tijdens render) zodat de tabel meteen gevuld is.
-  // De simulatie gebruikt Math.random — server- en client-render zouden anders
-  // verschillen en een hydration-mismatch geven, dus dit moet client-side gebeuren.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { run() }, [run])
+  // Live-fallback: alleen een run bij mount als er geen cache is. Ná mount (niet
+  // tijdens render) want runMonteCarlo gebruikt Math.random → anders hydration-mismatch.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!hasCache) run()
+  }, [hasCache, run])
 
-  const pct = (v: number) => `${Math.round((v / SIM_N) * 100)}%`
+  const pct = (v: number) => `${data ? Math.round((v / data.n) * 100) : 0}%`
 
-  const top8 = counts
-    ? Object.entries(counts).sort((a, b) => b[1].champ - a[1].champ).slice(0, 8)
+  const top8 = data
+    ? Object.entries(data.teams).sort((a, b) => b[1].champ - a[1].champ).slice(0, 8)
     : null
 
   return (
@@ -82,6 +55,11 @@ export default function ModelMonteCarlo() {
         <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
           {SIM_N.toLocaleString()} {t('mcSimsLabel')}
         </span>
+        {stamp && (
+          <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
+            · {t('mcLastUpdated')} <TimeAgo iso={stamp} />
+          </span>
+        )}
       </div>
 
       {top8 && (

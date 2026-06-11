@@ -6,6 +6,7 @@ import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-
 import stadiumsRaw from '@/lib/stadiums.json'
 import formCacheRaw from '@/lib/form-cache.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
+import { getRestDays } from '@/lib/rest-days'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
@@ -84,9 +85,15 @@ export default function VersusPage() {
   const venue = venueIdx !== null
     ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
     : undefined
-  const { pA, dr, pB } = matchP(teamA, teamB, venue)
+  const restA = getRestDays(teamA)
+  const restB = getRestDays(teamB)
+  const { pA, dr, pB } = matchP(teamA, teamB, venue, { home: restA, away: restB })
   const tA = teamData(teamA)
   const tB = teamData(teamB)
+  const restWarnings = [
+    { team: teamA, days: restA },
+    { team: teamB, days: restB },
+  ].filter((r): r is { team: string; days: number } => r.days !== undefined && r.days < 3)
   const upset = upsetLabel(pA, pB)
   const summaryA = getStarPlayerSummary(toTeamNl(teamA) ?? '')
   const summaryB = getStarPlayerSummary(toTeamNl(teamB) ?? '')
@@ -185,6 +192,12 @@ export default function VersusPage() {
             </div>
           )
         })}
+
+        {restWarnings.map(({ team, days }) => (
+          <div key={team} style={{ marginTop: 4, fontSize: 8, color: 'var(--color-r)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            ⚠️ {t('restWarning', { team, days })}
+          </div>
+        ))}
 
         {(summaryA.length > 0 || summaryB.length > 0) && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>

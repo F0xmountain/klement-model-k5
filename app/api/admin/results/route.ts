@@ -3,16 +3,24 @@ import { join } from 'path'
 import { revalidatePath } from 'next/cache'
 import { isAdminAuthed } from '@/lib/admin-auth'
 import { historicalElo } from '@/lib/klement-custom'
+import { runMonteCarlo } from '@/lib/monte-carlo'
 
 interface ResultEntry {
   teamA: string
   teamB: string
   scoreA: number
   scoreB: number
+  playedAt?: string
+}
+
+interface ResultsFile {
+  meta: { lastUpdated: string | null }
+  results: Record<string, ResultEntry>
 }
 
 const ELO_K = 32
 const ELO_DEFAULT = 1500
+const MC_RUNS = 2000
 
 function expectedScore(eloA: number, eloB: number): number {
   return 1 / (1 + 10 ** ((eloB - eloA) / 400))
@@ -55,14 +63,22 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Invalid body' }, { status: 400 })
   }
 
-  const resultsPath = join(process.cwd(), 'lib', 'results.json')
-  const results = JSON.parse(readFileSync(resultsPath, 'utf8')) as Record<string, ResultEntry>
-  results[matchKey] = { teamA, teamB, scoreA, scoreB }
-  writeFileSync(resultsPath, JSON.stringify(results, null, 2) + '\n', 'utf8')
+  const now = new Date().toISOString()
 
-  const eloCurrent = recomputeElo(results)
+  const resultsPath = join(process.cwd(), 'lib', 'results.json')
+  const file = JSON.parse(readFileSync(resultsPath, 'utf8')) as ResultsFile
+  file.results[matchKey] = { teamA, teamB, scoreA, scoreB, playedAt: now }
+  file.meta.lastUpdated = now
+  writeFileSync(resultsPath, JSON.stringify(file, null, 2) + '\n', 'utf8')
+
+  const eloCurrent = recomputeElo(file.results)
   const eloPath = join(process.cwd(), 'lib', 'elo-current.json')
   writeFileSync(eloPath, JSON.stringify(eloCurrent, null, 2) + '\n', 'utf8')
+
+  // Monte Carlo opnieuw draaien (custom-model) en cachen voor de /model-pagina.
+  const mc = runMonteCarlo(MC_RUNS)
+  const mcPath = join(process.cwd(), 'lib', 'mc-cache.json')
+  writeFileSync(mcPath, JSON.stringify({ lastUpdated: now, n: mc.n, teams: mc.teams }, null, 2) + '\n', 'utf8')
 
   revalidatePath('/', 'layout')
   return Response.json({ ok: true })

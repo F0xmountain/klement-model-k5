@@ -1,8 +1,18 @@
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
+import TimeAgo from '@/components/ui/TimeAgo'
 import ModelMonteCarlo from '@/components/model/ModelMonteCarlo'
 import { getModelWeights } from '@/lib/model-config'
+import { getResultsLastUpdated } from '@/lib/rest-days'
+import mcCacheRaw from '@/lib/mc-cache.json'
+import type { McResult } from '@/lib/monte-carlo'
+
+interface McCache {
+  lastUpdated: string | null
+  n: number
+  teams: McResult['teams']
+}
 
 const pct = (v: number) => `${Math.round(v * 100)}%`
 
@@ -36,11 +46,22 @@ export default function ModelPage() {
   const t = useTranslations('model')
   const factors = buildFactors()
 
+  const mcCache = mcCacheRaw as McCache
+  const mcInitial: McResult | null = Object.keys(mcCache.teams).length > 0
+    ? { n: mcCache.n, teams: mcCache.teams }
+    : null
+  const resultsLastUpdated = getResultsLastUpdated()
+
   return (
     <div className="sec page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
       <PixelParticles variant="mix" />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div className="section-title">{t('title')}</div>
+        {resultsLastUpdated && (
+          <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: -8, marginBottom: 8 }}>
+            {t('lastUpdated')} <TimeAgo iso={resultsLastUpdated} />
+          </div>
+        )}
 
         {/* Hoe het model werkt */}
         <div className="section-title" style={{ marginTop: 24 }}>{t('howTitle')}</div>
@@ -75,7 +96,7 @@ export default function ModelPage() {
         <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 16 }}>
           {t('mcIntro')}
         </div>
-        <ModelMonteCarlo />
+        <ModelMonteCarlo initial={mcInitial} lastUpdated={mcCache.lastUpdated} />
 
         {/* Configurator-link */}
         <div className="factor-card" style={{ marginTop: 32 }}>
