@@ -298,7 +298,7 @@ Toon onder de kansen-display:
 - `klement-custom.ts` leest gewichten via `getModelWeights()` in plaats van hardcoded waarden
 - Sliders voor: GDP-gewicht, bevolkingsgewicht, temperatuurgewicht, FIFA-gewicht, host-bonus,
   `ELO_WEIGHT` (als % van de FIFA-slot), Polymarket-gewicht, en sterspeler-penalty's (rank 1/2/3)
-- Live "factoren-som"-indicator — waarschuwt als de basisfactoren afwijken van 87%
+- Live "factoren-som"-indicator — waarschuwt als de basisfactoren afwijken van 100%
 - 4 presets: Default, Elo-heavy, Form-heavy (ontgrendelt zodra Fase 3 klaar is), Market-focused
 - Instellingen persisteren server-side in `lib/model-config.json` (niet `localStorage`),
   zodat ze voor alle bezoekers gelden, niet alleen de admin-browser
