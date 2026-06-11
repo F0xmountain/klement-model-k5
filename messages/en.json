@@ -105,7 +105,8 @@
     "climate": "CLIMATE",
     "population": "POPULATION",
     "homeEdge": "HOME EDGE",
-    "elo": "ELO"
+    "elo": "ELO",
+    "league": "COMPETITION LEVEL"
   },
   "versus": {
     "title": "VERSUS",

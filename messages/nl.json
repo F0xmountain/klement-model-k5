@@ -105,7 +105,8 @@
     "climate": "KLIMAAT",
     "population": "BEVOLKING",
     "homeEdge": "THUISVOORDEEL",
-    "elo": "ELO"
+    "elo": "ELO",
+    "league": "COMPETITIENIVEAU"
   },
   "versus": {
     "title": "VERSUS",

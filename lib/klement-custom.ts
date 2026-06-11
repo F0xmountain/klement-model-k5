@@ -1,6 +1,7 @@
 import teamsRaw from './teams.json'
 import eloHistoryRaw from './elo-history.json'
 import formCacheRaw from './form-cache.json'
+import leagueDataRaw from './league-data.json'
 import type { TeamData, WDL } from '../types'
 import { fG, fP, fT, fF } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
@@ -16,6 +17,16 @@ interface FormCacheEntry {
   formScore: number | null
 }
 const formCache = formCacheRaw as Record<string, FormCacheEntry>
+
+interface LeagueDataEntry {
+  team: string
+  players_top5: number
+  total_market_value_m: number
+  max_same_club: number
+}
+const leagueData: Record<string, LeagueDataEntry> = Object.fromEntries(
+  (leagueDataRaw as LeagueDataEntry[]).map(d => [d.team, d])
+)
 
 const W = { gdp: 0.20, pop: 0.15, temp: 0.15, fifa: 0.45, host: 0.05 }
 
@@ -224,6 +235,55 @@ export function applyFormFactor(probs: MatchProbs, homeTeam: string, awayTeam: s
   return shiftPA(probs, net)
 }
 
+// teams.json gebruikt voor enkele landen afwijkende namen t.o.v. squads-db.json's
+// name_en (de bron van league-data.json's "team" veld). Kleine alias-map om de
+// lookup te overbruggen.
+const LEAGUE_NAME_ALIASES: Record<string, string> = {
+  'Bosnia-Herz': 'Bosnia and Herzegovina',
+  'Curacao': 'Curaçao',
+  'Cape Verde': 'Cape Verde Islands',
+  'Congo DR': 'DR Congo',
+}
+
+function getLeagueData(team: string): LeagueDataEntry | undefined {
+  return leagueData[LEAGUE_NAME_ALIASES[team] ?? team]
+}
+
+// Competitieniveau: aandeel van de 26-mans selectie dat in een top-5 Europese
+// competitie speelt (Premier League, La Liga, Bundesliga, Serie A, Ligue 1),
+// genormaliseerd naar [0,1]. Ook gebruikt als 7e as in FactorRadar.
+const LEAGUE_SQUAD_SIZE = 26
+
+export function leagueIndex(team: string): number | undefined {
+  const data = getLeagueData(team)
+  if (!data) return undefined
+  return clamp(data.players_top5 / LEAGUE_SQUAD_SIZE, 0, 1)
+}
+
+// Competitieniveau telt voor 10% mee in het scoreverschil — zelfde
+// logit-schaalbenadering als applyFormFactor, maar lager gewicht omdat dit een
+// zachter signaal is dan recente vorm.
+const LEAGUE_WEIGHT = 0.10
+const LEAGUE_SIGMA = 0.28
+
+// Logit-shift van +0.04 ≈ +1%-punt rond p=0.5 (zelfde schaal als
+// EXPERIENCE_BONUS_MAX), voor 3+ spelers van dezelfde club (synergiebonus).
+const CLUB_SYNERGY_BONUS = 0.04
+const CLUB_SYNERGY_THRESHOLD = 3
+
+export function applyLeagueFactor(probs: MatchProbs, homeTeam: string, awayTeam: string): MatchProbs {
+  const idxA = leagueIndex(homeTeam)
+  const idxB = leagueIndex(awayTeam)
+  if (idxA === undefined || idxB === undefined) return probs
+
+  let net = (LEAGUE_WEIGHT * (idxA - idxB)) / LEAGUE_SIGMA
+
+  if ((getLeagueData(homeTeam)?.max_same_club ?? 0) >= CLUB_SYNERGY_THRESHOLD) net += CLUB_SYNERGY_BONUS
+  if ((getLeagueData(awayTeam)?.max_same_club ?? 0) >= CLUB_SYNERGY_THRESHOLD) net -= CLUB_SYNERGY_BONUS
+
+  return shiftPA(probs, net)
+}
+
 // Drop-in vervanging van klement.ts's matchP: zelfde signatuur, nA/nB zijn
 // Engelse teamnamen uit lib/teams.json. Past Elo-weging, de altitude/travel/
 // experience-factoren en de blessure-status van sterspelers toe op de
@@ -235,6 +295,7 @@ export function matchP(nA: string, nB: string, venue?: VenueInfo): MatchProbs {
   probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
   probs = applyExperienceFactor(probs, nA, nB)
   probs = applyFormFactor(probs, nA, nB)
+  probs = applyLeagueFactor(probs, nA, nB)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
   return applyStarPlayerModifier(probs, teamNlA, teamNlB)

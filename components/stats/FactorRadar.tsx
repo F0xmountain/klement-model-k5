@@ -5,15 +5,15 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, ResponsiveContainer, Tooltip,
 } from 'recharts'
 import { teamNames, teamData, fG, fP, fT, fF } from '@/lib/klement'
-import { fE, latestElo } from '@/lib/klement-custom'
+import { fE, latestElo, leagueIndex } from '@/lib/klement-custom'
 import TeamSelect from '@/components/ui/TeamSelect'
 
 const ALL_TEAMS = teamNames().sort()
-const FACTOR_KEYS = ['fifa', 'wealth', 'climate', 'population', 'homeEdge', 'elo'] as const
+const FACTOR_KEYS = ['fifa', 'wealth', 'climate', 'population', 'homeEdge', 'elo', 'league'] as const
 
 function factorValues(name: string) {
   const t = teamData(name)
-  if (!t) return { fifa: 0, wealth: 0, climate: 0, population: 0, homeEdge: 0, elo: 0 }
+  if (!t) return { fifa: 0, wealth: 0, climate: 0, population: 0, homeEdge: 0, elo: 0, league: 0 }
   const elo = latestElo(name)
   return {
     fifa: Math.round(fF(t.fifa) * 100),
@@ -22,6 +22,7 @@ function factorValues(name: string) {
     population: Math.round(fP(t.pop, t.latam) * 100),
     homeEdge: t.host ? 100 : 0,
     elo: Math.round(fE(elo ?? 0) * 100),
+    league: Math.round((leagueIndex(name) ?? 0) * 100),
   }
 }
 
