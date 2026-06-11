@@ -8,6 +8,7 @@
     "teams": "TEAMS",
     "mc": "MONTE",
     "groups": "GROUPS",
+    "topscorers": "Topscorers",
     "bracket": "BRACKET",
     "myBracket": "MY BRACKET",
     "stats": "STATS",
@@ -317,6 +318,12 @@
       "travel": { "name": "Travel distance", "desc": "Distance from home country to venue" },
       "wcexp": { "name": "WC experience", "desc": "Number of previous World Cup appearances" }
     }
+  },
+  "topscorers": {
+    "title": "Predicted Top Scorers",
+    "subtitle": "Based on team tournament probability × position weight",
+    "posWeight": "Position weight: lower = more likely to score",
+    "disclaimer": "Prediction only — based on squad position, not individual stats"
   },
   "time": {
     "justNow": "just now",

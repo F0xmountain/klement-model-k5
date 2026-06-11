@@ -4,8 +4,8 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 
-const linkHrefs = ['/versus', '/teams', '/mc', '/groups', '/knockout/r32', '/my-bracket', '/stats', '/live', '/model', '/about'] as const
-const linkKeys = ['versus', 'teams', 'mc', 'groups', 'bracket', 'myBracket', 'stats', 'live', 'model', 'about'] as const
+const linkHrefs = ['/versus', '/teams', '/mc', '/groups', '/topscorers', '/knockout/r32', '/my-bracket', '/stats', '/live', '/model', '/about'] as const
+const linkKeys = ['versus', 'teams', 'mc', 'groups', 'topscorers', 'bracket', 'myBracket', 'stats', 'live', 'model', 'about'] as const
 
 function XIcon() {
   return (

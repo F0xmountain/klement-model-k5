@@ -6,6 +6,8 @@ import { ROUNDS } from './fixtures'
 // zodat cache en live-resultaat exact dezelfde methode gebruiken.
 
 export interface McRoundCounts {
+  r32: number
+  r16: number
   qf: number
   sf: number
   final: number
@@ -28,12 +30,19 @@ function koWinner(a: string, b: string): string {
 export function runMonteCarlo(n: number): McResult {
   const teams: Record<string, McRoundCounts> = {}
   const bump = (team: string, key: keyof McRoundCounts) => {
-    const c = teams[team] ?? (teams[team] = { qf: 0, sf: 0, final: 0, champ: 0 })
+    const c = teams[team] ?? (teams[team] = { r32: 0, r16: 0, qf: 0, sf: 0, final: 0, champ: 0 })
     c[key]++
   }
 
   for (let i = 0; i < n; i++) {
-    const r16 = ROUNDS.r32.map(m => koWinner(m.teamA, m.teamB))
+    // De 32 teams in ROUNDS.r32 spelen per definitie de R32; winnaars spelen de R16.
+    const r16: string[] = []
+    for (const m of ROUNDS.r32) {
+      bump(m.teamA, 'r32')
+      bump(m.teamB, 'r32')
+      r16.push(koWinner(m.teamA, m.teamB))
+    }
+    r16.forEach(t => bump(t, 'r16'))
     const qf: string[] = []
     for (let j = 0; j < r16.length; j += 2) qf.push(koWinner(r16[j], r16[j + 1]))
     qf.forEach(t => bump(t, 'qf'))

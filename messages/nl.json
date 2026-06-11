@@ -8,6 +8,7 @@
     "teams": "TEAMS",
     "mc": "MONTE",
     "groups": "GROEPEN",
+    "topscorers": "Topscorers",
     "bracket": "BRACKET",
     "myBracket": "MIJN BRACKET",
     "stats": "STATS",
@@ -317,6 +318,12 @@
       "travel": { "name": "Reisafstand", "desc": "Afstand van thuisland naar speelstad" },
       "wcexp": { "name": "WK-ervaring", "desc": "Aantal eerdere WK-deelnames" }
     }
+  },
+  "topscorers": {
+    "title": "Verwachte Topscorers",
+    "subtitle": "Op basis van toernooi-kans × positiegewicht",
+    "posWeight": "Positiegewicht: lager = scoort eerder",
+    "disclaimer": "Alleen voorspelling — op basis van positie in de selectie, niet individuele statistieken"
   },
   "time": {
     "justNow": "zojuist",
