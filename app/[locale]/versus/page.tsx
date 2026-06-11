@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
+import stadiumsRaw from '@/lib/stadiums.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -14,6 +15,15 @@ import { PM_GAP_THRESHOLD } from '@/lib/polymarket'
 
 const allTeams = teamNames().sort()
 const SIM_N = 500
+
+interface Stadium {
+  city: string
+  country: string
+  stadium: string
+  altitude_m: number
+  coordinates: { lat: number; lon: number }
+}
+const stadiums = stadiumsRaw as Stadium[]
 
 const STATUS_KEY: Record<PlayerStatus, 'statusFit' | 'statusDoubtful' | 'statusOut'> = {
   fit: 'statusFit',
@@ -38,8 +48,12 @@ export default function VersusPage() {
   const [teamB, setTeamB] = useState('Portugal')
   const [sim, setSim] = useState<SimData | null>(null)
   const [simFor, setSimFor] = useState('')
+  const [venueIdx, setVenueIdx] = useState<number | null>(null)
 
-  const { pA, dr, pB } = matchP(teamA, teamB)
+  const venue = venueIdx !== null
+    ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
+    : undefined
+  const { pA, dr, pB } = matchP(teamA, teamB, venue)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const upset = upsetLabel(pA, pB)
@@ -91,6 +105,28 @@ export default function VersusPage() {
           <div style={{ fontSize: 14, color: 'var(--color-r)', textAlign: 'center', fontWeight: 'bold', padding: '0 8px' }}>{tc('vs')}</div>
           <TeamSelect teams={allTeams} value={teamB} onChange={v => { setTeamB(v); setSim(null) }} />
         </div>
+
+        <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 6 }}>{t('venueLabel')}</div>
+        <select
+          value={venueIdx ?? ''}
+          onChange={e => setVenueIdx(e.target.value === '' ? null : Number(e.target.value))}
+          style={{
+            width: '100%',
+            marginBottom: 16,
+            padding: '8px 10px',
+            backgroundColor: 'var(--color-bg)',
+            border: '2px solid var(--color-brd2)',
+            boxShadow: '3px 3px 0 var(--color-brd)',
+            fontFamily: 'inherit',
+            fontSize: 9,
+            color: 'var(--color-txt)',
+          }}
+        >
+          <option value="">{t('venueNeutral')}</option>
+          {stadiums.map((s, i) => (
+            <option key={`${s.city}-${s.stadium}`} value={i}>{s.city} — {s.stadium} ({s.altitude_m}m)</option>
+          ))}
+        </select>
 
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
 

@@ -116,7 +116,9 @@
     "simulate": "SIMULATE ▶",
     "win": "WIN",
     "simsLabel": "SIMS",
-    "teamStrengthSplit": "Team strength: Elo {elo}% + FIFA {fifa}%"
+    "teamStrengthSplit": "Team strength: Elo {elo}% + FIFA {fifa}%",
+    "venueLabel": "Venue",
+    "venueNeutral": "Neutral venue (no altitude/travel effect)"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",

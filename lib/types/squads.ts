@@ -15,6 +15,7 @@ export interface SquadPlayer {
 export interface SquadTeam {
   name_en: string
   captain: string
+  wc_appearances: number
   star_players: StarPlayer[]
   squad: SquadPlayer[]
 }

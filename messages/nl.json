@@ -116,7 +116,9 @@
     "simulate": "SIMULEER ▶",
     "win": "WINST",
     "simsLabel": "SIMS",
-    "teamStrengthSplit": "Teamsterkte: Elo {elo}% + FIFA {fifa}%"
+    "teamStrengthSplit": "Teamsterkte: Elo {elo}% + FIFA {fifa}%",
+    "venueLabel": "Locatie",
+    "venueNeutral": "Neutrale locatie (geen hoogte/reiseffect)"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",

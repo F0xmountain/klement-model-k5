@@ -3,6 +3,7 @@ import eloHistoryRaw from './elo-history.json'
 import type { TeamData, WDL } from '../types'
 import { fG, fP, fT, fF } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
+import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data'
 
 // Wrapper rond klement.ts's matchP. lib/klement.ts is read-only — modelaanpassingen
 // (Elo-weging, sterspeler-blessures) leven hier.
@@ -11,6 +12,16 @@ const td = teamsRaw as Record<string, TeamData>
 const eloHistory = eloHistoryRaw as Array<Record<string, string | number>>
 
 const W = { gdp: 0.20, pop: 0.15, temp: 0.15, fifa: 0.45, host: 0.05 }
+
+type MatchProbs = { pA: number; dr: number; pB: number }
+
+// Optionele wedstrijdlocatie voor de altitude- en travel-factor. Beide velden
+// zijn optioneel — zonder venue-data zijn deze factoren een no-op.
+export interface VenueInfo {
+  altitude?: number
+  lat?: number
+  lon?: number
+}
 
 // "Teamsterkte" (de 0.45-gewogen factor) is een mix van FIFA-ranking en Elo-rating
 export const ELO_WEIGHT = 0.30
@@ -49,6 +60,40 @@ function phi(x: number) {
   return 0.5 * (1 + erf(x / Math.sqrt(2)))
 }
 
+function sigmoid(x: number): number {
+  return 1 / (1 + Math.exp(-x))
+}
+
+function logit(p: number): number {
+  return Math.log(p / (1 - p))
+}
+
+// Verschuift pA op logit-schaal en herschaalt dr/pB proportioneel zodat de
+// som 1 blijft. Zelfde aanpak als applyStarPlayerModifier in squad-modifier.ts.
+function shiftPA(probs: MatchProbs, net: number): MatchProbs {
+  if (net === 0) return probs
+  const { pA, dr, pB } = probs
+  const pAadj = sigmoid(logit(pA) + net)
+  const scale = (1 - pAadj) / (1 - pA)
+  return { pA: pAadj, dr: dr * scale, pB: pB * scale }
+}
+
+const EARTH_RADIUS_KM = 6371
+
+function toRad(deg: number): number {
+  return (deg * Math.PI) / 180
+}
+
+// Boogafstand (great-circle) tussen twee coördinaten in km
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const dLat = toRad(lat2 - lat1)
+  const dLon = toRad(lon2 - lon1)
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+  return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
 // Teamscore zoals klement.ts's sc(), maar de FIFA-factor is vervangen door een
 // FIFA/Elo-mix (FIFA_WEIGHT/ELO_WEIGHT). Zonder Elo-data valt terug op fF alleen.
 function sc(name: string): number {
@@ -69,7 +114,7 @@ function sc(name: string): number {
   )
 }
 
-function matchPElo(nA: string, nB: string): { pA: number; dr: number; pB: number } {
+function matchPElo(nA: string, nB: string): MatchProbs {
   const sA = sc(nA)
   const sB = sc(nB)
   const z = (sA - sB) / 0.28
@@ -79,11 +124,86 @@ function matchPElo(nA: string, nB: string): { pA: number; dr: number; pB: number
   return { pA, dr, pB }
 }
 
+// Logit-shift van ~-0.22 ≈ -5%-punt rond p=0.5 (zelfde schaal als STAR_PENALTY
+// in squad-modifier.ts)
+const ALTITUDE_PENALTY = -0.22
+const ALTITUDE_VENUE_THRESHOLD_M = 1500
+const SEA_LEVEL_THRESHOLD_M = 500
+
+// Teams uit een land op zeeniveau (gemiddelde hoogte < 500m) leveren ~5%-punt
+// winkans in als de wedstrijd op > 1500m hoogte wordt gespeeld (Mexico-Stad,
+// Guadalajara). Geldt voor beide teams gelijk, dus als beiden uit een laagland
+// komen heffen de verschuivingen elkaar op.
+export function applyAltitudeFactor(
+  probs: MatchProbs,
+  homeTeam: string,
+  awayTeam: string,
+  venueAltitude: number = 0
+): MatchProbs {
+  if (venueAltitude <= ALTITUDE_VENUE_THRESHOLD_M) return probs
+
+  const altA = getHomeAltitude(homeTeam)
+  const altB = getHomeAltitude(awayTeam)
+
+  let net = 0
+  if (altA !== undefined && altA < SEA_LEVEL_THRESHOLD_M) net += ALTITUDE_PENALTY
+  if (altB !== undefined && altB < SEA_LEVEL_THRESHOLD_M) net -= ALTITUDE_PENALTY
+
+  return shiftPA(probs, net)
+}
+
+// Logit-shift van ~-0.13 ≈ -3%-punt rond p=0.5
+const TRAVEL_PENALTY = -0.13
+const TRAVEL_DISTANCE_THRESHOLD_KM = 8000
+
+// Teams die > 8000km (boogafstand vanaf het centroid van het thuisland) van
+// huis spelen leveren ~3%-punt winkans in.
+export function applyTravelFactor(
+  probs: MatchProbs,
+  homeTeam: string,
+  awayTeam: string,
+  venueLat?: number,
+  venueLon?: number
+): MatchProbs {
+  if (venueLat === undefined || venueLon === undefined) return probs
+
+  const coordA = getHomeCoordinates(homeTeam)
+  const coordB = getHomeCoordinates(awayTeam)
+
+  let net = 0
+  if (coordA && haversineKm(coordA.lat, coordA.lon, venueLat, venueLon) > TRAVEL_DISTANCE_THRESHOLD_KM) {
+    net += TRAVEL_PENALTY
+  }
+  if (coordB && haversineKm(coordB.lat, coordB.lon, venueLat, venueLon) > TRAVEL_DISTANCE_THRESHOLD_KM) {
+    net -= TRAVEL_PENALTY
+  }
+
+  return shiftPA(probs, net)
+}
+
+// Logit-shift van +0.08 ≈ +2%-punt rond p=0.5, voor 10+ WK-edities
+const EXPERIENCE_BONUS_MAX = 0.08
+const EXPERIENCE_EDITIONS_CAP = 10
+
+// Het team met de meeste WK-deelnames krijgt een bonus t.o.v. het minder
+// ervaren team, lineair geschaald tot 10 edities (10+ edities = volledige bonus).
+export function applyExperienceFactor(probs: MatchProbs, homeTeam: string, awayTeam: string): MatchProbs {
+  const bonus = (team: string) =>
+    clamp((getWcEditions(team) ?? 0) / EXPERIENCE_EDITIONS_CAP, 0, 1) * EXPERIENCE_BONUS_MAX
+
+  return shiftPA(probs, bonus(homeTeam) - bonus(awayTeam))
+}
+
 // Drop-in vervanging van klement.ts's matchP: zelfde signatuur, nA/nB zijn
-// Engelse teamnamen uit lib/teams.json. Past Elo-weging en de blessure-status
-// van sterspelers toe op de basisberekening.
-export function matchP(nA: string, nB: string): { pA: number; dr: number; pB: number } {
-  const probs = matchPElo(nA, nB)
+// Engelse teamnamen uit lib/teams.json. Past Elo-weging, de altitude/travel/
+// experience-factoren en de blessure-status van sterspelers toe op de
+// basisberekening. venue is optioneel — zonder venue-data zijn de altitude-
+// en travel-factor een no-op.
+export function matchP(nA: string, nB: string, venue?: VenueInfo): MatchProbs {
+  let probs = matchPElo(nA, nB)
+  probs = applyAltitudeFactor(probs, nA, nB, venue?.altitude ?? 0)
+  probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
+  probs = applyExperienceFactor(probs, nA, nB)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
   return applyStarPlayerModifier(probs, teamNlA, teamNlB)
