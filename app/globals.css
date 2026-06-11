@@ -570,3 +570,30 @@ main { flex: 1; }
   .admin-player-row { grid-template-columns: 16px 1fr 100px; }
   .admin-player-row > span:nth-child(3) { display: none; }
 }
+
+/* ── Admin: result row ── */
+.admin-result-row {
+  display: grid;
+  grid-template-columns: 1fr 44px 14px 44px 1fr 70px 60px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  font-size: 9px;
+  border-bottom: 1px solid var(--color-brd);
+}
+.admin-result-row:last-child { border-bottom: none; }
+.admin-score-input {
+  font-family: var(--font-pixel), monospace;
+  font-size: 9px;
+  background: var(--color-bg);
+  color: var(--color-txt);
+  border: 1px solid var(--color-brd2);
+  padding: 4px 6px;
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .admin-result-row { grid-template-columns: 1fr 36px 12px 36px 1fr 56px; }
+  .admin-result-row > span:last-child { display: none; }
+}

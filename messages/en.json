@@ -220,6 +220,7 @@
   },
   "admin": {
     "pageTitle": "SQUAD MANAGEMENT",
+    "resultsPageTitle": "MATCH RESULTS",
     "passwordLabel": "ADMIN PASSWORD",
     "loginButton": "LOGIN",
     "loginError": "INCORRECT PASSWORD",

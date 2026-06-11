@@ -1,5 +1,6 @@
 import teamsRaw from './teams.json'
 import eloHistoryRaw from './elo-history.json'
+import eloCurrentRaw from './elo-current.json'
 import formCacheRaw from './form-cache.json'
 import leagueDataRaw from './league-data.json'
 import type { TeamData, WDL } from '../types'
@@ -12,6 +13,7 @@ import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data
 
 const td = teamsRaw as Record<string, TeamData>
 const eloHistory = eloHistoryRaw as Array<Record<string, string | number>>
+const eloCurrent = eloCurrentRaw as Record<string, number>
 
 interface FormCacheEntry {
   formScore: number | null
@@ -56,13 +58,20 @@ export function fE(elo: number): number {
   return clamp((elo - ELO_MIN) / (ELO_MAX - ELO_MIN), 0, 1)
 }
 
-// Meest recente Elo-waarde voor een team (laatste entry in elo-history.json met deze sleutel)
-export function latestElo(name: string): number | undefined {
+// Meest recente Elo-waarde voor een team uit elo-history.json (laatste entry met deze sleutel)
+export function historicalElo(name: string): number | undefined {
   for (let i = eloHistory.length - 1; i >= 0; i--) {
     const v = eloHistory[i][name]
     if (typeof v === 'number') return v
   }
   return undefined
+}
+
+// Live Elo-waarde voor een team: lib/elo-current.json (bijgewerkt na elke uitslag in
+// /admin/results) heeft voorrang op de statische elo-history.json.
+export function latestElo(name: string): number | undefined {
+  const current = eloCurrent[name]
+  return typeof current === 'number' ? current : historicalElo(name)
 }
 
 function erf(x: number): number {

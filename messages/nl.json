@@ -220,6 +220,7 @@
   },
   "admin": {
     "pageTitle": "SPELERSBEHEER",
+    "resultsPageTitle": "WEDSTRIJDUITSLAGEN",
     "passwordLabel": "ADMIN-WACHTWOORD",
     "loginButton": "INLOGGEN",
     "loginError": "ONJUIST WACHTWOORD",
