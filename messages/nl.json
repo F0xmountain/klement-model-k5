@@ -28,7 +28,10 @@
     "vs": "VS",
     "draw": "GELIJK",
     "klementPick": "K✓",
-    "klementPickFull": "K✓ KLEMENT KEUZE"
+    "klementPickFull": "K✓ KLEMENT KEUZE",
+    "statusFit": "FIT",
+    "statusDoubtful": "TWIJFELACHTIG",
+    "statusOut": "OUT"
   },
   "factorBreakdown": {
     "title": "Factoranalyse",
@@ -204,5 +207,24 @@
     "loading": "MARKTKANSEN LADEN...",
     "error": "MARKTDATA NU NIET BESCHIKBAAR.",
     "disclaimer": "DIT IS GEEN FINANCIEEL ADVIES. WK-VOORSPELLINGEN ZIJN PROBABILISTISCH EN INHERENT ONZEKER."
+  },
+  "admin": {
+    "pageTitle": "SPELERSBEHEER",
+    "passwordLabel": "ADMIN-WACHTWOORD",
+    "loginButton": "INLOGGEN",
+    "loginError": "ONJUIST WACHTWOORD",
+    "lastUpdated": "LAATST BIJGEWERKT",
+    "save": "OPSLAAN",
+    "saving": "BEZIG MET OPSLAAN...",
+    "saved": "OPGESLAGEN",
+    "saveError": "OPSLAAN MISLUKT",
+    "group": "GROEP",
+    "squadDataErrorWarning": "SPELERSLIJST VOOR DIT TEAM IS ONJUIST (VERKEERDE SELECTIE). AANVOERDER EN STERSPELERS ZIJN WEL CORRECT.",
+    "category": {
+      "goalkeeper": "DOELMAN",
+      "defender": "VERDEDIGER",
+      "midfielder": "MIDDENVELDER",
+      "attacker": "AANVALLER"
+    }
   }
 }

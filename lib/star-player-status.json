@@ -1,0 +1,245 @@
+{
+  "lastUpdated": "2026-06-11T00:00:00Z",
+  "overrides": {
+    "Mexico": {
+      "Édson Álvarez": "fit",
+      "Santiago Giménez": "fit",
+      "Raúl Jiménez": "fit"
+    },
+    "Zuid-Afrika": {
+      "Teboho Mokoena": "fit",
+      "Lyle Foster": "fit",
+      "Ronwen Williams": "fit"
+    },
+    "Zuid-Korea": {
+      "Son Heung-min": "fit",
+      "Kim Min-jae": "fit",
+      "Lee Kang-in": "fit"
+    },
+    "Tsjechië": {
+      "Tomáš Souček": "fit",
+      "Patrik Schick": "fit",
+      "Adam Hložek": "fit"
+    },
+    "Canada": {
+      "Alphonso Davies": "fit",
+      "Jonathan David": "fit",
+      "Tajon Buchanan": "fit"
+    },
+    "Bosnië-Herzegovina": {
+      "Edin Džeko": "fit",
+      "Sead Kolasinac": "fit",
+      "Ermedin Demirovic": "fit"
+    },
+    "Qatar": {
+      "Akram Afif": "fit",
+      "Almoez Ali": "fit",
+      "Hassan Al-Haydos": "fit"
+    },
+    "Zwitserland": {
+      "Granit Xhaka": "fit",
+      "Manuel Akanji": "fit",
+      "Breel Embolo": "fit"
+    },
+    "Brazilië": {
+      "Vinícius Júnior": "fit",
+      "Raphinha": "fit",
+      "Alisson Becker": "fit"
+    },
+    "Marokko": {
+      "Achraf Hakimi": "fit",
+      "Sofyan Amrabat": "fit",
+      "Brahim Díaz": "fit"
+    },
+    "Haïti": {
+      "Jeanricner Bellegarde": "fit",
+      "Wilson Isidor": "fit",
+      "Duckens Nazon": "fit"
+    },
+    "Schotland": {
+      "Andy Robertson": "fit",
+      "Scott McTominay": "fit",
+      "Kieran Tierney": "fit"
+    },
+    "Verenigde Staten": {
+      "Christian Pulisic": "fit",
+      "Weston McKennie": "fit",
+      "Tyler Adams": "fit"
+    },
+    "Paraguay": {
+      "Miguel Almirón": "fit",
+      "Gustavo Gómez": "fit",
+      "Julio Enciso": "fit"
+    },
+    "Australië": {
+      "Mat Ryan": "fit",
+      "Harry Souttar": "fit",
+      "Jackson Irvine": "fit"
+    },
+    "Turkije": {
+      "Arda Güler": "fit",
+      "Hakan Çalhanoğlu": "fit",
+      "Kenan Yıldız": "fit"
+    },
+    "Duitsland": {
+      "Jamal Musiala": "fit",
+      "Florian Wirtz": "fit",
+      "Joshua Kimmich": "fit"
+    },
+    "Curaçao": {
+      "Armando Obispo": "fit",
+      "Tahith Chong": "fit",
+      "Jürgen Locadia": "fit"
+    },
+    "Ivoorkust": {
+      "Franck Kessié": "fit",
+      "Amad Diallo": "fit",
+      "Wilfried Singo": "fit"
+    },
+    "Ecuador": {
+      "Moisés Caicedo": "fit",
+      "Piero Hincapié": "fit",
+      "Enner Valencia": "fit"
+    },
+    "Nederland": {
+      "Virgil van Dijk": "fit",
+      "Frenkie de Jong": "fit",
+      "Cody Gakpo": "fit"
+    },
+    "Japan": {
+      "Takefusa Kubo": "fit",
+      "Wataru Endo": "fit",
+      "Kaoru Mitoma": "fit"
+    },
+    "Zweden": {
+      "Viktor Gyökeres": "fit",
+      "Alexander Isak": "fit",
+      "Lucas Bergvall": "fit"
+    },
+    "Tunesië": {
+      "Youssef Msakni": "fit",
+      "Ellyes Skhiri": "fit",
+      "Hannibal Mejbri": "fit"
+    },
+    "België": {
+      "Kevin De Bruyne": "fit",
+      "Romelu Lukaku": "fit",
+      "Jérémy Doku": "fit"
+    },
+    "Egypte": {
+      "Mohamed Salah": "fit",
+      "Omar Marmoush": "fit",
+      "Mostafa Mohamed": "fit"
+    },
+    "Iran": {
+      "Mehdi Taremi": "fit",
+      "Sardar Azmoun": "fit",
+      "Alireza Jahanbakhsh": "fit"
+    },
+    "Nieuw-Zeeland": {
+      "Clayton Lewis": "fit",
+      "Chris Wood": "fit",
+      "Liberato Cacace": "fit"
+    },
+    "Spanje": {
+      "Lamine Yamal": "fit",
+      "Rodri": "fit",
+      "Pedri": "fit"
+    },
+    "Kaapverdië": {
+      "Garry Rodrigues": "fit",
+      "Ryan Mendes": "fit",
+      "Jamiro Monteiro": "fit"
+    },
+    "Saoedi-Arabië": {
+      "Mohammed Al-Owais": "fit",
+      "Salem Al-Dawsari": "fit",
+      "Firas Al-Buraikan": "fit"
+    },
+    "Uruguay": {
+      "Federico Valverde": "fit",
+      "Darwin Núñez": "fit",
+      "Ronald Araújo": "fit"
+    },
+    "Frankrijk": {
+      "Kylian Mbappé": "fit",
+      "Aurélien Tchouaméni": "fit",
+      "Bradley Barcola": "fit"
+    },
+    "Senegal": {
+      "Sadio Mané": "fit",
+      "Kalidou Koulibaly": "fit",
+      "Nicolas Jackson": "fit"
+    },
+    "Irak": {
+      "Mohanad Ali": "fit",
+      "Ali Jasim": "fit",
+      "Aymen Hussein": "fit"
+    },
+    "Noorwegen": {
+      "Erling Haaland": "fit",
+      "Martin Ødegaard": "fit",
+      "Alexander Sørloth": "fit"
+    },
+    "Argentinië": {
+      "Lionel Messi": "fit",
+      "Julián Álvarez": "fit",
+      "Enzo Fernández": "fit"
+    },
+    "Algerije": {
+      "Riyad Mahrez": "fit",
+      "Ramy Bensebaïni": "fit",
+      "Amine Gouiri": "fit"
+    },
+    "Oostenrijk": {
+      "David Alaba": "fit",
+      "Marcel Sabitzer": "fit",
+      "Konrad Laimer": "fit"
+    },
+    "Jordanië": {
+      "Yazan Al-Naimat": "fit",
+      "Musa Al-Taamari": "fit",
+      "Ali Olwan": "fit"
+    },
+    "Portugal": {
+      "Bruno Fernandes": "fit",
+      "Vitinha": "fit",
+      "Rafael Leão": "fit"
+    },
+    "DR Congo": {
+      "Chancel Mbemba": "fit",
+      "Yoane Wissa": "fit",
+      "Cédric Bakambu": "fit"
+    },
+    "Oezbekistan": {
+      "Eldor Shomurodov": "fit",
+      "Abbosbek Fayzullaev": "fit",
+      "Jaloliddin Masharipov": "fit"
+    },
+    "Colombia": {
+      "Luis Díaz": "fit",
+      "James Rodríguez": "fit",
+      "Richard Ríos": "fit"
+    },
+    "Engeland": {
+      "Jude Bellingham": "fit",
+      "Harry Kane": "fit",
+      "Bukayo Saka": "fit"
+    },
+    "Kroatië": {
+      "Luka Modrić": "fit",
+      "Joško Gvardiol": "fit",
+      "Mateo Kovačić": "fit"
+    },
+    "Ghana": {
+      "Thomas Partey": "fit",
+      "Mohammed Kudus": "fit",
+      "Antoine Semenyo": "fit"
+    },
+    "Panama": {
+      "Rodolfo Pizarro": "fit",
+      "José Luis Rodríguez": "fit",
+      "Adalberto Carrasquilla": "fit"
+    }
+  }
+}

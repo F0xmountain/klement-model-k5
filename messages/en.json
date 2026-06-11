@@ -28,7 +28,10 @@
     "vs": "VS",
     "draw": "DRAW",
     "klementPick": "K✓",
-    "klementPickFull": "K✓ KLEMENT PICK"
+    "klementPickFull": "K✓ KLEMENT PICK",
+    "statusFit": "FIT",
+    "statusDoubtful": "DOUBTFUL",
+    "statusOut": "OUT"
   },
   "factorBreakdown": {
     "title": "Factor Breakdown",
@@ -204,5 +207,24 @@
     "loading": "LOADING MARKET ODDS...",
     "error": "MARKET DATA UNAVAILABLE RIGHT NOW.",
     "disclaimer": "THIS IS NOT FINANCIAL ADVICE. WORLD CUP PREDICTIONS ARE PROBABILISTIC AND INHERENTLY UNCERTAIN."
+  },
+  "admin": {
+    "pageTitle": "SQUAD MANAGEMENT",
+    "passwordLabel": "ADMIN PASSWORD",
+    "loginButton": "LOGIN",
+    "loginError": "INCORRECT PASSWORD",
+    "lastUpdated": "LAST UPDATED",
+    "save": "SAVE",
+    "saving": "SAVING...",
+    "saved": "SAVED",
+    "saveError": "FAILED TO SAVE",
+    "group": "GROUP",
+    "squadDataErrorWarning": "SQUAD LIST FOR THIS TEAM IS INCORRECT (WRONG ROSTER). CAPTAIN AND STAR PLAYERS ARE CORRECT.",
+    "category": {
+      "goalkeeper": "GOALKEEPER",
+      "defender": "DEFENDER",
+      "midfielder": "MIDFIELDER",
+      "attacker": "ATTACKER"
+    }
   }
 }

@@ -1,7 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { matchP, teamNames, teamData, simResult } from '@/lib/klement'
+import { teamNames, teamData, simResult } from '@/lib/klement'
+import { matchP } from '@/lib/klement-custom'
+import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
@@ -12,6 +14,12 @@ import { PM_GAP_THRESHOLD } from '@/lib/polymarket'
 
 const allTeams = teamNames().sort()
 const SIM_N = 500
+
+const STATUS_KEY: Record<PlayerStatus, 'statusFit' | 'statusDoubtful' | 'statusOut'> = {
+  fit: 'statusFit',
+  doubtful: 'statusDoubtful',
+  out: 'statusOut',
+}
 
 function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite' | 'upsetPotential'; color: string } | null {
   const gap = Math.abs(pA - pB)
@@ -35,6 +43,8 @@ export default function VersusPage() {
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const upset = upsetLabel(pA, pB)
+  const summaryA = getStarPlayerSummary(toTeamNl(teamA) ?? '')
+  const summaryB = getStarPlayerSummary(toTeamNl(teamB) ?? '')
 
   // Reset sim results when teams change
   const key = `${teamA}:${teamB}`
@@ -83,6 +93,28 @@ export default function VersusPage() {
         </div>
 
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
+
+        {(summaryA.length > 0 || summaryB.length > 0) && (
+          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {[
+              { team: teamA, flag: tA?.flag, summary: summaryA },
+              { team: teamB, flag: tB?.flag, summary: summaryB },
+            ].filter(({ summary }) => summary.length > 0).map(({ team, flag, summary }) => (
+              <div key={team} style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                <FlagImg name={team} h={12} emoji={flag ?? '🏳️'} />
+                <span>{team}:</span>
+                {summary.map((p, i) => (
+                  <span key={p.name} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    {i > 0 && <span>·</span>}
+                    <span className={`status-dot status-dot-${p.status}`} />
+                    {p.name} {tc(STATUS_KEY[p.status])}
+                    {p.pct !== null && ` (${p.pct.toFixed(1)}%)`}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
 
         {Math.abs(pA - pB) >= PM_GAP_THRESHOLD && (
           <PolymarketBtn

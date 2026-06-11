@@ -528,3 +528,35 @@ main { flex: 1; }
   to   { opacity: 1; transform: translateY(0); }
 }
 .tick-up { animation: tickUp 0.15s ease forwards; }
+
+/* ── Player status dot (admin squads, injury summary) ── */
+.status-dot { display: inline-block; width: 8px; height: 8px; flex-shrink: 0; }
+.status-dot-fit      { background: var(--color-g); }
+.status-dot-doubtful { background: var(--color-o); }
+.status-dot-out      { background: var(--color-r); }
+
+/* ── Admin: squad player row ── */
+.admin-player-row {
+  display: grid;
+  grid-template-columns: 16px 1fr 120px 90px 100px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  font-size: 9px;
+  border-bottom: 1px solid var(--color-brd);
+}
+.admin-player-row:last-child { border-bottom: none; }
+.admin-status-select {
+  font-family: var(--font-pixel), monospace;
+  font-size: 8px;
+  background: var(--color-bg);
+  color: var(--color-txt);
+  border: 1px solid var(--color-brd2);
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .admin-player-row { grid-template-columns: 16px 1fr 100px; }
+  .admin-player-row > span:nth-child(3) { display: none; }
+}
