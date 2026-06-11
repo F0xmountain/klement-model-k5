@@ -211,6 +211,20 @@ export function applyExperienceFactor(probs: MatchProbs, homeTeam: string, awayT
   return shiftPA(probs, bonus(homeTeam) - bonus(awayTeam))
 }
 
+// teams.json gebruikt voor enkele landen afwijkende namen t.o.v. squads-db.json's
+// name_en (de bron van form-cache.json en league-data.json's "team" veld). Kleine
+// alias-map om de lookup te overbruggen.
+const LEAGUE_NAME_ALIASES: Record<string, string> = {
+  'Bosnia-Herz': 'Bosnia and Herzegovina',
+  'Curacao': 'Curaçao',
+  'Cape Verde': 'Cape Verde Islands',
+  'Congo DR': 'DR Congo',
+}
+
+function getLeagueData(team: string): LeagueDataEntry | undefined {
+  return leagueData[LEAGUE_NAME_ALIASES[team] ?? team]
+}
+
 // Recente vorm telt voor 15% mee in het scoreverschil — formScore (0-30, uit
 // lib/form-cache.json) wordt geschaald naar [0,1] en het verschil tussen beide
 // teams wordt, net als sA-sB in matchPElo, gedeeld door 0.28 voor een logit-shift.
@@ -219,7 +233,7 @@ const FORM_SCORE_MAX = 30
 const FORM_SIGMA = 0.28
 
 function form01(team: string): number | undefined {
-  const score = formCache[team]?.formScore
+  const score = formCache[LEAGUE_NAME_ALIASES[team] ?? team]?.formScore
   return score == null ? undefined : clamp(score / FORM_SCORE_MAX, 0, 1)
 }
 
@@ -233,20 +247,6 @@ export function applyFormFactor(probs: MatchProbs, homeTeam: string, awayTeam: s
 
   const net = (FORM_WEIGHT * (formA - formB)) / FORM_SIGMA
   return shiftPA(probs, net)
-}
-
-// teams.json gebruikt voor enkele landen afwijkende namen t.o.v. squads-db.json's
-// name_en (de bron van league-data.json's "team" veld). Kleine alias-map om de
-// lookup te overbruggen.
-const LEAGUE_NAME_ALIASES: Record<string, string> = {
-  'Bosnia-Herz': 'Bosnia and Herzegovina',
-  'Curacao': 'Curaçao',
-  'Cape Verde': 'Cape Verde Islands',
-  'Congo DR': 'DR Congo',
-}
-
-function getLeagueData(team: string): LeagueDataEntry | undefined {
-  return leagueData[LEAGUE_NAME_ALIASES[team] ?? team]
 }
 
 // Competitieniveau: aandeel van de 26-mans selectie dat in een top-5 Europese
