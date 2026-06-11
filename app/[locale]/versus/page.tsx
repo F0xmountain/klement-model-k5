@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import stadiumsRaw from '@/lib/stadiums.json'
+import formCacheRaw from '@/lib/form-cache.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -24,6 +25,28 @@ interface Stadium {
   coordinates: { lat: number; lon: number }
 }
 const stadiums = stadiumsRaw as Stadium[]
+
+const formCache = formCacheRaw as Record<string, { formScore: number | null }>
+
+type FormLevel = 'poor' | 'average' | 'good'
+
+function formLevel(score: number): FormLevel {
+  if (score < 10) return 'poor'
+  if (score < 20) return 'average'
+  return 'good'
+}
+
+const FORM_LEVEL_KEY: Record<FormLevel, 'formPoor' | 'formAverage' | 'formGood'> = {
+  poor: 'formPoor',
+  average: 'formAverage',
+  good: 'formGood',
+}
+
+const FORM_LEVEL_DOT: Record<FormLevel, 'L' | 'D' | 'W'> = {
+  poor: 'L',
+  average: 'D',
+  good: 'W',
+}
 
 const STATUS_KEY: Record<PlayerStatus, 'statusFit' | 'statusDoubtful' | 'statusOut'> = {
   fit: 'statusFit',
@@ -133,6 +156,18 @@ export default function VersusPage() {
         <div style={{ marginTop: 8, fontSize: 8, color: 'var(--color-muted)' }}>
           {t('teamStrengthSplit', { elo: ELO_WEIGHT * 100, fifa: FIFA_WEIGHT * 100 })}
         </div>
+
+        {[teamA, teamB].map(name => {
+          const score = formCache[name]?.formScore
+          if (score == null) return null
+          const level = formLevel(score)
+          return (
+            <div key={name} style={{ marginTop: 4, fontSize: 8, color: 'var(--color-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span className={`form-dot form-dot-${FORM_LEVEL_DOT[level]}`} />
+              {t('formIndicator', { team: name, level: t(FORM_LEVEL_KEY[level]), score })}
+            </div>
+          )
+        })}
 
         {(summaryA.length > 0 || summaryB.length > 0) && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>

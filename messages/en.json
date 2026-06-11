@@ -118,7 +118,11 @@
     "simsLabel": "SIMS",
     "teamStrengthSplit": "Team strength: Elo {elo}% + FIFA {fifa}%",
     "venueLabel": "Venue",
-    "venueNeutral": "Neutral venue (no altitude/travel effect)"
+    "venueNeutral": "Neutral venue (no altitude/travel effect)",
+    "formIndicator": "{team} in {level} form ({score}/30)",
+    "formPoor": "poor",
+    "formAverage": "average",
+    "formGood": "good"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",
@@ -127,7 +131,8 @@
     "colScore": "SCORE",
     "scoreModelScore": "MODEL SCORE",
     "scoreFifaPts": "FIFA PTS",
-    "scoreGdpCapita": "GDP/CAPITA"
+    "scoreGdpCapita": "GDP/CAPITA",
+    "formLabel": "RECENT FORM"
   },
   "about": {
     "title": "ABOUT THE MODEL",

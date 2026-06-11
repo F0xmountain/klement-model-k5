@@ -118,7 +118,11 @@
     "simsLabel": "SIMS",
     "teamStrengthSplit": "Teamsterkte: Elo {elo}% + FIFA {fifa}%",
     "venueLabel": "Locatie",
-    "venueNeutral": "Neutrale locatie (geen hoogte/reiseffect)"
+    "venueNeutral": "Neutrale locatie (geen hoogte/reiseffect)",
+    "formIndicator": "{team} in {level} vorm ({score}/30)",
+    "formPoor": "slechte",
+    "formAverage": "gemiddelde",
+    "formGood": "goede"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",
@@ -127,7 +131,8 @@
     "colScore": "SCORE",
     "scoreModelScore": "MODEL SCORE",
     "scoreFifaPts": "FIFA PTS",
-    "scoreGdpCapita": "BBP/INWONER"
+    "scoreGdpCapita": "BBP/INWONER",
+    "formLabel": "RECENTE VORM"
   },
   "about": {
     "title": "OVER HET MODEL",

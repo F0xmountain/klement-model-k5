@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { teamNames, teamData, sc } from '@/lib/klement'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
 import H2HList from '@/components/team/H2HList'
+import FormBar from '@/components/stats/FormBar'
 import FlagImg from '@/components/ui/FlagImg'
 import TeamSelect from '@/components/ui/TeamSelect'
 import PixelParticles from '@/components/ui/PixelParticles'
@@ -94,6 +95,13 @@ export default function TeamsPage() {
             {team?.conf} · FIFA {team?.fifa} PTS · MODEL {score.toFixed(3)}
           </div>
         </div>
+      </div>
+
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 8 }}>
+          {tt('formLabel')}
+        </div>
+        <FormBar team={selected} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>

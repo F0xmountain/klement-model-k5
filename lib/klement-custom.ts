@@ -1,5 +1,6 @@
 import teamsRaw from './teams.json'
 import eloHistoryRaw from './elo-history.json'
+import formCacheRaw from './form-cache.json'
 import type { TeamData, WDL } from '../types'
 import { fG, fP, fT, fF } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
@@ -10,6 +11,11 @@ import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data
 
 const td = teamsRaw as Record<string, TeamData>
 const eloHistory = eloHistoryRaw as Array<Record<string, string | number>>
+
+interface FormCacheEntry {
+  formScore: number | null
+}
+const formCache = formCacheRaw as Record<string, FormCacheEntry>
 
 const W = { gdp: 0.20, pop: 0.15, temp: 0.15, fifa: 0.45, host: 0.05 }
 
@@ -194,6 +200,30 @@ export function applyExperienceFactor(probs: MatchProbs, homeTeam: string, awayT
   return shiftPA(probs, bonus(homeTeam) - bonus(awayTeam))
 }
 
+// Recente vorm telt voor 15% mee in het scoreverschil — formScore (0-30, uit
+// lib/form-cache.json) wordt geschaald naar [0,1] en het verschil tussen beide
+// teams wordt, net als sA-sB in matchPElo, gedeeld door 0.28 voor een logit-shift.
+const FORM_WEIGHT = 0.15
+const FORM_SCORE_MAX = 30
+const FORM_SIGMA = 0.28
+
+function form01(team: string): number | undefined {
+  const score = formCache[team]?.formScore
+  return score == null ? undefined : clamp(score / FORM_SCORE_MAX, 0, 1)
+}
+
+// Teams zonder vormgegevens (formScore null in form-cache.json, bv. zonder
+// API_FOOTBALL_KEY) leveren geen bijdrage — no-op net als de andere
+// post-hoc factoren zonder data.
+export function applyFormFactor(probs: MatchProbs, homeTeam: string, awayTeam: string): MatchProbs {
+  const formA = form01(homeTeam)
+  const formB = form01(awayTeam)
+  if (formA === undefined || formB === undefined) return probs
+
+  const net = (FORM_WEIGHT * (formA - formB)) / FORM_SIGMA
+  return shiftPA(probs, net)
+}
+
 // Drop-in vervanging van klement.ts's matchP: zelfde signatuur, nA/nB zijn
 // Engelse teamnamen uit lib/teams.json. Past Elo-weging, de altitude/travel/
 // experience-factoren en de blessure-status van sterspelers toe op de
@@ -204,6 +234,7 @@ export function matchP(nA: string, nB: string, venue?: VenueInfo): MatchProbs {
   probs = applyAltitudeFactor(probs, nA, nB, venue?.altitude ?? 0)
   probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
   probs = applyExperienceFactor(probs, nA, nB)
+  probs = applyFormFactor(probs, nA, nB)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
   return applyStarPlayerModifier(probs, teamNlA, teamNlB)

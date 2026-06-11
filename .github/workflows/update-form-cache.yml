@@ -1,0 +1,36 @@
+name: Update Form Cache
+
+on:
+  schedule:
+    - cron: '0 3 * * *'    # Daily 03:00 UTC
+  workflow_dispatch:          # Allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch recent form for all teams
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+        run: node scripts/fetch-form.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lib/form-cache.json
+          git diff --staged --quiet || git commit -m "chore: update form cache $(date +%Y-%m-%d)"
+          git push
+
+      - name: Trigger Next.js on-demand revalidation
+        run: |
+          curl -sf -X POST \
+            "${{ secrets.NEXT_PUBLIC_APP_URL }}/api/revalidate?secret=${{ secrets.REVALIDATE_TOKEN }}" \
+            || echo "Revalidation skipped (no URL configured)"
