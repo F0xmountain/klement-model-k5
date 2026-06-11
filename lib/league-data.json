@@ -1,0 +1,290 @@
+[
+  {
+    "team": "Mexico",
+    "players_top5": 6,
+    "total_market_value_m": 0,
+    "max_same_club": 5
+  },
+  {
+    "team": "South Africa",
+    "players_top5": 1,
+    "total_market_value_m": 0,
+    "max_same_club": 8
+  },
+  {
+    "team": "South Korea",
+    "players_top5": 5,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Czechia",
+    "players_top5": 7,
+    "total_market_value_m": 0,
+    "max_same_club": 9
+  },
+  {
+    "team": "Canada",
+    "players_top5": 10,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Bosnia and Herzegovina",
+    "players_top5": 8,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Qatar",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 7
+  },
+  {
+    "team": "Switzerland",
+    "players_top5": 23,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Brazil",
+    "players_top5": 14,
+    "total_market_value_m": 0,
+    "max_same_club": 4
+  },
+  {
+    "team": "Morocco",
+    "players_top5": 16,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Haiti",
+    "players_top5": 4,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Scotland",
+    "players_top5": 11,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "USA",
+    "players_top5": 13,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Paraguay",
+    "players_top5": 4,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Australia",
+    "players_top5": 5,
+    "total_market_value_m": 0,
+    "max_same_club": 4
+  },
+  {
+    "team": "Turkey",
+    "players_top5": 9,
+    "total_market_value_m": 0,
+    "max_same_club": 7
+  },
+  {
+    "team": "Germany",
+    "players_top5": 25,
+    "total_market_value_m": 0,
+    "max_same_club": 6
+  },
+  {
+    "team": "Curaçao",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Ivory Coast",
+    "players_top5": 12,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Ecuador",
+    "players_top5": 7,
+    "total_market_value_m": 0,
+    "max_same_club": 3
+  },
+  {
+    "team": "Netherlands",
+    "players_top5": 21,
+    "total_market_value_m": 0,
+    "max_same_club": 3
+  },
+  {
+    "team": "Japan",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Sweden",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Tunisia",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Belgium",
+    "players_top5": 1,
+    "total_market_value_m": 0,
+    "max_same_club": 1
+  },
+  {
+    "team": "Egypt",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Iran",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "New Zealand",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Spain",
+    "players_top5": 3,
+    "total_market_value_m": 0,
+    "max_same_club": 1
+  },
+  {
+    "team": "Cape Verde Islands",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Saudi Arabia",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Uruguay",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "France",
+    "players_top5": 2,
+    "total_market_value_m": 0,
+    "max_same_club": 1
+  },
+  {
+    "team": "Senegal",
+    "players_top5": 20,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Iraq",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Norway",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Argentina",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Algeria",
+    "players_top5": 12,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Austria",
+    "players_top5": 16,
+    "total_market_value_m": 0,
+    "max_same_club": 2
+  },
+  {
+    "team": "Jordan",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Portugal",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 1
+  },
+  {
+    "team": "DR Congo",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Uzbekistan",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Colombia",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "England",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 1
+  },
+  {
+    "team": "Croatia",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Ghana",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  },
+  {
+    "team": "Panama",
+    "players_top5": 0,
+    "total_market_value_m": 0,
+    "max_same_club": 0
+  }
+]
