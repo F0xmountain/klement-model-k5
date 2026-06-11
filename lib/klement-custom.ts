@@ -7,6 +7,7 @@ import type { TeamData, WDL } from '../types'
 import { fG, fP, fT, fF } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
 import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data'
+import { getModelWeights, type ModelWeights } from './model-config'
 
 // Wrapper rond klement.ts's matchP. lib/klement.ts is read-only — modelaanpassingen
 // (Elo-weging, sterspeler-blessures) leven hier.
@@ -30,7 +31,11 @@ const leagueData: Record<string, LeagueDataEntry> = Object.fromEntries(
   (leagueDataRaw as LeagueDataEntry[]).map(d => [d.team, d])
 )
 
-const W = { gdp: 0.20, pop: 0.15, temp: 0.15, fifa: 0.45, host: 0.05 }
+// Modelgewichten uit lib/model-config.json (defaults in lib/model-config.ts).
+// Op module-niveau ingelezen — admin-wijzigingen gelden na revalidatie/herbouw.
+// De basisfactoren (gdp/pop/temp/fifa/host) worden per berekening uit `weights`
+// gelezen via scWith(), zodat de configurator-preview ze kan overrulen.
+const weights = getModelWeights()
 
 type MatchProbs = { pA: number; dr: number; pB: number }
 
@@ -42,9 +47,10 @@ export interface VenueInfo {
   lon?: number
 }
 
-// "Teamsterkte" (de 0.45-gewogen factor) is een mix van FIFA-ranking en Elo-rating
-export const ELO_WEIGHT = 0.30
-export const FIFA_WEIGHT = 0.70
+// "Teamsterkte" (de fifa-gewogen factor) is een mix van FIFA-ranking en Elo-rating.
+// eloWeight uit de config bepaalt het Elo-aandeel; FIFA krijgt de rest.
+export const ELO_WEIGHT = weights.eloWeight
+export const FIFA_WEIGHT = 1 - weights.eloWeight
 
 // Elo-normalisatie [1000, 2200] → [0, 1], analoog aan fF's FIFA-normalisatie [1400, 2000]
 const ELO_MIN = 1000
@@ -121,33 +127,38 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 }
 
 // Teamscore zoals klement.ts's sc(), maar de FIFA-factor is vervangen door een
-// FIFA/Elo-mix (FIFA_WEIGHT/ELO_WEIGHT). Zonder Elo-data valt terug op fF alleen.
-function sc(name: string): number {
+// FIFA/Elo-mix (eloWeight bepaalt het Elo-aandeel). Zonder Elo-data valt terug
+// op fF alleen. w is parametriseerbaar voor de live configurator-preview.
+function scWith(name: string, w: ModelWeights): number {
   const t = td[name]
   if (!t) return 0
 
   const elo = latestElo(name)
   const strength = elo !== undefined
-    ? FIFA_WEIGHT * fF(t.fifa) + ELO_WEIGHT * fE(elo)
+    ? (1 - w.eloWeight) * fF(t.fifa) + w.eloWeight * fE(elo)
     : fF(t.fifa)
 
   return (
-    W.gdp * fG(t.gdp) +
-    W.pop * fP(t.pop, t.latam) +
-    W.temp * fT(t.temp) +
-    W.fifa * strength +
-    W.host * (t.host ? 1 : 0)
+    w.gdp * fG(t.gdp) +
+    w.pop * fP(t.pop, t.latam) +
+    w.temp * fT(t.temp) +
+    w.fifa * strength +
+    w.host * (t.host ? 1 : 0)
   )
 }
 
-function matchPElo(nA: string, nB: string): MatchProbs {
-  const sA = sc(nA)
-  const sB = sc(nB)
+function matchPEloWith(nA: string, nB: string, w: ModelWeights): MatchProbs {
+  const sA = scWith(nA, w)
+  const sB = scWith(nB, w)
   const z = (sA - sB) / 0.28
   const dr = clamp(0.20 * (1 - 0.3 * Math.abs(z)), 0.05, 0.24)
   const pA = phi(z) * (1 - dr)
   const pB = (1 - phi(z)) * (1 - dr)
   return { pA, dr, pB }
+}
+
+function matchPElo(nA: string, nB: string): MatchProbs {
+  return matchPEloWith(nA, nB, weights)
 }
 
 // Logit-shift van ~-0.22 ≈ -5%-punt rond p=0.5 (zelfde schaal als STAR_PENALTY
@@ -234,10 +245,10 @@ function getLeagueData(team: string): LeagueDataEntry | undefined {
   return leagueData[LEAGUE_NAME_ALIASES[team] ?? team]
 }
 
-// Recente vorm telt voor 15% mee in het scoreverschil — formScore (0-30, uit
-// lib/form-cache.json) wordt geschaald naar [0,1] en het verschil tussen beide
-// teams wordt, net als sA-sB in matchPElo, gedeeld door 0.28 voor een logit-shift.
-const FORM_WEIGHT = 0.15
+// Recente vorm telt mee in het scoreverschil (default 15%, instelbaar via config)
+// — formScore (0-30, uit lib/form-cache.json) wordt geschaald naar [0,1] en het
+// verschil tussen beide teams wordt, net als sA-sB in matchPElo, gedeeld door
+// 0.28 voor een logit-shift.
 const FORM_SCORE_MAX = 30
 const FORM_SIGMA = 0.28
 
@@ -249,12 +260,17 @@ function form01(team: string): number | undefined {
 // Teams zonder vormgegevens (formScore null in form-cache.json, bv. zonder
 // API_FOOTBALL_KEY) leveren geen bijdrage — no-op net als de andere
 // post-hoc factoren zonder data.
-export function applyFormFactor(probs: MatchProbs, homeTeam: string, awayTeam: string): MatchProbs {
+export function applyFormFactor(
+  probs: MatchProbs,
+  homeTeam: string,
+  awayTeam: string,
+  formWeight: number = weights.formWeight
+): MatchProbs {
   const formA = form01(homeTeam)
   const formB = form01(awayTeam)
   if (formA === undefined || formB === undefined) return probs
 
-  const net = (FORM_WEIGHT * (formA - formB)) / FORM_SIGMA
+  const net = (formWeight * (formA - formB)) / FORM_SIGMA
   return shiftPA(probs, net)
 }
 
@@ -269,10 +285,9 @@ export function leagueIndex(team: string): number | undefined {
   return clamp(data.players_top5 / LEAGUE_SQUAD_SIZE, 0, 1)
 }
 
-// Competitieniveau telt voor 10% mee in het scoreverschil — zelfde
-// logit-schaalbenadering als applyFormFactor, maar lager gewicht omdat dit een
-// zachter signaal is dan recente vorm.
-const LEAGUE_WEIGHT = 0.10
+// Competitieniveau telt mee in het scoreverschil (default 10%, instelbaar via
+// config) — zelfde logit-schaalbenadering als applyFormFactor, maar lager gewicht
+// omdat dit een zachter signaal is dan recente vorm.
 const LEAGUE_SIGMA = 0.28
 
 // Logit-shift van +0.04 ≈ +1%-punt rond p=0.5 (zelfde schaal als
@@ -280,12 +295,17 @@ const LEAGUE_SIGMA = 0.28
 const CLUB_SYNERGY_BONUS = 0.04
 const CLUB_SYNERGY_THRESHOLD = 3
 
-export function applyLeagueFactor(probs: MatchProbs, homeTeam: string, awayTeam: string): MatchProbs {
+export function applyLeagueFactor(
+  probs: MatchProbs,
+  homeTeam: string,
+  awayTeam: string,
+  leagueWeight: number = weights.leagueWeight
+): MatchProbs {
   const idxA = leagueIndex(homeTeam)
   const idxB = leagueIndex(awayTeam)
   if (idxA === undefined || idxB === undefined) return probs
 
-  let net = (LEAGUE_WEIGHT * (idxA - idxB)) / LEAGUE_SIGMA
+  let net = (leagueWeight * (idxA - idxB)) / LEAGUE_SIGMA
 
   if ((getLeagueData(homeTeam)?.max_same_club ?? 0) >= CLUB_SYNERGY_THRESHOLD) net += CLUB_SYNERGY_BONUS
   if ((getLeagueData(awayTeam)?.max_same_club ?? 0) >= CLUB_SYNERGY_THRESHOLD) net -= CLUB_SYNERGY_BONUS
@@ -305,6 +325,20 @@ export function matchP(nA: string, nB: string, venue?: VenueInfo): MatchProbs {
   probs = applyExperienceFactor(probs, nA, nB)
   probs = applyFormFactor(probs, nA, nB)
   probs = applyLeagueFactor(probs, nA, nB)
+  const teamNlA = toTeamNl(nA) ?? ''
+  const teamNlB = toTeamNl(nB) ?? ''
+  return applyStarPlayerModifier(probs, teamNlA, teamNlB)
+}
+
+// Live-preview voor de modelconfigurator: berekent matchP met expliciet
+// meegegeven gewichten in plaats van de opgeslagen config. Past de
+// gewichtsgevoelige factoren toe (basisscore, vorm, competitieniveau, sterspeler-
+// blessures); venue-gebonden factoren (hoogte/reis) blijven buiten beschouwing
+// omdat de preview een neutrale locatie aanneemt.
+export function previewMatchP(nA: string, nB: string, w: ModelWeights): MatchProbs {
+  let probs = matchPEloWith(nA, nB, w)
+  probs = applyFormFactor(probs, nA, nB, w.formWeight)
+  probs = applyLeagueFactor(probs, nA, nB, w.leagueWeight)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
   return applyStarPlayerModifier(probs, teamNlA, teamNlB)

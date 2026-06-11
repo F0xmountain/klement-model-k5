@@ -54,6 +54,14 @@ const STATUS_KEY: Record<PlayerStatus, 'statusFit' | 'statusDoubtful' | 'statusO
   out: 'statusOut',
 }
 
+// Verwachte goals afgeleid van de winkans — geen scorevoorspelling, alleen een
+// indicatie. Basis 1.35 goals/team (historisch WK-gemiddelde), bijgesteld naar
+// winkans: de sterkere ploeg scoort meer, de zwakkere minder. Afgerond op 1 decimaal.
+const BASE_SCORING_RATE = 1.35
+function expectedGoals(p: number): string {
+  return (BASE_SCORING_RATE * (0.5 + (p - 0.5) * 0.8)).toFixed(1)
+}
+
 function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite' | 'upsetPotential'; color: string } | null {
   const gap = Math.abs(pA - pB)
   if (gap < 0.1) return { key: 'coinFlip', color: 'var(--color-muted)' }
@@ -152,6 +160,15 @@ export default function VersusPage() {
         </select>
 
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
+
+        <div style={{ marginTop: 10, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: 'var(--color-muted)' }}>
+            {t('expectedScore', { a: expectedGoals(pA), b: expectedGoals(pB) })}
+          </div>
+          <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 4 }}>
+            {t('expectedScoreNote')}
+          </div>
+        </div>
 
         <div style={{ marginTop: 8, fontSize: 8, color: 'var(--color-muted)' }}>
           {t('teamStrengthSplit', { elo: ELO_WEIGHT * 100, fifa: FIFA_WEIGHT * 100 })}

@@ -3,6 +3,7 @@ import playerStatusRaw from './player-status.json'
 import starPlayerStatusRaw from './star-player-status.json'
 import type { matchP } from './klement'
 import type { PlayerStatus, SquadTeam } from './types/squads'
+import { getModelWeights } from './model-config'
 
 export type { PlayerStatus } from './types/squads'
 
@@ -38,8 +39,19 @@ export function toTeamNl(nameEn: string): string | undefined {
   return EN_TO_NL[nameEn] ?? EN_TO_NL[EN_NAME_ALIASES[nameEn] ?? '']
 }
 
-// Penalty op logit-schaal per sterspeler-rank (rank 1 = belangrijkste)
-const STAR_PENALTY: Record<number, number> = { 1: -0.35, 2: -0.22, 3: -0.13 }
+// Sterspeler-penalty's komen uit de modelconfig als positieve %-punt-waarden
+// (default 0.08/0.05/0.03) en worden omgezet naar een negatieve logit-shift:
+// een penalty van d %-punt rond p=0.5 is logit-shift log((0.5−d)/(0.5+d)).
+function pctToLogit(d: number): number {
+  return Math.log((0.5 - d) / (0.5 + d))
+}
+
+const starWeights = getModelWeights()
+const STAR_PENALTY: Record<number, number> = {
+  1: pctToLogit(starWeights.starPenalty1),
+  2: pctToLogit(starWeights.starPenalty2),
+  3: pctToLogit(starWeights.starPenalty3),
+}
 
 function sigmoid(x: number): number {
   return 1 / (1 + Math.exp(-x))
