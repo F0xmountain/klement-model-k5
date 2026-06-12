@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { isAdminAuthed } from '@/lib/admin-auth'
 import { getModelWeights } from '@/lib/model-config'
+import { Link } from '@/i18n/navigation'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
 import ModelConfigClient from '@/components/admin/ModelConfigClient'
 
@@ -22,8 +23,11 @@ export default async function ModelConfigPage() {
   return (
     <div className="sec page-enter">
       <div className="section-title">{t('title')}</div>
-      <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2, marginBottom: 24 }}>
+      <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2, marginBottom: 12 }}>
         {t('description')}
+      </div>
+      <div style={{ marginBottom: 24 }}>
+        <Link href="/admin/model-explain" style={{ fontSize: 9, color: 'var(--color-b)' }}>→ Model internals (live calculation walkthrough)</Link>
       </div>
       <ModelConfigClient initial={getModelWeights()} />
     </div>
