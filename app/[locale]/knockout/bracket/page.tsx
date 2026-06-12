@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
-import BracketView from '@/components/knockout/BracketView'
+import SimBracketView from '@/components/bracket/SimBracketView'
 import PixelParticles from '@/components/ui/PixelParticles'
 
 const ROUND_TABS = [
@@ -32,15 +32,10 @@ export default function BracketPage() {
         </div>
 
         <div style={{ padding: '16px 12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 10, color: 'var(--color-muted)', letterSpacing: 1 }}>
-              {tk('bracketLegendTitle')}
-            </span>
-            <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
-              <span style={{ color: 'var(--color-g)', marginRight: 4 }}>█</span>{tk('bracketLegend')}
-            </span>
+          <div style={{ fontSize: 10, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 14 }}>
+            {tk('bracketLegendTitle')}
           </div>
-          <BracketView />
+          <SimBracketView />
         </div>
       </div>
     </div>
