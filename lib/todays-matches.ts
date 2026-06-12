@@ -48,26 +48,53 @@ export interface TodayMatch extends ScheduleMatch {
   prediction: { pA: number; dr: number; pB: number }
 }
 
-// Wedstrijden van vandaag (UTC-datum van `now`), elk met de werkelijke uitslag
-// (indien in results.json) en altijd de modelvoorspelling.
-export function getTodaysMatches(now: Date): TodayMatch[] {
-  const todayUTC = now.toISOString().slice(0, 10)
+const DAY_MS = 24 * 60 * 60 * 1000
 
+// Kalenderdatum in de LOKALE tijdzone van de runtime (in de client = de tijdzone
+// van de kijker), als "YYYY-MM-DD".
+function localDateStr(d: Date): string {
+  const y = d.getFullYear()
+  const mo = String(d.getMonth() + 1).padStart(2, '0')
+  const da = String(d.getDate()).padStart(2, '0')
+  return `${y}-${mo}-${da}`
+}
+
+// Het exacte aftrap-moment (UTC-instant) van een wedstrijd.
+function kickoffInstant(m: ScheduleMatch): Date {
+  return new Date(`${m.date}T${m.kickoffUTC}:00Z`)
+}
+
+function buildMatch(m: ScheduleMatch, byPair: Map<string, ResultEntry>): TodayMatch {
+  const teamA = canon(m.teamA)
+  const teamB = canon(m.teamB)
+  const r = byPair.get(pairKey(teamA, teamB))
+  const result = r
+    ? r.teamA === teamA
+      ? { scoreA: r.scoreA, scoreB: r.scoreB }
+      : { scoreA: r.scoreB, scoreB: r.scoreA }
+    : undefined
+  const { pA, dr, pB } = matchP(teamA, teamB)
+  return { ...m, teamA, teamB, result, prediction: { pA, dr, pB } }
+}
+
+// Wedstrijden waarvan de aftrap (UTC) binnen de lokale kalenderdag `localDate`
+// valt (00:00–23:59 lokale tijd), gesorteerd op aftraptijd.
+function matchesForLocalDate(localDate: string): TodayMatch[] {
   const byPair = new Map<string, ResultEntry>()
   for (const r of Object.values(results)) byPair.set(pairKey(r.teamA, r.teamB), r)
 
   return schedule
-    .filter(m => m.date === todayUTC)
-    .map(m => {
-      const teamA = canon(m.teamA)
-      const teamB = canon(m.teamB)
-      const r = byPair.get(pairKey(teamA, teamB))
-      const result = r
-        ? r.teamA === teamA
-          ? { scoreA: r.scoreA, scoreB: r.scoreB }
-          : { scoreA: r.scoreB, scoreB: r.scoreA }
-        : undefined
-      const { pA, dr, pB } = matchP(teamA, teamB)
-      return { ...m, teamA, teamB, result, prediction: { pA, dr, pB } }
-    })
+    .filter(m => localDateStr(kickoffInstant(m)) === localDate)
+    .sort((a, b) => kickoffInstant(a).getTime() - kickoffInstant(b).getTime())
+    .map(m => buildMatch(m, byPair))
+}
+
+// Wedstrijden "vandaag" volgens de LOKALE kalenderdag van de kijker (niet UTC).
+export function getTodaysMatches(now: Date): TodayMatch[] {
+  return matchesForLocalDate(localDateStr(now))
+}
+
+// Wedstrijden van de volgende lokale dag — voor de fallback op rustige dagen.
+export function getTomorrowsMatches(now: Date): TodayMatch[] {
+  return matchesForLocalDate(localDateStr(new Date(now.getTime() + DAY_MS)))
 }

@@ -103,6 +103,7 @@
     "predictionPathLabel": "PATH:",
     "modelVariablesTitle": "MODEL VARIABLES",
     "todayMatches": "Today's matches",
+    "tomorrowMatches": "Tomorrow",
     "modelPrediction": "Model",
     "noMatchesToday": ""
   },
