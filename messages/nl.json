@@ -10,6 +10,7 @@
     "groups": "GROEPEN",
     "topscorers": "Topscorers",
     "bracket": "BRACKET",
+    "simBracket": "SIM",
     "myBracket": "MIJN BRACKET",
     "stats": "STATS",
     "live": "LIVE",
@@ -295,6 +296,8 @@
     "mcRunning": "⏳ BEZIG...",
     "mcSimsLabel": "simulaties",
     "mcColTeam": "TEAM",
+    "mcColR32": "R32",
+    "mcColR16": "R16",
     "mcColQf": "KF",
     "mcColSf": "HF",
     "mcColFinal": "FINALE",
@@ -324,6 +327,16 @@
     "subtitle": "Op basis van toernooi-kans × positiegewicht",
     "posWeight": "Positiegewicht: lager = scoort eerder",
     "disclaimer": "Alleen voorspelling — op basis van positie in de selectie, niet individuele statistieken"
+  },
+  "simBracket": {
+    "title": "Meest Waarschijnlijke Bracket",
+    "subtitle": "Het volledige toernooi duizenden keren gesimuleerd — het meest waarschijnlijke team per plek.",
+    "updated": "Recentste uitslagen:",
+    "recalculate": "↻ HERBEREKEN",
+    "recalculating": "⏳ SIMULEREN...",
+    "basedOn": "Op basis van {n} simulaties",
+    "final": "FINALE",
+    "champion": "KAMPIOEN"
   },
   "time": {
     "justNow": "zojuist",

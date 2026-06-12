@@ -1,6 +1,6 @@
 import squadsDbRaw from './squads-db.json'
 import type { SquadTeam } from './types/squads'
-import type { McResult, McRoundCounts } from './monte-carlo'
+import { simulateTournament, expectedMatchesFromSim } from './simulate-tournament'
 
 const teamsDb = (squadsDbRaw as unknown as { teams: Record<string, SquadTeam> }).teams
 
@@ -20,22 +20,16 @@ export interface PredictedScorer {
   score: number
 }
 
-// Verwacht aantal gespeelde wedstrijden = 3 groepswedstrijden + de kans om elke
-// knockoutronde (R32..finale) te spelen. Teams zonder MC-data (niet in de bracket)
-// spelen alleen de groepsfase.
-function expectedMatches(counts: McRoundCounts | undefined, n: number): number {
-  if (!counts || n === 0) return 3
-  const reach =
-    (counts.r32 ?? 0) + (counts.r16 ?? 0) + (counts.qf ?? 0) + (counts.sf ?? 0) + (counts.final ?? 0)
-  return 3 + reach / n
-}
+// Rangschikt alle spelers uit squads-db.json op verwachte scorebijdrage:
+// verwacht aantal gespeelde wedstrijden (uit de volledige toernooi-simulatie,
+// inclusief groepsfase) × inverse positiegewicht. Geeft de top N.
+export function predictedTopScorers(limit = 20, sims = 2000): PredictedScorer[] {
+  const sim = simulateTournament(sims)
+  const expected = expectedMatchesFromSim(sim)
 
-// Rangschikt alle spelers uit squads-db.json op verwachte scorebijdrage
-// (toernooi-kans van het team × inverse positiegewicht) en geeft de top N.
-export function predictedTopScorers(mc: McResult, limit = 20): PredictedScorer[] {
   const players: PredictedScorer[] = []
   for (const team of Object.values(teamsDb)) {
-    const em = expectedMatches(mc.teams[team.name_en], mc.n)
+    const em = expected[team.name_en] ?? 3
     for (const p of team.squad) {
       const weight = POSITION_WEIGHT[p.category] ?? POSITION_WEIGHT.midfielder
       players.push({ name: p.name, team: team.name_en, category: p.category, score: em / weight })

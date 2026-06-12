@@ -5,14 +5,6 @@ import TimeAgo from '@/components/ui/TimeAgo'
 import ModelMonteCarlo from '@/components/model/ModelMonteCarlo'
 import { getModelWeights } from '@/lib/model-config'
 import { getResultsLastUpdated } from '@/lib/rest-days'
-import mcCacheRaw from '@/lib/mc-cache.json'
-import type { McResult } from '@/lib/monte-carlo'
-
-interface McCache {
-  lastUpdated: string | null
-  n: number
-  teams: McResult['teams']
-}
 
 const pct = (v: number) => `${Math.round(v * 100)}%`
 
@@ -45,11 +37,6 @@ function buildFactors(): FactorRow[] {
 export default function ModelPage() {
   const t = useTranslations('model')
   const factors = buildFactors()
-
-  const mcCache = mcCacheRaw as McCache
-  const mcInitial: McResult | null = Object.keys(mcCache.teams).length > 0
-    ? { n: mcCache.n, teams: mcCache.teams }
-    : null
   const resultsLastUpdated = getResultsLastUpdated()
 
   return (
@@ -96,7 +83,7 @@ export default function ModelPage() {
         <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 16 }}>
           {t('mcIntro')}
         </div>
-        <ModelMonteCarlo initial={mcInitial} lastUpdated={mcCache.lastUpdated} />
+        <ModelMonteCarlo />
 
         {/* Configurator-link */}
         <div className="factor-card" style={{ marginTop: 32 }}>

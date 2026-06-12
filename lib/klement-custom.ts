@@ -147,6 +147,12 @@ function scWith(name: string, w: ModelWeights): number {
   )
 }
 
+// Publieke teamscore (custom-model, opgeslagen gewichten). Wordt o.a. gebruikt
+// door de topscorers-ranking als sterktemaat, los van de bracket-fixtures.
+export function sc(name: string): number {
+  return scWith(name, weights)
+}
+
 function matchPEloWith(nA: string, nB: string, w: ModelWeights): MatchProbs {
   const sA = scWith(nA, w)
   const sB = scWith(nB, w)

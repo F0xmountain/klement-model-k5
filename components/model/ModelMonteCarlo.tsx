@@ -3,48 +3,46 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
-import { runMonteCarlo, type McResult } from '@/lib/monte-carlo'
-import TimeAgo from '@/components/ui/TimeAgo'
+import { simulateTournament, type SimResult } from '@/lib/simulate-tournament'
 import Btn from '@/components/ui/Btn'
 import FlagImg from '@/components/ui/FlagImg'
 
 const SIM_N = 2000
 
-interface Props {
-  initial: McResult | null
-  lastUpdated: string | null
-}
+const COLS: { key: keyof Pick<SimResult, 'reachR32' | 'reachR16' | 'reachQF' | 'reachSF' | 'reachFinal' | 'champion'>; label: string; color: string }[] = [
+  { key: 'reachR32', label: 'mcColR32', color: 'var(--color-muted)' },
+  { key: 'reachR16', label: 'mcColR16', color: 'var(--color-muted)' },
+  { key: 'reachQF', label: 'mcColQf', color: 'var(--color-muted)' },
+  { key: 'reachSF', label: 'mcColSf', color: 'var(--color-muted)' },
+  { key: 'reachFinal', label: 'mcColFinal', color: 'var(--color-b)' },
+  { key: 'champion', label: 'mcColChamp', color: 'var(--color-g)' },
+]
 
-export default function ModelMonteCarlo({ initial, lastUpdated }: Props) {
+export default function ModelMonteCarlo() {
   const t = useTranslations('model')
-  // Cache uit mc-cache.json heeft voorrang; live-resultaat overschrijft de tijdstempel.
-  const hasCache = !!initial && Object.keys(initial.teams).length > 0
-  const [data, setData] = useState<McResult | null>(hasCache ? initial : null)
-  const [stamp, setStamp] = useState<string | null>(hasCache ? lastUpdated : null)
+  const [sim, setSim] = useState<SimResult | null>(null)
   const [running, setRunning] = useState(false)
 
   const run = useCallback(() => {
     setRunning(true)
     // Laat de "running"-status renderen vóór de blokkerende lus
     setTimeout(() => {
-      setData(runMonteCarlo(SIM_N))
-      setStamp(new Date().toISOString())
+      setSim(simulateTournament(SIM_N))
       setRunning(false)
     }, 20)
   }, [])
 
-  // Live-fallback: alleen een run bij mount als er geen cache is. Ná mount (niet
-  // tijdens render) want runMonteCarlo gebruikt Math.random → anders hydration-mismatch.
+  // Initiële run ná mount (niet tijdens render) — de simulatie gebruikt Math.random,
+  // dus server- en client-render zouden anders verschillen (hydration-mismatch).
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!hasCache) run()
-  }, [hasCache, run])
+    run()
+  }, [run])
 
-  const pct = (v: number) => `${data ? Math.round((v / data.n) * 100) : 0}%`
-
-  const top8 = data
-    ? Object.entries(data.teams).sort((a, b) => b[1].champ - a[1].champ).slice(0, 8)
+  const top = sim
+    ? Object.entries(sim.champion).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([team]) => team)
     : null
+  const pct = (m: Record<string, number>, team: string) => sim ? `${Math.round((m[team] ?? 0) / sim.n * 100)}%` : '0%'
 
   return (
     <div>
@@ -55,32 +53,23 @@ export default function ModelMonteCarlo({ initial, lastUpdated }: Props) {
         <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
           {SIM_N.toLocaleString()} {t('mcSimsLabel')}
         </span>
-        {stamp && (
-          <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
-            · {t('mcLastUpdated')} <TimeAgo iso={stamp} />
-          </span>
-        )}
       </div>
 
-      {top8 && (
+      {top && (
         <div className="factor-card" style={{ overflowX: 'auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(4, 1fr)', gap: 8, fontSize: 8, color: 'var(--color-muted)', marginBottom: 10, minWidth: 360 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(6, 1fr)', gap: 6, fontSize: 8, color: 'var(--color-muted)', marginBottom: 10, minWidth: 480 }}>
             <span>{t('mcColTeam')}</span>
-            <span style={{ textAlign: 'right' }}>{t('mcColQf')}</span>
-            <span style={{ textAlign: 'right' }}>{t('mcColSf')}</span>
-            <span style={{ textAlign: 'right' }}>{t('mcColFinal')}</span>
-            <span style={{ textAlign: 'right' }}>{t('mcColChamp')}</span>
+            {COLS.map(c => <span key={c.key} style={{ textAlign: 'right' }}>{t(c.label)}</span>)}
           </div>
-          {top8.map(([team, c]) => (
-            <div key={team} style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(4, 1fr)', gap: 8, fontSize: 9, alignItems: 'center', padding: '6px 0', borderTop: '1px solid var(--color-brd)', minWidth: 360 }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {top.map(team => (
+            <div key={team} style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(6, 1fr)', gap: 6, fontSize: 9, alignItems: 'center', padding: '6px 0', borderTop: '1px solid var(--color-brd)', minWidth: 480 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
                 <FlagImg name={team} h={14} emoji={teamData(team)?.flag ?? '🏳️'} />
-                {team}
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{team}</span>
               </span>
-              <span style={{ textAlign: 'right', color: 'var(--color-muted)' }}>{pct(c.qf)}</span>
-              <span style={{ textAlign: 'right', color: 'var(--color-muted)' }}>{pct(c.sf)}</span>
-              <span style={{ textAlign: 'right', color: 'var(--color-b)' }}>{pct(c.final)}</span>
-              <span style={{ textAlign: 'right', color: 'var(--color-g)' }}>{pct(c.champ)}</span>
+              {COLS.map(c => (
+                <span key={c.key} style={{ textAlign: 'right', color: c.color }}>{pct(sim![c.key], team)}</span>
+              ))}
             </div>
           ))}
         </div>

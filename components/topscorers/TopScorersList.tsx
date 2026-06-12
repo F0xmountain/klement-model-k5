@@ -1,17 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
-import { runMonteCarlo, type McResult } from '@/lib/monte-carlo'
-import { predictedTopScorers } from '@/lib/topscorers'
+import type { PredictedScorer } from '@/lib/topscorers'
 import FlagImg from '@/components/ui/FlagImg'
 import PixelBar from '@/components/ui/PixelBar'
 
-const SIM_N = 1000
-
 interface Props {
-  initial: McResult | null
+  ranked: PredictedScorer[]
 }
 
 // Positiekleur voor de badge: aanvaller=rood, middenvelder=blauw,
@@ -23,25 +19,9 @@ const POS_COLOR: Record<string, string> = {
   goalkeeper: 'var(--color-muted)',
 }
 
-export default function TopScorersList({ initial }: Props) {
+export default function TopScorersList({ ranked }: Props) {
   const tCat = useTranslations('admin')
-  const hasCache = !!initial && Object.keys(initial.teams).length > 0
-  const [data, setData] = useState<McResult | null>(hasCache ? initial : null)
-
-  // Live-fallback: alleen een MC-run bij mount als er geen cache is. Ná mount
-  // (niet tijdens render) want runMonteCarlo gebruikt Math.random → anders
-  // hydration-mismatch tussen server en client.
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!hasCache) setData(runMonteCarlo(SIM_N))
-  }, [hasCache])
-
-  const ranked = data ? predictedTopScorers(data, 20) : null
-  const maxScore = ranked && ranked.length > 0 ? ranked[0].score : 1
-
-  if (!ranked) {
-    return <div style={{ fontSize: 10, color: 'var(--color-muted)', padding: '20px 0' }}>…</div>
-  }
+  const maxScore = ranked.length > 0 ? ranked[0].score : 1
 
   return (
     <div className="factor-card" style={{ overflowX: 'auto' }}>

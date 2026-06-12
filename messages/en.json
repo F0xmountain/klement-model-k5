@@ -10,6 +10,7 @@
     "groups": "GROUPS",
     "topscorers": "Topscorers",
     "bracket": "BRACKET",
+    "simBracket": "SIM",
     "myBracket": "MY BRACKET",
     "stats": "STATS",
     "live": "LIVE",
@@ -295,6 +296,8 @@
     "mcRunning": "⏳ RUNNING...",
     "mcSimsLabel": "simulations",
     "mcColTeam": "TEAM",
+    "mcColR32": "R32",
+    "mcColR16": "R16",
     "mcColQf": "QF",
     "mcColSf": "SF",
     "mcColFinal": "FINAL",
@@ -324,6 +327,16 @@
     "subtitle": "Based on team tournament probability × position weight",
     "posWeight": "Position weight: lower = more likely to score",
     "disclaimer": "Prediction only — based on squad position, not individual stats"
+  },
+  "simBracket": {
+    "title": "Most Likely Bracket",
+    "subtitle": "The full tournament simulated thousands of times — the most probable team at each slot.",
+    "updated": "Latest results entered:",
+    "recalculate": "↻ RECALCULATE",
+    "recalculating": "⏳ SIMULATING...",
+    "basedOn": "Based on {n} simulations",
+    "final": "FINAL",
+    "champion": "CHAMPION"
   },
   "time": {
     "justNow": "just now",

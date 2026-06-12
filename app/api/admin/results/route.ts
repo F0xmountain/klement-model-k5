@@ -3,7 +3,6 @@ import { join } from 'path'
 import { revalidatePath } from 'next/cache'
 import { isAdminAuthed } from '@/lib/admin-auth'
 import { historicalElo } from '@/lib/klement-custom'
-import { runMonteCarlo } from '@/lib/monte-carlo'
 
 interface ResultEntry {
   teamA: string
@@ -20,7 +19,6 @@ interface ResultsFile {
 
 const ELO_K = 32
 const ELO_DEFAULT = 1500
-const MC_RUNS = 2000
 
 function expectedScore(eloA: number, eloB: number): number {
   return 1 / (1 + 10 ** ((eloB - eloA) / 400))
@@ -74,11 +72,6 @@ export async function POST(req: Request) {
   const eloCurrent = recomputeElo(file.results)
   const eloPath = join(process.cwd(), 'lib', 'elo-current.json')
   writeFileSync(eloPath, JSON.stringify(eloCurrent, null, 2) + '\n', 'utf8')
-
-  // Monte Carlo opnieuw draaien (custom-model) en cachen voor de /model-pagina.
-  const mc = runMonteCarlo(MC_RUNS)
-  const mcPath = join(process.cwd(), 'lib', 'mc-cache.json')
-  writeFileSync(mcPath, JSON.stringify({ lastUpdated: now, n: mc.n, teams: mc.teams }, null, 2) + '\n', 'utf8')
 
   revalidatePath('/', 'layout')
   return Response.json({ ok: true })
