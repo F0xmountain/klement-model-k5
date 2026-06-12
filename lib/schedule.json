@@ -1,650 +1,74 @@
 [
-  {
-    "matchId": "m01",
-    "teamA": "Mexico",
-    "teamB": "South Korea",
-    "group": "A",
-    "date": "2026-06-11",
-    "kickoffUTC": "13:00",
-    "venue": "Estadio Azteca"
-  },
-  {
-    "matchId": "m05",
-    "teamA": "Brazil",
-    "teamB": "Morocco",
-    "group": "C",
-    "date": "2026-06-11",
-    "kickoffUTC": "13:00",
-    "venue": "BC Place"
-  },
-  {
-    "matchId": "m02",
-    "teamA": "South Africa",
-    "teamB": "Czechia",
-    "group": "A",
-    "date": "2026-06-11",
-    "kickoffUTC": "16:00",
-    "venue": "Estadio Akron"
-  },
-  {
-    "matchId": "m06",
-    "teamA": "Scotland",
-    "teamB": "Haiti",
-    "group": "C",
-    "date": "2026-06-11",
-    "kickoffUTC": "16:00",
-    "venue": "Mercedes-Benz Stadium"
-  },
-  {
-    "matchId": "m03",
-    "teamA": "Canada",
-    "teamB": "Switzerland",
-    "group": "B",
-    "date": "2026-06-11",
-    "kickoffUTC": "19:00",
-    "venue": "Estadio BBVA"
-  },
-  {
-    "matchId": "m04",
-    "teamA": "Qatar",
-    "teamB": "Bosnia-Herz",
-    "group": "B",
-    "date": "2026-06-11",
-    "kickoffUTC": "22:00",
-    "venue": "BMO Field"
-  },
-  {
-    "matchId": "m09",
-    "teamA": "Germany",
-    "teamB": "Curacao",
-    "group": "E",
-    "date": "2026-06-12",
-    "kickoffUTC": "13:00",
-    "venue": "NRG Stadium"
-  },
-  {
-    "matchId": "m10",
-    "teamA": "Ivory Coast",
-    "teamB": "Ecuador",
-    "group": "E",
-    "date": "2026-06-12",
-    "kickoffUTC": "16:00",
-    "venue": "Arrowhead Stadium"
-  },
-  {
-    "matchId": "m07",
-    "teamA": "USA",
-    "teamB": "Paraguay",
-    "group": "D",
-    "date": "2026-06-12",
-    "kickoffUTC": "19:00",
-    "venue": "Gillette Stadium"
-  },
-  {
-    "matchId": "m11",
-    "teamA": "Netherlands",
-    "teamB": "Japan",
-    "group": "F",
-    "date": "2026-06-12",
-    "kickoffUTC": "19:00",
-    "venue": "SoFi Stadium"
-  },
-  {
-    "matchId": "m08",
-    "teamA": "Australia",
-    "teamB": "Turkey",
-    "group": "D",
-    "date": "2026-06-12",
-    "kickoffUTC": "22:00",
-    "venue": "AT&T Stadium"
-  },
-  {
-    "matchId": "m12",
-    "teamA": "Sweden",
-    "teamB": "Tunisia",
-    "group": "F",
-    "date": "2026-06-12",
-    "kickoffUTC": "22:00",
-    "venue": "Hard Rock Stadium"
-  },
-  {
-    "matchId": "m13",
-    "teamA": "Belgium",
-    "teamB": "Egypt",
-    "group": "G",
-    "date": "2026-06-13",
-    "kickoffUTC": "13:00",
-    "venue": "MetLife Stadium"
-  },
-  {
-    "matchId": "m17",
-    "teamA": "France",
-    "teamB": "Senegal",
-    "group": "I",
-    "date": "2026-06-13",
-    "kickoffUTC": "13:00",
-    "venue": "Estadio Azteca"
-  },
-  {
-    "matchId": "m14",
-    "teamA": "Iran",
-    "teamB": "New Zealand",
-    "group": "G",
-    "date": "2026-06-13",
-    "kickoffUTC": "16:00",
-    "venue": "Lincoln Financial Field"
-  },
-  {
-    "matchId": "m18",
-    "teamA": "Iraq",
-    "teamB": "Norway",
-    "group": "I",
-    "date": "2026-06-13",
-    "kickoffUTC": "16:00",
-    "venue": "Estadio Akron"
-  },
-  {
-    "matchId": "m15",
-    "teamA": "Spain",
-    "teamB": "Cape Verde",
-    "group": "H",
-    "date": "2026-06-13",
-    "kickoffUTC": "19:00",
-    "venue": "Levi's Stadium"
-  },
-  {
-    "matchId": "m16",
-    "teamA": "Saudi Arabia",
-    "teamB": "Uruguay",
-    "group": "H",
-    "date": "2026-06-13",
-    "kickoffUTC": "22:00",
-    "venue": "Lumen Field"
-  },
-  {
-    "matchId": "m21",
-    "teamA": "Portugal",
-    "teamB": "Congo DR",
-    "group": "K",
-    "date": "2026-06-14",
-    "kickoffUTC": "13:00",
-    "venue": "BC Place"
-  },
-  {
-    "matchId": "m22",
-    "teamA": "Uzbekistan",
-    "teamB": "Colombia",
-    "group": "K",
-    "date": "2026-06-14",
-    "kickoffUTC": "16:00",
-    "venue": "Mercedes-Benz Stadium"
-  },
-  {
-    "matchId": "m19",
-    "teamA": "Argentina",
-    "teamB": "Algeria",
-    "group": "J",
-    "date": "2026-06-14",
-    "kickoffUTC": "19:00",
-    "venue": "Estadio BBVA"
-  },
-  {
-    "matchId": "m23",
-    "teamA": "England",
-    "teamB": "Croatia",
-    "group": "L",
-    "date": "2026-06-14",
-    "kickoffUTC": "19:00",
-    "venue": "Gillette Stadium"
-  },
-  {
-    "matchId": "m20",
-    "teamA": "Austria",
-    "teamB": "Jordan",
-    "group": "J",
-    "date": "2026-06-14",
-    "kickoffUTC": "22:00",
-    "venue": "BMO Field"
-  },
-  {
-    "matchId": "m24",
-    "teamA": "Ghana",
-    "teamB": "Panama",
-    "group": "L",
-    "date": "2026-06-14",
-    "kickoffUTC": "22:00",
-    "venue": "AT&T Stadium"
-  },
-  {
-    "matchId": "m25",
-    "teamA": "Mexico",
-    "teamB": "South Africa",
-    "group": "A",
-    "date": "2026-06-15",
-    "kickoffUTC": "13:00",
-    "venue": "NRG Stadium"
-  },
-  {
-    "matchId": "m29",
-    "teamA": "Brazil",
-    "teamB": "Scotland",
-    "group": "C",
-    "date": "2026-06-15",
-    "kickoffUTC": "13:00",
-    "venue": "MetLife Stadium"
-  },
-  {
-    "matchId": "m26",
-    "teamA": "South Korea",
-    "teamB": "Czechia",
-    "group": "A",
-    "date": "2026-06-15",
-    "kickoffUTC": "16:00",
-    "venue": "Arrowhead Stadium"
-  },
-  {
-    "matchId": "m30",
-    "teamA": "Morocco",
-    "teamB": "Haiti",
-    "group": "C",
-    "date": "2026-06-15",
-    "kickoffUTC": "16:00",
-    "venue": "Lincoln Financial Field"
-  },
-  {
-    "matchId": "m27",
-    "teamA": "Canada",
-    "teamB": "Qatar",
-    "group": "B",
-    "date": "2026-06-15",
-    "kickoffUTC": "19:00",
-    "venue": "SoFi Stadium"
-  },
-  {
-    "matchId": "m28",
-    "teamA": "Switzerland",
-    "teamB": "Bosnia-Herz",
-    "group": "B",
-    "date": "2026-06-15",
-    "kickoffUTC": "22:00",
-    "venue": "Hard Rock Stadium"
-  },
-  {
-    "matchId": "m33",
-    "teamA": "Germany",
-    "teamB": "Ivory Coast",
-    "group": "E",
-    "date": "2026-06-16",
-    "kickoffUTC": "13:00",
-    "venue": "Estadio Azteca"
-  },
-  {
-    "matchId": "m34",
-    "teamA": "Curacao",
-    "teamB": "Ecuador",
-    "group": "E",
-    "date": "2026-06-16",
-    "kickoffUTC": "16:00",
-    "venue": "Estadio Akron"
-  },
-  {
-    "matchId": "m31",
-    "teamA": "USA",
-    "teamB": "Australia",
-    "group": "D",
-    "date": "2026-06-16",
-    "kickoffUTC": "19:00",
-    "venue": "Levi's Stadium"
-  },
-  {
-    "matchId": "m35",
-    "teamA": "Netherlands",
-    "teamB": "Sweden",
-    "group": "F",
-    "date": "2026-06-16",
-    "kickoffUTC": "19:00",
-    "venue": "Estadio BBVA"
-  },
-  {
-    "matchId": "m32",
-    "teamA": "Paraguay",
-    "teamB": "Turkey",
-    "group": "D",
-    "date": "2026-06-16",
-    "kickoffUTC": "22:00",
-    "venue": "Lumen Field"
-  },
-  {
-    "matchId": "m36",
-    "teamA": "Japan",
-    "teamB": "Tunisia",
-    "group": "F",
-    "date": "2026-06-16",
-    "kickoffUTC": "22:00",
-    "venue": "BMO Field"
-  },
-  {
-    "matchId": "m37",
-    "teamA": "Belgium",
-    "teamB": "Iran",
-    "group": "G",
-    "date": "2026-06-17",
-    "kickoffUTC": "13:00",
-    "venue": "BC Place"
-  },
-  {
-    "matchId": "m41",
-    "teamA": "France",
-    "teamB": "Iraq",
-    "group": "I",
-    "date": "2026-06-17",
-    "kickoffUTC": "13:00",
-    "venue": "NRG Stadium"
-  },
-  {
-    "matchId": "m38",
-    "teamA": "Egypt",
-    "teamB": "New Zealand",
-    "group": "G",
-    "date": "2026-06-17",
-    "kickoffUTC": "16:00",
-    "venue": "Mercedes-Benz Stadium"
-  },
-  {
-    "matchId": "m42",
-    "teamA": "Senegal",
-    "teamB": "Norway",
-    "group": "I",
-    "date": "2026-06-17",
-    "kickoffUTC": "16:00",
-    "venue": "Arrowhead Stadium"
-  },
-  {
-    "matchId": "m39",
-    "teamA": "Spain",
-    "teamB": "Saudi Arabia",
-    "group": "H",
-    "date": "2026-06-17",
-    "kickoffUTC": "19:00",
-    "venue": "Gillette Stadium"
-  },
-  {
-    "matchId": "m40",
-    "teamA": "Cape Verde",
-    "teamB": "Uruguay",
-    "group": "H",
-    "date": "2026-06-17",
-    "kickoffUTC": "22:00",
-    "venue": "AT&T Stadium"
-  },
-  {
-    "matchId": "m45",
-    "teamA": "Portugal",
-    "teamB": "Uzbekistan",
-    "group": "K",
-    "date": "2026-06-18",
-    "kickoffUTC": "13:00",
-    "venue": "MetLife Stadium"
-  },
-  {
-    "matchId": "m46",
-    "teamA": "Congo DR",
-    "teamB": "Colombia",
-    "group": "K",
-    "date": "2026-06-18",
-    "kickoffUTC": "16:00",
-    "venue": "Lincoln Financial Field"
-  },
-  {
-    "matchId": "m43",
-    "teamA": "Argentina",
-    "teamB": "Austria",
-    "group": "J",
-    "date": "2026-06-18",
-    "kickoffUTC": "19:00",
-    "venue": "SoFi Stadium"
-  },
-  {
-    "matchId": "m47",
-    "teamA": "England",
-    "teamB": "Ghana",
-    "group": "L",
-    "date": "2026-06-18",
-    "kickoffUTC": "19:00",
-    "venue": "Levi's Stadium"
-  },
-  {
-    "matchId": "m44",
-    "teamA": "Algeria",
-    "teamB": "Jordan",
-    "group": "J",
-    "date": "2026-06-18",
-    "kickoffUTC": "22:00",
-    "venue": "Hard Rock Stadium"
-  },
-  {
-    "matchId": "m48",
-    "teamA": "Croatia",
-    "teamB": "Panama",
-    "group": "L",
-    "date": "2026-06-18",
-    "kickoffUTC": "22:00",
-    "venue": "Lumen Field"
-  },
-  {
-    "matchId": "m49",
-    "teamA": "Mexico",
-    "teamB": "Czechia",
-    "group": "A",
-    "date": "2026-06-19",
-    "kickoffUTC": "13:00",
-    "venue": "Estadio Azteca"
-  },
-  {
-    "matchId": "m53",
-    "teamA": "Brazil",
-    "teamB": "Haiti",
-    "group": "C",
-    "date": "2026-06-19",
-    "kickoffUTC": "13:00",
-    "venue": "BC Place"
-  },
-  {
-    "matchId": "m50",
-    "teamA": "South Korea",
-    "teamB": "South Africa",
-    "group": "A",
-    "date": "2026-06-19",
-    "kickoffUTC": "16:00",
-    "venue": "Estadio Akron"
-  },
-  {
-    "matchId": "m54",
-    "teamA": "Morocco",
-    "teamB": "Scotland",
-    "group": "C",
-    "date": "2026-06-19",
-    "kickoffUTC": "16:00",
-    "venue": "Mercedes-Benz Stadium"
-  },
-  {
-    "matchId": "m51",
-    "teamA": "Canada",
-    "teamB": "Bosnia-Herz",
-    "group": "B",
-    "date": "2026-06-19",
-    "kickoffUTC": "19:00",
-    "venue": "Estadio BBVA"
-  },
-  {
-    "matchId": "m52",
-    "teamA": "Switzerland",
-    "teamB": "Qatar",
-    "group": "B",
-    "date": "2026-06-19",
-    "kickoffUTC": "22:00",
-    "venue": "BMO Field"
-  },
-  {
-    "matchId": "m57",
-    "teamA": "Germany",
-    "teamB": "Ecuador",
-    "group": "E",
-    "date": "2026-06-20",
-    "kickoffUTC": "13:00",
-    "venue": "NRG Stadium"
-  },
-  {
-    "matchId": "m58",
-    "teamA": "Curacao",
-    "teamB": "Ivory Coast",
-    "group": "E",
-    "date": "2026-06-20",
-    "kickoffUTC": "16:00",
-    "venue": "Arrowhead Stadium"
-  },
-  {
-    "matchId": "m55",
-    "teamA": "USA",
-    "teamB": "Turkey",
-    "group": "D",
-    "date": "2026-06-20",
-    "kickoffUTC": "19:00",
-    "venue": "Gillette Stadium"
-  },
-  {
-    "matchId": "m59",
-    "teamA": "Netherlands",
-    "teamB": "Tunisia",
-    "group": "F",
-    "date": "2026-06-20",
-    "kickoffUTC": "19:00",
-    "venue": "SoFi Stadium"
-  },
-  {
-    "matchId": "m56",
-    "teamA": "Paraguay",
-    "teamB": "Australia",
-    "group": "D",
-    "date": "2026-06-20",
-    "kickoffUTC": "22:00",
-    "venue": "AT&T Stadium"
-  },
-  {
-    "matchId": "m60",
-    "teamA": "Japan",
-    "teamB": "Sweden",
-    "group": "F",
-    "date": "2026-06-20",
-    "kickoffUTC": "22:00",
-    "venue": "Hard Rock Stadium"
-  },
-  {
-    "matchId": "m61",
-    "teamA": "Belgium",
-    "teamB": "New Zealand",
-    "group": "G",
-    "date": "2026-06-21",
-    "kickoffUTC": "13:00",
-    "venue": "MetLife Stadium"
-  },
-  {
-    "matchId": "m65",
-    "teamA": "France",
-    "teamB": "Norway",
-    "group": "I",
-    "date": "2026-06-21",
-    "kickoffUTC": "13:00",
-    "venue": "Estadio Azteca"
-  },
-  {
-    "matchId": "m62",
-    "teamA": "Egypt",
-    "teamB": "Iran",
-    "group": "G",
-    "date": "2026-06-21",
-    "kickoffUTC": "16:00",
-    "venue": "Lincoln Financial Field"
-  },
-  {
-    "matchId": "m66",
-    "teamA": "Senegal",
-    "teamB": "Iraq",
-    "group": "I",
-    "date": "2026-06-21",
-    "kickoffUTC": "16:00",
-    "venue": "Estadio Akron"
-  },
-  {
-    "matchId": "m63",
-    "teamA": "Spain",
-    "teamB": "Uruguay",
-    "group": "H",
-    "date": "2026-06-21",
-    "kickoffUTC": "19:00",
-    "venue": "Levi's Stadium"
-  },
-  {
-    "matchId": "m64",
-    "teamA": "Cape Verde",
-    "teamB": "Saudi Arabia",
-    "group": "H",
-    "date": "2026-06-21",
-    "kickoffUTC": "22:00",
-    "venue": "Lumen Field"
-  },
-  {
-    "matchId": "m69",
-    "teamA": "Portugal",
-    "teamB": "Colombia",
-    "group": "K",
-    "date": "2026-06-22",
-    "kickoffUTC": "13:00",
-    "venue": "BC Place"
-  },
-  {
-    "matchId": "m70",
-    "teamA": "Congo DR",
-    "teamB": "Uzbekistan",
-    "group": "K",
-    "date": "2026-06-22",
-    "kickoffUTC": "16:00",
-    "venue": "Mercedes-Benz Stadium"
-  },
-  {
-    "matchId": "m67",
-    "teamA": "Argentina",
-    "teamB": "Jordan",
-    "group": "J",
-    "date": "2026-06-22",
-    "kickoffUTC": "19:00",
-    "venue": "Estadio BBVA"
-  },
-  {
-    "matchId": "m71",
-    "teamA": "England",
-    "teamB": "Panama",
-    "group": "L",
-    "date": "2026-06-22",
-    "kickoffUTC": "19:00",
-    "venue": "Gillette Stadium"
-  },
-  {
-    "matchId": "m68",
-    "teamA": "Algeria",
-    "teamB": "Austria",
-    "group": "J",
-    "date": "2026-06-22",
-    "kickoffUTC": "22:00",
-    "venue": "BMO Field"
-  },
-  {
-    "matchId": "m72",
-    "teamA": "Croatia",
-    "teamB": "Ghana",
-    "group": "L",
-    "date": "2026-06-22",
-    "kickoffUTC": "22:00",
-    "venue": "AT&T Stadium"
-  }
+  {"matchId":"GRP-001","teamA":"Mexico","teamB":"South Africa","group":"A","date":"2026-06-11","kickoffUTC":"19:00","venue":"Estadio Azteca, Mexico City"},
+  {"matchId":"GRP-002","teamA":"South Korea","teamB":"Czechia","group":"A","date":"2026-06-12","kickoffUTC":"02:00","venue":"Estadio Akron, Guadalajara"},
+  {"matchId":"GRP-003","teamA":"Canada","teamB":"Bosnia and Herzegovina","group":"B","date":"2026-06-12","kickoffUTC":"19:00","venue":"BMO Field, Toronto"},
+  {"matchId":"GRP-004","teamA":"USA","teamB":"Paraguay","group":"D","date":"2026-06-13","kickoffUTC":"01:00","venue":"SoFi Stadium, Los Angeles"},
+  {"matchId":"GRP-005","teamA":"Haiti","teamB":"Scotland","group":"C","date":"2026-06-14","kickoffUTC":"01:00","venue":"Gillette Stadium, Boston"},
+  {"matchId":"GRP-006","teamA":"Australia","teamB":"Turkey","group":"D","date":"2026-06-14","kickoffUTC":"04:00","venue":"BC Place, Vancouver"},
+  {"matchId":"GRP-007","teamA":"Brazil","teamB":"Morocco","group":"C","date":"2026-06-13","kickoffUTC":"22:00","venue":"MetLife Stadium, New York"},
+  {"matchId":"GRP-008","teamA":"Qatar","teamB":"Switzerland","group":"B","date":"2026-06-13","kickoffUTC":"19:00","venue":"Levi's Stadium, SF Bay Area"},
+  {"matchId":"GRP-009","teamA":"Ivory Coast","teamB":"Ecuador","group":"E","date":"2026-06-14","kickoffUTC":"23:00","venue":"Lincoln Financial Field, Philadelphia"},
+  {"matchId":"GRP-010","teamA":"Germany","teamB":"Curaçao","group":"E","date":"2026-06-14","kickoffUTC":"17:00","venue":"NRG Stadium, Houston"},
+  {"matchId":"GRP-011","teamA":"Netherlands","teamB":"Japan","group":"F","date":"2026-06-14","kickoffUTC":"20:00","venue":"AT&T Stadium, Dallas"},
+  {"matchId":"GRP-012","teamA":"Sweden","teamB":"Tunisia","group":"F","date":"2026-06-15","kickoffUTC":"02:00","venue":"Estadio BBVA, Monterrey"},
+  {"matchId":"GRP-013","teamA":"Saudi Arabia","teamB":"Uruguay","group":"H","date":"2026-06-15","kickoffUTC":"22:00","venue":"Hard Rock Stadium, Miami"},
+  {"matchId":"GRP-014","teamA":"Spain","teamB":"Cape Verde Islands","group":"H","date":"2026-06-15","kickoffUTC":"16:00","venue":"Mercedes-Benz Stadium, Atlanta"},
+  {"matchId":"GRP-015","teamA":"Iran","teamB":"New Zealand","group":"G","date":"2026-06-16","kickoffUTC":"01:00","venue":"SoFi Stadium, Los Angeles"},
+  {"matchId":"GRP-016","teamA":"Belgium","teamB":"Egypt","group":"G","date":"2026-06-15","kickoffUTC":"19:00","venue":"Lumen Field, Seattle"},
+  {"matchId":"GRP-017","teamA":"France","teamB":"Senegal","group":"I","date":"2026-06-16","kickoffUTC":"19:00","venue":"MetLife Stadium, New York"},
+  {"matchId":"GRP-018","teamA":"Iraq","teamB":"Norway","group":"I","date":"2026-06-16","kickoffUTC":"22:00","venue":"Gillette Stadium, Boston"},
+  {"matchId":"GRP-019","teamA":"Argentina","teamB":"Algeria","group":"J","date":"2026-06-17","kickoffUTC":"01:00","venue":"Arrowhead Stadium, Kansas City"},
+  {"matchId":"GRP-020","teamA":"Austria","teamB":"Jordan","group":"J","date":"2026-06-17","kickoffUTC":"04:00","venue":"Levi's Stadium, SF Bay Area"},
+  {"matchId":"GRP-021","teamA":"Ghana","teamB":"Panama","group":"L","date":"2026-06-17","kickoffUTC":"23:00","venue":"BMO Field, Toronto"},
+  {"matchId":"GRP-022","teamA":"England","teamB":"Croatia","group":"L","date":"2026-06-17","kickoffUTC":"20:00","venue":"AT&T Stadium, Dallas"},
+  {"matchId":"GRP-023","teamA":"Portugal","teamB":"DR Congo","group":"K","date":"2026-06-17","kickoffUTC":"17:00","venue":"NRG Stadium, Houston"},
+  {"matchId":"GRP-024","teamA":"Uzbekistan","teamB":"Colombia","group":"K","date":"2026-06-18","kickoffUTC":"02:00","venue":"Estadio Azteca, Mexico City"},
+  {"matchId":"GRP-025","teamA":"Czechia","teamB":"South Africa","group":"A","date":"2026-06-18","kickoffUTC":"16:00","venue":"Mercedes-Benz Stadium, Atlanta"},
+  {"matchId":"GRP-026","teamA":"Switzerland","teamB":"Bosnia and Herzegovina","group":"B","date":"2026-06-18","kickoffUTC":"19:00","venue":"SoFi Stadium, Los Angeles"},
+  {"matchId":"GRP-027","teamA":"Canada","teamB":"Qatar","group":"B","date":"2026-06-18","kickoffUTC":"22:00","venue":"BC Place, Vancouver"},
+  {"matchId":"GRP-028","teamA":"Mexico","teamB":"South Korea","group":"A","date":"2026-06-19","kickoffUTC":"01:00","venue":"Estadio Akron, Guadalajara"},
+  {"matchId":"GRP-029","teamA":"Brazil","teamB":"Haiti","group":"C","date":"2026-06-20","kickoffUTC":"00:30","venue":"Lincoln Financial Field, Philadelphia"},
+  {"matchId":"GRP-030","teamA":"Scotland","teamB":"Morocco","group":"C","date":"2026-06-19","kickoffUTC":"22:00","venue":"Gillette Stadium, Boston"},
+  {"matchId":"GRP-031","teamA":"Turkey","teamB":"Paraguay","group":"D","date":"2026-06-20","kickoffUTC":"03:00","venue":"Levi's Stadium, SF Bay Area"},
+  {"matchId":"GRP-032","teamA":"USA","teamB":"Australia","group":"D","date":"2026-06-19","kickoffUTC":"19:00","venue":"Lumen Field, Seattle"},
+  {"matchId":"GRP-033","teamA":"Germany","teamB":"Ivory Coast","group":"E","date":"2026-06-20","kickoffUTC":"20:00","venue":"BMO Field, Toronto"},
+  {"matchId":"GRP-034","teamA":"Ecuador","teamB":"Curaçao","group":"E","date":"2026-06-21","kickoffUTC":"00:00","venue":"Arrowhead Stadium, Kansas City"},
+  {"matchId":"GRP-035","teamA":"Netherlands","teamB":"Sweden","group":"F","date":"2026-06-20","kickoffUTC":"17:00","venue":"NRG Stadium, Houston"},
+  {"matchId":"GRP-036","teamA":"Tunisia","teamB":"Japan","group":"F","date":"2026-06-21","kickoffUTC":"04:00","venue":"Estadio BBVA, Monterrey"},
+  {"matchId":"GRP-037","teamA":"Uruguay","teamB":"Cape Verde Islands","group":"H","date":"2026-06-21","kickoffUTC":"22:00","venue":"Hard Rock Stadium, Miami"},
+  {"matchId":"GRP-038","teamA":"Spain","teamB":"Saudi Arabia","group":"H","date":"2026-06-21","kickoffUTC":"16:00","venue":"Mercedes-Benz Stadium, Atlanta"},
+  {"matchId":"GRP-039","teamA":"Belgium","teamB":"Iran","group":"G","date":"2026-06-21","kickoffUTC":"19:00","venue":"SoFi Stadium, Los Angeles"},
+  {"matchId":"GRP-040","teamA":"New Zealand","teamB":"Egypt","group":"G","date":"2026-06-22","kickoffUTC":"01:00","venue":"BC Place, Vancouver"},
+  {"matchId":"GRP-041","teamA":"Norway","teamB":"Senegal","group":"I","date":"2026-06-23","kickoffUTC":"00:00","venue":"MetLife Stadium, New York"},
+  {"matchId":"GRP-042","teamA":"France","teamB":"Iraq","group":"I","date":"2026-06-22","kickoffUTC":"21:00","venue":"Lincoln Financial Field, Philadelphia"},
+  {"matchId":"GRP-043","teamA":"Argentina","teamB":"Austria","group":"J","date":"2026-06-22","kickoffUTC":"17:00","venue":"AT&T Stadium, Dallas"},
+  {"matchId":"GRP-044","teamA":"Jordan","teamB":"Algeria","group":"J","date":"2026-06-23","kickoffUTC":"03:00","venue":"Levi's Stadium, SF Bay Area"},
+  {"matchId":"GRP-045","teamA":"England","teamB":"Ghana","group":"L","date":"2026-06-23","kickoffUTC":"20:00","venue":"Gillette Stadium, Boston"},
+  {"matchId":"GRP-046","teamA":"Panama","teamB":"Croatia","group":"L","date":"2026-06-24","kickoffUTC":"23:00","venue":"BMO Field, Toronto"},
+  {"matchId":"GRP-047","teamA":"Portugal","teamB":"Uzbekistan","group":"K","date":"2026-06-23","kickoffUTC":"17:00","venue":"NRG Stadium, Houston"},
+  {"matchId":"GRP-048","teamA":"Colombia","teamB":"DR Congo","group":"K","date":"2026-06-24","kickoffUTC":"02:00","venue":"Estadio Akron, Guadalajara"},
+  {"matchId":"GRP-049","teamA":"Scotland","teamB":"Brazil","group":"C","date":"2026-06-24","kickoffUTC":"22:00","venue":"Hard Rock Stadium, Miami"},
+  {"matchId":"GRP-050","teamA":"Morocco","teamB":"Haiti","group":"C","date":"2026-06-24","kickoffUTC":"22:00","venue":"Mercedes-Benz Stadium, Atlanta"},
+  {"matchId":"GRP-051","teamA":"Switzerland","teamB":"Canada","group":"B","date":"2026-06-24","kickoffUTC":"19:00","venue":"BC Place, Vancouver"},
+  {"matchId":"GRP-052","teamA":"Bosnia and Herzegovina","teamB":"Qatar","group":"B","date":"2026-06-24","kickoffUTC":"19:00","venue":"Lumen Field, Seattle"},
+  {"matchId":"GRP-053","teamA":"Czechia","teamB":"Mexico","group":"A","date":"2026-06-25","kickoffUTC":"01:00","venue":"Estadio Azteca, Mexico City"},
+  {"matchId":"GRP-054","teamA":"South Africa","teamB":"South Korea","group":"A","date":"2026-06-25","kickoffUTC":"01:00","venue":"Estadio BBVA, Monterrey"},
+  {"matchId":"GRP-055","teamA":"Curaçao","teamB":"Ivory Coast","group":"E","date":"2026-06-25","kickoffUTC":"20:00","venue":"Lincoln Financial Field, Philadelphia"},
+  {"matchId":"GRP-056","teamA":"Ecuador","teamB":"Germany","group":"E","date":"2026-06-25","kickoffUTC":"20:00","venue":"MetLife Stadium, New York"},
+  {"matchId":"GRP-057","teamA":"Japan","teamB":"Sweden","group":"F","date":"2026-06-25","kickoffUTC":"23:00","venue":"AT&T Stadium, Dallas"},
+  {"matchId":"GRP-058","teamA":"Tunisia","teamB":"Netherlands","group":"F","date":"2026-06-25","kickoffUTC":"23:00","venue":"Arrowhead Stadium, Kansas City"},
+  {"matchId":"GRP-059","teamA":"Turkey","teamB":"USA","group":"D","date":"2026-06-26","kickoffUTC":"02:00","venue":"SoFi Stadium, Los Angeles"},
+  {"matchId":"GRP-060","teamA":"Paraguay","teamB":"Australia","group":"D","date":"2026-06-26","kickoffUTC":"02:00","venue":"Levi's Stadium, SF Bay Area"},
+  {"matchId":"GRP-061","teamA":"Norway","teamB":"France","group":"I","date":"2026-06-26","kickoffUTC":"19:00","venue":"Gillette Stadium, Boston"},
+  {"matchId":"GRP-062","teamA":"Senegal","teamB":"Iraq","group":"I","date":"2026-06-26","kickoffUTC":"19:00","venue":"BMO Field, Toronto"},
+  {"matchId":"GRP-063","teamA":"Egypt","teamB":"Iran","group":"G","date":"2026-06-27","kickoffUTC":"03:00","venue":"Lumen Field, Seattle"},
+  {"matchId":"GRP-064","teamA":"New Zealand","teamB":"Belgium","group":"G","date":"2026-06-27","kickoffUTC":"03:00","venue":"BC Place, Vancouver"},
+  {"matchId":"GRP-065","teamA":"Cape Verde Islands","teamB":"Saudi Arabia","group":"H","date":"2026-06-27","kickoffUTC":"00:00","venue":"NRG Stadium, Houston"},
+  {"matchId":"GRP-066","teamA":"Uruguay","teamB":"Spain","group":"H","date":"2026-06-27","kickoffUTC":"00:00","venue":"Estadio Akron, Guadalajara"},
+  {"matchId":"GRP-067","teamA":"Panama","teamB":"England","group":"L","date":"2026-06-27","kickoffUTC":"21:00","venue":"MetLife Stadium, New York"},
+  {"matchId":"GRP-068","teamA":"Croatia","teamB":"Ghana","group":"L","date":"2026-06-27","kickoffUTC":"21:00","venue":"Lincoln Financial Field, Philadelphia"},
+  {"matchId":"GRP-069","teamA":"Algeria","teamB":"Austria","group":"J","date":"2026-06-28","kickoffUTC":"02:00","venue":"Arrowhead Stadium, Kansas City"},
+  {"matchId":"GRP-070","teamA":"Jordan","teamB":"Argentina","group":"J","date":"2026-06-28","kickoffUTC":"02:00","venue":"AT&T Stadium, Dallas"},
+  {"matchId":"GRP-071","teamA":"Colombia","teamB":"Portugal","group":"K","date":"2026-06-27","kickoffUTC":"23:30","venue":"Hard Rock Stadium, Miami"},
+  {"matchId":"GRP-072","teamA":"DR Congo","teamB":"Uzbekistan","group":"K","date":"2026-06-27","kickoffUTC":"23:30","venue":"Mercedes-Benz Stadium, Atlanta"}
 ]

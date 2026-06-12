@@ -30,6 +30,17 @@ interface ResultsFile {
 const schedule = scheduleRaw as ScheduleMatch[]
 const results = (resultsRaw as ResultsFile).results ?? {}
 
+// De officiële FIFA-schedule gebruikt voor 4 landen een andere spelling dan
+// teams.json; normaliseer naar de teams.json-sleutel zodat matchP/teamData (en dus
+// de vlag en voorspelling) kloppen.
+const SCHEDULE_NAME_MAP: Record<string, string> = {
+  'Bosnia and Herzegovina': 'Bosnia-Herz',
+  'Curaçao': 'Curacao',
+  'Cape Verde Islands': 'Cape Verde',
+  'DR Congo': 'Congo DR',
+}
+const canon = (name: string) => SCHEDULE_NAME_MAP[name] ?? name
+
 const pairKey = (a: string, b: string) => [a, b].sort().join('|')
 
 export interface TodayMatch extends ScheduleMatch {
@@ -48,13 +59,15 @@ export function getTodaysMatches(now: Date): TodayMatch[] {
   return schedule
     .filter(m => m.date === todayUTC)
     .map(m => {
-      const r = byPair.get(pairKey(m.teamA, m.teamB))
+      const teamA = canon(m.teamA)
+      const teamB = canon(m.teamB)
+      const r = byPair.get(pairKey(teamA, teamB))
       const result = r
-        ? r.teamA === m.teamA
+        ? r.teamA === teamA
           ? { scoreA: r.scoreA, scoreB: r.scoreB }
           : { scoreA: r.scoreB, scoreB: r.scoreA }
         : undefined
-      const { pA, dr, pB } = matchP(m.teamA, m.teamB)
-      return { ...m, result, prediction: { pA, dr, pB } }
+      const { pA, dr, pB } = matchP(teamA, teamB)
+      return { ...m, teamA, teamB, result, prediction: { pA, dr, pB } }
     })
 }
