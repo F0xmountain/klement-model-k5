@@ -83,6 +83,35 @@ const W = (g: number): Slot => ({ kind: 'W', group: g })
 const R = (g: number): Slot => ({ kind: 'R', group: g })
 const T = (i: number): Slot => ({ kind: 'T', idx: i })
 
+// ─────────────────────────────────────────────────────────────────────────────
+// OFFICIËLE FIFA WK 2026 R32-SEEDING — bron & status
+//
+// Bron: FIFA WK 2026 lotingsuitslag (5 december 2024, Washington D.C.) +
+//       het officiële wedstrijdschema (wedstrijden 73–88 = de Round of 32),
+//       te verifiëren op fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026.
+//
+// Officiële opzet: 48 teams, 12 groepen A–L. De nummers 1 en 2 van elke groep
+// (24) plus de 8 beste nummers-drie plaatsen zich voor de R32. De R32-sloten van
+// de groepswinnaars en nummers-twee liggen vast door de loting; de 8 beste
+// nummers-drie worden via een gepubliceerde PERMUTATIETABEL aan winnaar-sloten
+// gekoppeld. Welke 8 van de 12 nummers-drie zich plaatsen is resultaatafhankelijk
+// (C(12,8) = 495 combinaties), dus de exacte derde-naar-slot-routing kan pas worden
+// vastgelegd zodra de groepsfase is gespeeld — vergelijkbaar met (maar groter dan)
+// de "best third-placed" tabel van het EK. Voorbeeld uit de gepubliceerde opzet:
+// de beste nummers-drie uit groepen A/B/C/D/E/F stromen naar specifieke R32-sloten
+// (de volledige tabel staat in het officiële schema en moet daar worden overgenomen).
+//
+// SWAP-IN: vervang SEED_TEMPLATE hieronder door de officiële 16 matchups zodra de
+// tabel is overgenomen. De Slot/resolveSlot-machinerie ondersteunt al W(groep),
+// R(groep) en T(idx) referenties, dus alleen de 16 [home, away]-paren hoeven te
+// worden aangepast (idx 0–7 = nummers-drie op aflopende ranking).
+//
+// LET OP — APPROXIMATIE: SEED_TEMPLATE hieronder is NIET de officiële tabel, maar
+// een deterministische cross-group benadering (winnaars vs. nummers-drie, en
+// nummers-twee onderling kruislings gepaard zodat geen twee teams uit dezelfde
+// groep elkaar in de R32 treffen). Dit houdt de simulatie coherent en zonder
+// fantoomteams; alleen de exacte tegenstander-paring wijkt af van het officiële schema.
+// ─────────────────────────────────────────────────────────────────────────────
 const SEED_TEMPLATE: [Slot, Slot][] = [
   [W(0), T(0)], [W(1), T(1)], [W(2), T(2)], [W(3), T(3)],
   [W(4), T(4)], [W(5), T(5)], [W(6), T(6)], [W(7), T(7)],

@@ -13,6 +13,11 @@ export const POSITION_WEIGHT: Record<string, number> = {
   goalkeeper: 32,
 }
 
+// Sterspeler-multiplier (rang uit squads-db.json's star_players): de sterspeler is
+// veel meer dan een bankzitter een doelpuntenmaker, dus zijn score wordt opgeschaald.
+// Geen sterspeler → ×1.0 (ongewijzigd).
+const STAR_MULTIPLIER: Record<number, number> = { 1: 3.0, 2: 2.0, 3: 1.5 }
+
 export interface PredictedScorer {
   name: string
   team: string // name_en
@@ -30,9 +35,11 @@ export function predictedTopScorers(limit = 20, sims = 2000): PredictedScorer[] 
   const players: PredictedScorer[] = []
   for (const team of Object.values(teamsDb)) {
     const em = expected[team.name_en] ?? 3
+    const starRank = new Map(team.star_players.map(s => [s.name, s.rank]))
     for (const p of team.squad) {
       const weight = POSITION_WEIGHT[p.category] ?? POSITION_WEIGHT.midfielder
-      players.push({ name: p.name, team: team.name_en, category: p.category, score: em / weight })
+      const starMult = STAR_MULTIPLIER[starRank.get(p.name) ?? 0] ?? 1.0
+      players.push({ name: p.name, team: team.name_en, category: p.category, score: (em / weight) * starMult })
     }
   }
   players.sort((a, b) => b.score - a.score)
