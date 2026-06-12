@@ -1,5 +1,5 @@
 import { GROUPS } from './fixtures'
-import { matchP, sc } from './klement-custom'
+import { matchP, sc, type EloMap } from './klement-custom'
 import stadiumsRaw from './stadiums.json'
 
 // Volledige toernooi-simulator: simuleert de groepsfase (12 groepen × 6
@@ -30,9 +30,10 @@ function groupVenue(groupIndex: number): Venue {
   return { altitude: s.altitude_m, lat: s.coordinates.lat, lon: s.coordinates.lon }
 }
 
-// Eén groepswedstrijd → W/D/L volgens matchP (met venue)
-function playMatch(a: string, b: string, venue: Venue): 'A' | 'D' | 'B' {
-  const { pA, dr } = matchP(a, b, venue)
+// Eén groepswedstrijd → W/D/L volgens matchP (met venue). eloOverride zet de
+// Elo-stand (voor de kampioenskans-tijdlijn met historische standen).
+function playMatch(a: string, b: string, venue: Venue, eloOverride?: EloMap): 'A' | 'D' | 'B' {
+  const { pA, dr } = matchP(a, b, venue, undefined, undefined, eloOverride)
   const r = Math.random()
   if (r < pA) return 'A'
   if (r < pA + dr) return 'D'
@@ -40,8 +41,8 @@ function playMatch(a: string, b: string, venue: Venue): 'A' | 'D' | 'B' {
 }
 
 // Knockout-winnaar: gelijkspelkans weggenormaliseerd zodat er altijd één doorgaat
-function koWinner(a: string, b: string): string {
-  const { pA, pB } = matchP(a, b)
+function koWinner(a: string, b: string, eloOverride?: EloMap): string {
+  const { pA, pB } = matchP(a, b, undefined, undefined, undefined, eloOverride)
   return Math.random() < pA / (pA + pB) ? a : b
 }
 
@@ -54,13 +55,13 @@ interface GroupStanding {
 // Simuleert een groep (round-robin, 6 wedstrijden) → standen gesorteerd op punten,
 // dan overwinningen, dan modelsterkte (sc) als deterministische tiebreak (het model
 // is W/D/L-only, dus geen doelsaldo beschikbaar).
-function simGroup(teams: string[], venue: Venue): GroupStanding[] {
+function simGroup(teams: string[], venue: Venue, eloOverride?: EloMap): GroupStanding[] {
   const table: Record<string, GroupStanding> = {}
   for (const t of teams) table[t] = { team: t, pts: 0, w: 0 }
 
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
-      const r = playMatch(teams[i], teams[j], venue)
+      const r = playMatch(teams[i], teams[j], venue, eloOverride)
       if (r === 'A') { table[teams[i]].pts += 3; table[teams[i]].w++ }
       else if (r === 'B') { table[teams[j]].pts += 3; table[teams[j]].w++ }
       else { table[teams[i]].pts += 1; table[teams[j]].pts += 1 }
@@ -173,7 +174,7 @@ function topSlot(slot: SlotCounter[number], n: number): SlotTeam {
   return { team: best, prob: n > 0 ? bestC / n : 0 }
 }
 
-export function simulateTournament(n = 10000): SimResult {
+export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
   const groupWinner: Record<string, number> = {}
   const reachR32: Record<string, number> = {}
   const reachR16: Record<string, number> = {}
@@ -197,7 +198,7 @@ export function simulateTournament(n = 10000): SimResult {
     const thirdsRaw: GroupStanding[] = []
 
     GROUP_LETTERS.forEach((g, gi) => {
-      const st = simGroup(GROUPS[g], groupVenue(gi))
+      const st = simGroup(GROUPS[g], groupVenue(gi), eloOverride)
       winners[gi] = st[0].team
       runners[gi] = st[1].team
       thirdsRaw.push(st[2])
@@ -227,7 +228,7 @@ export function simulateTournament(n = 10000): SimResult {
     const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
       const next: string[] = []
       for (let i = 0; i < teams.length; i += 2) {
-        const wnr = koWinner(teams[i], teams[i + 1])
+        const wnr = koWinner(teams[i], teams[i + 1], eloOverride)
         next.push(wnr)
         tally(counter, i / 2, wnr)
         inc(reach, wnr)
@@ -239,7 +240,7 @@ export function simulateTournament(n = 10000): SimResult {
     const qf = advance(r16, cQF, reachQF)       // 16 → 8
     const sf = advance(qf, cSF, reachSF)        // 8 → 4
     const fin = advance(sf, cFinal, reachFinal) // 4 → 2
-    const champ = koWinner(fin[0], fin[1])
+    const champ = koWinner(fin[0], fin[1], eloOverride)
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }

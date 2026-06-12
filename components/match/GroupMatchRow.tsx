@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import { matchP as matchPCustom } from '@/lib/klement-custom'
+import { UPSET_THRESHOLD } from '@/lib/upset-detector'
 import FlagImg from '@/components/ui/FlagImg'
 import type { WDL } from '@/types'
 
@@ -23,6 +24,11 @@ export default function GroupMatchRow({ teamA, teamB, result }: Props) {
   const tB = teamData(teamB)
   const fmtPct = (v: number) => `${(v * 100).toFixed(0)}%`
 
+  // Verrassingspotentieel: winkans van de zwakkere ploeg (lagere FIFA-ranking)
+  const aWeaker = (tA?.fifa ?? 0) <= (tB?.fifa ?? 0)
+  const upsetProb = aWeaker ? cpA : cpB
+  const isUpset = upsetProb >= UPSET_THRESHOLD
+
   const resultColor = result === 'A' ? 'var(--color-r)' : result === 'B' ? 'var(--color-b)' : 'var(--color-muted)'
   const resultLabel = result === 'A' ? t('resultWL') : result === 'B' ? t('resultLW') : t('resultDD')
 
@@ -35,6 +41,9 @@ export default function GroupMatchRow({ teamA, teamB, result }: Props) {
       fontSize: 7,
       borderBottom: '1px solid var(--color-brd)',
     }}>
+      <span style={{ width: 10, flexShrink: 0, textAlign: 'center' }} title={isUpset ? `${t('upsetPotential')}: ${Math.round(upsetProb * 100)}%` : undefined}>
+        {isUpset ? '⚡' : ''}
+      </span>
       <FlagImg name={teamA} h={12} emoji={tA?.flag ?? '🏳️'} />
       <span style={{ color: 'var(--color-txt)', minWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamA}</span>
       {result ? (

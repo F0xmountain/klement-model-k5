@@ -83,7 +83,8 @@
     "resimulate": "Opnieuw simuleren",
     "colTeam": "TEAM",
     "hideMatches": "▲ VERBERG WEDSTRIJDEN",
-    "showMatches": "▼ TOON WEDSTRIJDEN"
+    "showMatches": "▼ TOON WEDSTRIJDEN",
+    "upsetPotential": "Verrassingspotentieel"
   },
   "home": {
     "eyebrow": "PANMURE LIBERUM · APRIL 2026",
@@ -136,7 +137,11 @@
     "h2hSummary": "{teamA} {winsA} — {draws} gelijk — {winsB} {teamB}",
     "h2hNoData": "Geen recente ontmoetingen gevonden",
     "h2hShow": "Toon H2H ▼",
-    "h2hHide": "Verberg ▲"
+    "h2hHide": "Verberg ▲",
+    "scoreDist": "Scorekansen",
+    "scoreDistNote": "Poisson-model",
+    "showScores": "Toon scores ▼",
+    "hideScores": "Verberg ▲"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",
@@ -196,6 +201,9 @@
   "stats": {
     "pageTitle": "STATISTIEKEN",
     "pageDescription": "ELO-TRENDS, FACTORVERGELIJKINGEN EN WK-GESCHIEDENIS — DE DATA ACHTER HET MODEL.",
+    "probTimeline": "Kampioenskansen over tijd",
+    "probTimelineSub": "Hoe de kansen van elk team evolueren naarmate er wordt gespeeld",
+    "probTimelineEmpty": "Bijgewerkt na elke wedstrijd",
     "eloTitle": "ELO-RATING TREND",
     "eloDescription": "ELO-RATINGS PER KWARTAAL SINDS 2016, BRON: ELORATINGS.NET. KIES 1–6 TEAMS OM TE VERGELIJKEN.",
     "addTeam": "TEAM TOEVOEGEN",
@@ -343,7 +351,8 @@
     "recalculating": "⏳ SIMULEREN...",
     "basedOn": "Op basis van {n} simulaties",
     "final": "FINALE",
-    "champion": "KAMPIOEN"
+    "champion": "KAMPIOEN",
+    "upsets": "Mogelijke verrassingen"
   },
   "time": {
     "justNow": "zojuist",

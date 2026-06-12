@@ -80,6 +80,12 @@ A Next.js web app that surfaces Joachim Klement's econometric World Cup forecast
 The model explains R²≈0.55 of variance. The remaining 45% is noise, encoded in σ=0.28.
 Never add score prediction (e.g. Poisson) without an explicit request — it was tried and removed.
 
+> **Exception (explicit request, 2026):** a Poisson **score-probability distribution**
+> was re-added on `/versus` (`lib/score-distribution.ts`) at the user's explicit request.
+> It does NOT change the model — it's a derived display transformed from the win
+> probability (via the expected-goals formula); nothing feeds back into the W/D/L model.
+> The model output itself remains W/D/L only. Don't add score prediction *to the model*.
+
 **Klement's 2026 prediction:** Netherlands win (first ever), final vs Portugal,
 biggest upset = Japan beat Brazil in R32.
 
@@ -701,7 +707,10 @@ The logo `WC26 Klement` links back to `/`.
 
 These must never be violated without an explicit instruction to change them:
 
-1. **No score prediction.** Poisson distribution was added and removed. Do not re-add it.
+1. **No score prediction in the model.** The model stays W/D/L only. A Poisson
+   score-probability *display* was re-added on `/versus` at explicit request
+   (`lib/score-distribution.ts`) — it's a derived view of the win probability, not a
+   model change. Don't add score prediction to the model itself.
 2. **No dark mode.** Light only. Do not add a theme toggle.
 3. **`teams.json` is the single source of truth.** Never hardcode team values inline in components.
 4. **Klement picks are hardcoded in `fixtures.ts`** (`k` field per match). They are his published predictions, not auto-generated from model scores.

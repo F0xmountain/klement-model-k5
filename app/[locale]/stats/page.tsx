@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl'
 import EloTrendChart from '@/components/stats/EloTrendChart'
+import ProbabilityTimeline from '@/components/stats/ProbabilityTimeline'
 import FactorRadar from '@/components/stats/FactorRadar'
 import WCHistoryTable from '@/components/stats/WCHistoryTable'
 import PixelParticles from '@/components/ui/PixelParticles'
@@ -17,6 +18,10 @@ export default function StatsPage() {
         </div>
 
         <EloTrendChart />
+
+        <div style={{ marginTop: 40 }}>
+          <ProbabilityTimeline />
+        </div>
 
         <div style={{ marginTop: 40 }}>
           <FactorRadar />

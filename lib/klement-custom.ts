@@ -126,14 +126,19 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
   return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
+// Optionele Elo-override per team — voor de kampioenskans-tijdlijn, die de
+// simulatie met historische Elo-standen (na elke uitslag) opnieuw draait.
+export type EloMap = Record<string, number>
+
 // Teamscore zoals klement.ts's sc(), maar de FIFA-factor is vervangen door een
 // FIFA/Elo-mix (eloWeight bepaalt het Elo-aandeel). Zonder Elo-data valt terug
-// op fF alleen. w is parametriseerbaar voor de live configurator-preview.
-function scWith(name: string, w: ModelWeights): number {
+// op fF alleen. w is parametriseerbaar voor de live configurator-preview;
+// eloOverride vervangt de Elo-rating (anders de actuele waarde uit latestElo).
+function scWith(name: string, w: ModelWeights, eloOverride?: EloMap): number {
   const t = td[name]
   if (!t) return 0
 
-  const elo = latestElo(name)
+  const elo = eloOverride?.[name] ?? latestElo(name)
   const strength = elo !== undefined
     ? (1 - w.eloWeight) * fF(t.fifa) + w.eloWeight * fE(elo)
     : fF(t.fifa)
@@ -153,9 +158,9 @@ export function sc(name: string): number {
   return scWith(name, weights)
 }
 
-function matchPEloWith(nA: string, nB: string, w: ModelWeights): MatchProbs {
-  const sA = scWith(nA, w)
-  const sB = scWith(nB, w)
+function matchPEloWith(nA: string, nB: string, w: ModelWeights, eloOverride?: EloMap): MatchProbs {
+  const sA = scWith(nA, w, eloOverride)
+  const sB = scWith(nB, w, eloOverride)
   const z = (sA - sB) / 0.28
   const dr = clamp(0.20 * (1 - 0.3 * Math.abs(z)), 0.05, 0.24)
   const pA = phi(z) * (1 - dr)
@@ -163,8 +168,8 @@ function matchPEloWith(nA: string, nB: string, w: ModelWeights): MatchProbs {
   return { pA, dr, pB }
 }
 
-function matchPElo(nA: string, nB: string): MatchProbs {
-  return matchPEloWith(nA, nB, weights)
+function matchPElo(nA: string, nB: string, eloOverride?: EloMap): MatchProbs {
+  return matchPEloWith(nA, nB, weights, eloOverride)
 }
 
 // Logit-shift van ~-0.22 ≈ -5%-punt rond p=0.5 (zelfde schaal als STAR_PENALTY
@@ -389,9 +394,10 @@ export function matchP(
   nB: string,
   venue?: VenueInfo,
   restDays?: RestDays,
-  polyOdds?: PolymarketOdds
+  polyOdds?: PolymarketOdds,
+  eloOverride?: EloMap
 ): MatchProbs {
-  let probs = matchPElo(nA, nB)
+  let probs = matchPElo(nA, nB, eloOverride)
   probs = applyAltitudeFactor(probs, nA, nB, venue?.altitude ?? 0)
   probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
   probs = applyExperienceFactor(probs, nA, nB)

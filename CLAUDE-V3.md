@@ -31,7 +31,10 @@ Een fork van `x-cookie/klement-model-k5`: een Next.js-app die Klement's economet
 
 Erft alle harde regels uit de originele `CLAUDE.md`, plus:
 
-1. **Geen scorevoorspelling.** W/D/L only. Altijd.
+1. **Geen scorevoorspelling in het model.** Het model blijft W/D/L only. Uitzondering
+   (op expliciet verzoek, 2026): een Poisson-**scorekansverdeling** als afgeleide
+   weergave op `/versus` (`lib/score-distribution.ts`) — afgeleid van de winkans, geen
+   modelwijziging. Voeg geen scorevoorspelling toe aan het model zelf.
 2. **`lib/klement.ts` is read-only.** Voeg geen logica toe aan het modelbestand.
    Wil je het model aanpassen? Maak `lib/klement-custom.ts` en exporteer daar vanuit.
 3. **`lib/teams.json` is de enige bron van teamdata voor de basisapp.** Nooit inline hardcoden.

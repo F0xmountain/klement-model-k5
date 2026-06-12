@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
+import { calcScoreDistribution } from '@/lib/score-distribution'
 import stadiumsRaw from '@/lib/stadiums.json'
 import formCacheRaw from '@/lib/form-cache.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
@@ -60,8 +61,11 @@ const STATUS_KEY: Record<PlayerStatus, 'statusFit' | 'statusDoubtful' | 'statusO
 // indicatie. Basis 1.35 goals/team (historisch WK-gemiddelde), bijgesteld naar
 // winkans: de sterkere ploeg scoort meer, de zwakkere minder. Afgerond op 1 decimaal.
 const BASE_SCORING_RATE = 1.35
+function expectedGoalsNum(p: number): number {
+  return BASE_SCORING_RATE * (0.5 + (p - 0.5) * 0.8)
+}
 function expectedGoals(p: number): string {
-  return (BASE_SCORING_RATE * (0.5 + (p - 0.5) * 0.8)).toFixed(1)
+  return expectedGoalsNum(p).toFixed(1)
 }
 
 function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite' | 'upsetPotential'; color: string } | null {
@@ -99,6 +103,7 @@ export default function VersusPage() {
   const [polyOdds, setPolyOdds] = useState<Record<string, number> | null>(null)
   const [h2hCache, setH2hCache] = useState<Record<string, H2HResult>>({})
   const [h2hOpen, setH2hOpen] = useState(false)
+  const [scoresOpen, setScoresOpen] = useState(false)
   const [ciCache, setCiCache] = useState<Record<string, ConfidenceInterval>>({})
 
   // Polymarket-toernooiodds eenmalig ophalen (gecachet server-side via /api/polymarket)
@@ -152,6 +157,7 @@ export default function VersusPage() {
 
   const tA = teamData(teamA)
   const tB = teamData(teamB)
+  const scoreDist = calcScoreDistribution(expectedGoalsNum(pA), expectedGoalsNum(pB))
   const restWarnings = [
     { team: teamA, days: restA },
     { team: teamB, days: restB },
@@ -260,6 +266,30 @@ export default function VersusPage() {
                 market: Math.round(marketPA * 100),
                 combined: Math.round(pA * 100),
               })}
+            </div>
+          )}
+        </div>
+
+        {/* Scorekansen — Poisson-verdeling (afgeleide weergave, inklapbaar) */}
+        <div style={{ marginTop: 10, textAlign: 'center' }}>
+          <button
+            onClick={() => setScoresOpen(o => !o)}
+            style={{ padding: '4px 12px', fontSize: 8, color: 'var(--color-muted)', border: '1px solid var(--color-brd)', backgroundColor: 'transparent', fontFamily: 'inherit', cursor: 'pointer' }}
+          >
+            {scoresOpen ? t('hideScores') : t('showScores')}
+          </button>
+          {scoresOpen && (
+            <div style={{ marginTop: 10, border: '1px solid var(--color-brd)', padding: 12 }}>
+              <div style={{ fontSize: 9, color: 'var(--color-txt)', marginBottom: 10 }}>{t('scoreDist')}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px', maxWidth: 280, margin: '0 auto' }}>
+                {scoreDist.scores.slice(0, 8).map(s => (
+                  <div key={`${s.a}-${s.b}`} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'var(--color-muted)' }}>
+                    <span style={{ color: 'var(--color-txt)' }}>{s.a}-{s.b}</span>
+                    <span>{Math.round(s.prob * 100)}%</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 7, color: 'var(--color-muted)', marginTop: 10 }}>{t('scoreDistNote')}</div>
             </div>
           )}
         </div>

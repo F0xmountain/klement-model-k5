@@ -83,7 +83,8 @@
     "resimulate": "Re-simulate",
     "colTeam": "TEAM",
     "hideMatches": "▲ HIDE MATCHES",
-    "showMatches": "▼ SHOW MATCHES"
+    "showMatches": "▼ SHOW MATCHES",
+    "upsetPotential": "Upset potential"
   },
   "home": {
     "eyebrow": "PANMURE LIBERUM · APRIL 2026",
@@ -136,7 +137,11 @@
     "h2hSummary": "{teamA} {winsA} — {draws} draws — {winsB} {teamB}",
     "h2hNoData": "No recent meetings found",
     "h2hShow": "Show H2H ▼",
-    "h2hHide": "Hide ▲"
+    "h2hHide": "Hide ▲",
+    "scoreDist": "Score probabilities",
+    "scoreDistNote": "Poisson model",
+    "showScores": "Show scores ▼",
+    "hideScores": "Hide ▲"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",
@@ -196,6 +201,9 @@
   "stats": {
     "pageTitle": "STATISTICS",
     "pageDescription": "ELO RATING TRENDS, FACTOR COMPARISONS AND WORLD CUP HISTORY — THE DATA BEHIND THE MODEL.",
+    "probTimeline": "Championship probability",
+    "probTimelineSub": "How each team's chances evolve as matches are played",
+    "probTimelineEmpty": "Updates as matches are played",
     "eloTitle": "ELO RATING TREND",
     "eloDescription": "QUARTERLY ELO RATINGS SINCE 2016, SOURCED FROM ELORATINGS.NET. PICK 1–6 TEAMS TO COMPARE.",
     "addTeam": "ADD TEAM",
@@ -343,7 +351,8 @@
     "recalculating": "⏳ SIMULATING...",
     "basedOn": "Based on {n} simulations",
     "final": "FINAL",
-    "champion": "CHAMPION"
+    "champion": "CHAMPION",
+    "upsets": "Upsets to watch"
   },
   "time": {
     "justNow": "just now",
