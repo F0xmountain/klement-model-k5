@@ -25,8 +25,10 @@ function sleep(ms) {
 async function main() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL
   if (!appUrl) {
-    console.error('NEXT_PUBLIC_APP_URL is not set')
-    process.exit(1)
+    // Geen app-URL geconfigureerd → niets te doen. Sla netjes over (exit 0) i.p.v.
+    // de workflow te laten falen; form-cache.json blijft ongewijzigd als fallback.
+    console.log('NEXT_PUBLIC_APP_URL not set — skipping form cache update.')
+    return
   }
 
   const squadsDb = JSON.parse(readFileSync(SQUADS_DB_PATH, 'utf8'))
