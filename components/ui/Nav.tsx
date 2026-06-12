@@ -80,6 +80,14 @@ export default function Nav() {
               {loc.toUpperCase()}
             </button>
           ))}
+          <Link
+            href="/admin"
+            className="nav-link"
+            style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
+            aria-label="Admin"
+          >
+            <i className="ti ti-settings" style={{ fontSize: 18 }} aria-hidden />
+          </Link>
           <a
             href="https://x.com/klementworldcup"
             target="_blank"

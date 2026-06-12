@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import '../globals.css'
+import '@tabler/icons-webfont/dist/tabler-icons.min.css'
 import Nav from '@/components/ui/Nav'
 
 const pixelFont = Press_Start_2P({
