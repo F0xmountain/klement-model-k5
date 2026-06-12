@@ -1,5 +1,3 @@
-import { ROUNDS } from './fixtures'
-
 export const STORAGE_KEY = 'wc26-my-picks'
 
 export const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
@@ -19,33 +17,38 @@ export interface ResolvedMatch {
   teamA: string | null
   teamB: string | null
   pick: string | null
-  klementPick: string
+  klementPick: string // leeg in de dynamische bracket (Klement = aparte tab)
   differs: boolean
 }
 
 export type ResolvedBracket = Record<Round, ResolvedMatch[]>
 
-// Cascades user picks through the bracket: a round's matchup is determined by
-// the picks made in the previous round, mirroring how ROUNDS.k cascades for Klement.
-export function resolveBracket(picks: MyPicks): ResolvedBracket {
+// Cascadeert de gebruikerspicks door de bracket. De R32-paringen komen uit de
+// dynamische seeding (r32Teams = 32 teams, paarsgewijs home/away) die uit de
+// groepsfase-picks volgt; elke verdere ronde wordt bepaald door de picks van de
+// vorige ronde. Geen Klement-vergelijking hier (dat is de Klement-tab).
+export function resolveBracket(r32Teams: string[], picks: MyPicks): ResolvedBracket {
   const result: ResolvedBracket = { r32: [], r16: [], qf: [], sf: [], final: [] }
 
-  ROUNDS.r32.forEach((m, i) => {
+  for (let i = 0; i < 16; i++) {
+    const teamA = r32Teams[i * 2] ?? null
+    const teamB = r32Teams[i * 2 + 1] ?? null
     const pick = picks.r32[i] ?? null
-    const valid = pick === m.teamA || pick === m.teamB ? pick : null
-    result.r32.push({ teamA: m.teamA, teamB: m.teamB, pick: valid, klementPick: m.k, differs: valid !== null && valid !== m.k })
-  })
+    const valid = pick === teamA || pick === teamB ? pick : null
+    result.r32.push({ teamA, teamB, pick: valid, klementPick: '', differs: false })
+  }
 
   for (let r = 1; r < ROUND_ORDER.length; r++) {
     const round = ROUND_ORDER[r]
     const prev = result[ROUND_ORDER[r - 1]]
-    ROUNDS[round].forEach((m, i) => {
+    const count = prev.length / 2
+    for (let i = 0; i < count; i++) {
       const teamA = prev[i * 2]?.pick ?? null
       const teamB = prev[i * 2 + 1]?.pick ?? null
       const pick = picks[round][i] ?? null
       const valid = (teamA !== null && pick === teamA) || (teamB !== null && pick === teamB) ? pick : null
-      result[round].push({ teamA, teamB, pick: valid, klementPick: m.k, differs: valid !== null && valid !== m.k })
-    })
+      result[round].push({ teamA, teamB, pick: valid, klementPick: '', differs: false })
+    }
   }
 
   return result

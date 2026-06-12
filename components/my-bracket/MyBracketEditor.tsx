@@ -1,21 +1,20 @@
 'use client'
 import { useTranslations } from 'next-intl'
-import { ROUND_ORDER, resolveBracket, type MyPicks, type Round } from '@/lib/my-picks'
+import { ROUND_ORDER, type ResolvedBracket, type Round } from '@/lib/my-picks'
 import MatchPickRow from './MatchPickRow'
 
 type FullKey = 'r32Full' | 'r16Full' | 'qfFull' | 'sfFull' | 'finalFull'
 
 interface Props {
-  picks: MyPicks
+  resolved: ResolvedBracket
   onPick: (round: Round, index: number, team: string) => void
   onCopy: () => void
   copied: boolean
 }
 
-export default function MyBracketEditor({ picks, onPick, onCopy, copied }: Props) {
+export default function MyBracketEditor({ resolved, onPick, onCopy, copied }: Props) {
   const tr = useTranslations('rounds')
   const tmb = useTranslations('myBracket')
-  const resolved = resolveBracket(picks)
 
   return (
     <div>

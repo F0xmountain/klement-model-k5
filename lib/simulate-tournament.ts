@@ -126,6 +126,19 @@ function resolveSlot(slot: Slot, winners: string[], runners: string[], thirds: s
   return thirds[slot.idx]
 }
 
+// Past SEED_TEMPLATE toe op de groepsstanden → 32 R32-teams in seed-volgorde
+// (16 wedstrijden × [home, away]). winners[gi]/runners[gi] per groep-index 0..11
+// (A..L), thirds[0..7] = de 8 beste nummers-drie op ranking. Geëxporteerd voor de
+// "Simuleer mijn bracket"-functie van /my-bracket.
+export function seedR32(winners: string[], runners: string[], thirds: string[]): string[] {
+  const r32: string[] = []
+  SEED_TEMPLATE.forEach(([hs, as], i) => {
+    r32[i * 2] = resolveSlot(hs, winners, runners, thirds)
+    r32[i * 2 + 1] = resolveSlot(as, winners, runners, thirds)
+  })
+  return r32
+}
+
 export interface SlotTeam {
   team: string
   prob: number
@@ -212,17 +225,11 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     const thirds = thirdsRaw.slice(0, 8).map(t => t.team)
 
     // R32 vullen via de seeding-template
-    const r32: string[] = [] // 32 teams, paarsgewijs (home,away per match)
-    SEED_TEMPLATE.forEach(([hs, as], i) => {
-      const home = resolveSlot(hs, winners, runners, thirds)
-      const away = resolveSlot(as, winners, runners, thirds)
-      r32[i * 2] = home
-      r32[i * 2 + 1] = away
-      tally(cR32, i * 2, home)
-      tally(cR32, i * 2 + 1, away)
-      inc(reachR32, home)
-      inc(reachR32, away)
-    })
+    const r32 = seedR32(winners, runners, thirds) // 32 teams, paarsgewijs (home,away)
+    for (let i = 0; i < r32.length; i++) {
+      tally(cR32, i, r32[i])
+      inc(reachR32, r32[i])
+    }
 
     // Knockout: paarsgewijze winnaars per ronde
     const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
