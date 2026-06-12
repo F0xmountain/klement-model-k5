@@ -108,10 +108,17 @@ async function fetchFixtures(apiKey) {
   })
   if (!res.ok) throw new Error(`API-Football returned ${res.status}`)
   const data = await res.json()
+  // API-Football antwoordt met HTTP 200 + een errors-veld bij bv. plan-restricties;
+  // surface dat expliciet i.p.v. stilletjes als "0 wedstrijden" te behandelen.
+  const errs = data.errors
+  if (errs && (Array.isArray(errs) ? errs.length : Object.keys(errs).length)) {
+    throw new Error('API-Football error: ' + JSON.stringify(errs))
+  }
   return data.response ?? []
 }
 
 async function main() {
+  const dryRun = process.argv.includes('--dry-run')
   const apiKey = process.env.API_FOOTBALL_KEY
   if (!apiKey) {
     console.error('API_FOOTBALL_KEY is not set')
@@ -134,10 +141,24 @@ async function main() {
     process.exit(1)
   }
 
+  const ft = fixtures.filter(f => f.fixture?.status?.short === 'FT')
+  console.log(`API-Football returned ${fixtures.length} fixture(s) for league ${WC_LEAGUE_ID} season ${SEASON}; ${ft.length} finished (FT).`)
+
+  const before = new Set(Object.keys(file.results))
   const { added, skipped } = ingestNewResults(fixtures, file.results, validTeams, console.error)
+  const newKeys = Object.keys(file.results).filter(k => !before.has(k))
+  for (const k of newKeys) {
+    const r = file.results[k]
+    console.log(`  + ${r.teamA} ${r.scoreA}-${r.scoreB} ${r.teamB} (${r.playedAt?.slice(0, 10)})`)
+  }
 
   if (added === 0) {
     console.log(`No new finished results to ingest (${skipped} skipped for unknown teams).`)
+    return
+  }
+
+  if (dryRun) {
+    console.log(`[dry-run] Would ingest ${added} new result(s) and recompute Elo. No files written.`)
     return
   }
 
