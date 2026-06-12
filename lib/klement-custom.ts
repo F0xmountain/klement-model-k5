@@ -347,12 +347,50 @@ export interface RestDays {
   away?: number
 }
 
+// Polymarket-toernooiodds per team (kans om het WK te winnen), bv. uit /api/polymarket.
+export type PolymarketOdds = Record<string, number>
+
+// Blendt de modelkansen met de Polymarket-marktodds (Fase 6). Polymarket geeft de
+// kans dat een team het TOERNOOI wint; daaruit leiden we een wedstrijdkans af:
+// matchPoly(home) = polyHome / (polyHome + polyAway). De blend per uitkomst:
+// finalP = modelP × (1 − marketWeight) + marktP × marketWeight. De markt kent geen
+// gelijkspel (marktDraw = 0), dus de gelijkspelkans krimpt evenredig met
+// marketWeight; de som blijft 1 omdat mHome + mAway = 1. Zonder marktdata voor
+// BEIDE teams een no-op (geen blending).
+export function applyPolymarketFactor(
+  probs: MatchProbs,
+  homeTeam: string,
+  awayTeam: string,
+  polyOdds?: PolymarketOdds,
+  marketWeight: number = weights.marketWeight
+): MatchProbs {
+  if (!polyOdds || marketWeight <= 0) return probs
+  const polyHome = polyOdds[homeTeam]
+  const polyAway = polyOdds[awayTeam]
+  if (!(polyHome > 0) || !(polyAway > 0)) return probs
+
+  const mHome = polyHome / (polyHome + polyAway)
+  const mAway = polyAway / (polyHome + polyAway)
+  return {
+    pA: probs.pA * (1 - marketWeight) + mHome * marketWeight,
+    dr: probs.dr * (1 - marketWeight),
+    pB: probs.pB * (1 - marketWeight) + mAway * marketWeight,
+  }
+}
+
 // Drop-in vervanging van klement.ts's matchP: zelfde signatuur, nA/nB zijn
 // Engelse teamnamen uit lib/teams.json. Past Elo-weging, de altitude/travel/
-// experience/rustdagen-factoren en de blessure-status van sterspelers toe op de
-// basisberekening. venue en restDays zijn optioneel — zonder die data zijn de
+// experience/rustdagen-factoren, de blessure-status van sterspelers en (als
+// polyOdds is meegegeven) de Polymarket-marktblend toe op de basisberekening.
+// venue, restDays en polyOdds zijn optioneel — zonder die data zijn de
 // betreffende factoren een no-op.
-export function matchP(nA: string, nB: string, venue?: VenueInfo, restDays?: RestDays): MatchProbs {
+export function matchP(
+  nA: string,
+  nB: string,
+  venue?: VenueInfo,
+  restDays?: RestDays,
+  polyOdds?: PolymarketOdds
+): MatchProbs {
   let probs = matchPElo(nA, nB)
   probs = applyAltitudeFactor(probs, nA, nB, venue?.altitude ?? 0)
   probs = applyTravelFactor(probs, nA, nB, venue?.lat, venue?.lon)
@@ -362,7 +400,8 @@ export function matchP(nA: string, nB: string, venue?: VenueInfo, restDays?: Res
   probs = applyRestDaysFactor(probs, nA, nB, restDays?.home, restDays?.away)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''
-  return applyStarPlayerModifier(probs, teamNlA, teamNlB)
+  probs = applyStarPlayerModifier(probs, teamNlA, teamNlB)
+  return applyPolymarketFactor(probs, nA, nB, polyOdds)
 }
 
 // Live-preview voor de modelconfigurator: berekent matchP met expliciet

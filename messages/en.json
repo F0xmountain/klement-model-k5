@@ -129,7 +129,14 @@
     "formGood": "good",
     "expectedScore": "Expected: {a} – {b}",
     "expectedScoreNote": "* Derived from win probabilities",
-    "restWarning": "{team} played {days} days ago"
+    "restWarning": "{team} played {days} days ago",
+    "polyBreakdown": "Model: {model}% · Market: {market}% · Combined: {combined}%",
+    "confidenceInterval": "[{low}–{high}%]",
+    "h2hTitle": "Head to Head",
+    "h2hSummary": "{teamA} {winsA} — {draws} draws — {winsB} {teamB}",
+    "h2hNoData": "No recent meetings found",
+    "h2hShow": "Show H2H ▼",
+    "h2hHide": "Hide ▲"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",

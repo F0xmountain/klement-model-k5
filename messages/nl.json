@@ -129,7 +129,14 @@
     "formGood": "goede",
     "expectedScore": "Verwacht: {a} – {b}",
     "expectedScoreNote": "* Afgeleid van winstkansen",
-    "restWarning": "{team} speelde {days} dagen geleden"
+    "restWarning": "{team} speelde {days} dagen geleden",
+    "polyBreakdown": "Model: {model}% · Markt: {market}% · Gecombineerd: {combined}%",
+    "confidenceInterval": "[{low}–{high}%]",
+    "h2hTitle": "Onderlinge ontmoetingen",
+    "h2hSummary": "{teamA} {winsA} — {draws} gelijk — {winsB} {teamB}",
+    "h2hNoData": "Geen recente ontmoetingen gevonden",
+    "h2hShow": "Toon H2H ▼",
+    "h2hHide": "Verberg ▲"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",

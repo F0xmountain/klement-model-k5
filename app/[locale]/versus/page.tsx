@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useState, useEffect } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
+import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
 import stadiumsRaw from '@/lib/stadiums.json'
 import formCacheRaw from '@/lib/form-cache.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
@@ -73,21 +74,82 @@ function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite
 
 interface SimData { w: number; d: number; l: number }
 
+interface H2HMatch {
+  date: string
+  homeTeam: string
+  awayTeam: string
+  homeScore: number
+  awayScore: number
+  competition: string
+}
+interface H2HResult {
+  matches: H2HMatch[]
+  summary: { teamAWins: number; draws: number; teamBWins: number }
+}
+
 export default function VersusPage() {
   const t = useTranslations('versus')
   const tc = useTranslations('common')
+  const locale = useLocale()
   const [teamA, setTeamA] = useState('Netherlands')
   const [teamB, setTeamB] = useState('Portugal')
   const [sim, setSim] = useState<SimData | null>(null)
   const [simFor, setSimFor] = useState('')
   const [venueIdx, setVenueIdx] = useState<number | null>(null)
+  const [polyOdds, setPolyOdds] = useState<Record<string, number> | null>(null)
+  const [h2hCache, setH2hCache] = useState<Record<string, H2HResult>>({})
+  const [h2hOpen, setH2hOpen] = useState(false)
+  const [ciCache, setCiCache] = useState<Record<string, ConfidenceInterval>>({})
+
+  // Polymarket-toernooiodds eenmalig ophalen (gecachet server-side via /api/polymarket)
+  useEffect(() => {
+    fetch('/api/polymarket')
+      .then(r => r.json())
+      .then((data: { team: string; probability: number }[]) => {
+        setPolyOdds(Object.fromEntries(data.map(p => [p.team, p.probability])))
+      })
+      .catch(() => {})
+  }, [])
 
   const venue = venueIdx !== null
     ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
     : undefined
   const restA = getRestDays(teamA)
   const restB = getRestDays(teamB)
-  const { pA, dr, pB } = matchP(teamA, teamB, venue, { home: restA, away: restB })
+
+  const polyAvailable = !!polyOdds && (polyOdds[teamA] ?? 0) > 0 && (polyOdds[teamB] ?? 0) > 0
+  const { pA, dr, pB } = matchP(teamA, teamB, venue, { home: restA, away: restB }, polyOdds ?? undefined)
+  const modelOnly = polyAvailable ? matchP(teamA, teamB, venue, { home: restA, away: restB }) : null
+  const marketPA = polyAvailable ? polyOdds![teamA] / (polyOdds![teamA] + polyOdds![teamB]) : null
+
+  // H2H per teamparing ophalen (lazy, gecachet)
+  const h2hKey = `${teamA}:${teamB}`
+  const h2h = h2hCache[h2hKey]
+  useEffect(() => {
+    if (h2hCache[h2hKey]) return
+    let cancelled = false
+    fetch(`/api/h2h/${encodeURIComponent(teamA)}/${encodeURIComponent(teamB)}`)
+      .then(r => r.json())
+      .then((data: H2HResult) => { if (!cancelled) setH2hCache(prev => ({ ...prev, [h2hKey]: data })) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [h2hKey, h2hCache, teamA, teamB])
+
+  // Betrouwbaarheidsinterval (client-side, ~0.5s) per teamparing + locatie, gecachet
+  const ciKey = `${teamA}:${teamB}:${venueIdx}`
+  const ci = ciCache[ciKey]
+  useEffect(() => {
+    if (ciCache[ciKey]) return
+    const id = setTimeout(() => {
+      const v = venueIdx !== null
+        ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
+        : undefined
+      const data = calcConfidenceInterval(teamA, teamB, v, 500)
+      setCiCache(prev => ({ ...prev, [ciKey]: data }))
+    }, 30)
+    return () => clearTimeout(id)
+  }, [ciKey, ciCache, teamA, teamB, venueIdx])
+
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const restWarnings = [
@@ -168,6 +230,22 @@ export default function VersusPage() {
 
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
 
+        {/* Win-kans met betrouwbaarheidsinterval (client-side berekend) */}
+        <div style={{ marginTop: 8, display: 'flex', justifyContent: 'center', gap: 18, fontSize: 9, flexWrap: 'wrap' }}>
+          <span style={{ color: 'var(--color-r)' }}>
+            {teamA} {Math.round(pA * 100)}%{' '}
+            <span style={{ color: 'var(--color-muted)' }}>
+              {ci ? t('confidenceInterval', { low: Math.round(ci.win.low95 * 100), high: Math.round(ci.win.high95 * 100) }) : '…'}
+            </span>
+          </span>
+          <span style={{ color: 'var(--color-b)' }}>
+            {teamB} {Math.round(pB * 100)}%{' '}
+            <span style={{ color: 'var(--color-muted)' }}>
+              {ci ? t('confidenceInterval', { low: Math.round(ci.loss.low95 * 100), high: Math.round(ci.loss.high95 * 100) }) : '…'}
+            </span>
+          </span>
+        </div>
+
         <div style={{ marginTop: 10, textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: 'var(--color-muted)' }}>
             {t('expectedScore', { a: expectedGoals(pA), b: expectedGoals(pB) })}
@@ -175,6 +253,15 @@ export default function VersusPage() {
           <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 4 }}>
             {t('expectedScoreNote')}
           </div>
+          {polyAvailable && modelOnly && marketPA !== null && (
+            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 6 }}>
+              {t('polyBreakdown', {
+                model: Math.round(modelOnly.pA * 100),
+                market: Math.round(marketPA * 100),
+                combined: Math.round(pA * 100),
+              })}
+            </div>
+          )}
         </div>
 
         <div style={{ marginTop: 8, fontSize: 8, color: 'var(--color-muted)' }}>
@@ -258,6 +345,37 @@ export default function VersusPage() {
                   {teamB.split(' ')[0].toUpperCase()} {t('win')} {Math.round(sim.l / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-muted)', fontSize: 7, alignSelf: 'center' }}>{SIM_N} {t('simsLabel')}</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* H2H — onderlinge ontmoetingen (inklapbaar, alleen bij ≥1 wedstrijd) */}
+        {h2h && h2h.matches.length >= 1 && (
+          <div style={{ marginTop: 16 }}>
+            <button
+              onClick={() => setH2hOpen(o => !o)}
+              style={{ padding: '5px 12px', fontSize: 8, color: 'var(--color-muted)', border: '1px solid var(--color-brd)', backgroundColor: 'transparent', fontFamily: 'inherit', cursor: 'pointer' }}
+            >
+              {h2hOpen ? t('h2hHide') : t('h2hShow')}
+            </button>
+            {h2hOpen && (
+              <div style={{ marginTop: 10, border: '1px solid var(--color-brd)', padding: 12 }}>
+                <div style={{ fontSize: 10, color: 'var(--color-txt)', marginBottom: 8 }}>{t('h2hTitle')}</div>
+                <div style={{ fontSize: 9, color: 'var(--color-muted)', marginBottom: 10 }}>
+                  {t('h2hSummary', {
+                    teamA,
+                    winsA: h2h.summary.teamAWins,
+                    draws: h2h.summary.draws,
+                    winsB: h2h.summary.teamBWins,
+                    teamB,
+                  })}
+                </div>
+                {h2h.matches.slice(0, 5).map((m, i) => (
+                  <div key={i} style={{ fontSize: 8, color: 'var(--color-muted)', padding: '5px 0', borderTop: i > 0 ? '1px solid var(--color-brd)' : 'none' }}>
+                    {new Date(m.date).toLocaleDateString(locale, { month: 'short', year: 'numeric' })} · {m.homeTeam} {m.homeScore}–{m.awayScore} {m.awayTeam} · {m.competition}
+                  </div>
+                ))}
               </div>
             )}
           </div>
