@@ -5,6 +5,7 @@ import PixelBar from '@/components/ui/PixelBar'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import PolymarketBtn from '@/components/ui/PolymarketBtn'
+import TodaysMatches from '@/components/home/TodaysMatches'
 
 const factors = [
   { key: 'fifa' as const,       pct: 45, color: 'var(--color-r)' },
@@ -148,6 +149,9 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      {/* ── TODAY'S MATCHES ── */}
+      <TodaysMatches />
 
       {/* ── MODEL VARIABLES ── */}
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>

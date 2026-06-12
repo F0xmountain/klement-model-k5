@@ -101,7 +101,10 @@
     "predictionTitle": "2026 PREDICTION",
     "predictionLine1": "FIRST WORLD CUP TITLE IN HISTORY",
     "predictionPathLabel": "PATH:",
-    "modelVariablesTitle": "MODEL VARIABLES"
+    "modelVariablesTitle": "MODEL VARIABLES",
+    "todayMatches": "Today's matches",
+    "modelPrediction": "Model",
+    "noMatchesToday": ""
   },
   "factors": {
     "fifa": "FIFA RANKING",
@@ -190,6 +193,12 @@
     "copied": "COPIED!",
     "tbd": "TBD",
     "diffBadge": "≠ K",
+    "tabEdit": "Edit picks",
+    "tabView": "Bracket view",
+    "reset": "Reset all picks",
+    "resetConfirm": "Are you sure? This clears all picks.",
+    "resetDone": "Picks cleared",
+    "emptySlot": "?",
     "championTitle": "YOUR CHAMPION",
     "championEmpty": "COMPLETE YOUR BRACKET TO REVEAL YOUR CHAMPION",
     "championDiffers": "KLEMENT PICKS {team}",

@@ -101,7 +101,10 @@
     "predictionTitle": "VOORSPELLING 2026",
     "predictionLine1": "EERSTE WK-TITEL OOIT",
     "predictionPathLabel": "ROUTE:",
-    "modelVariablesTitle": "MODEL VARIABELEN"
+    "modelVariablesTitle": "MODEL VARIABELEN",
+    "todayMatches": "Wedstrijden vandaag",
+    "modelPrediction": "Model",
+    "noMatchesToday": ""
   },
   "factors": {
     "fifa": "FIFA-RANKING",
@@ -190,6 +193,12 @@
     "copied": "GEKOPIEERD!",
     "tbd": "NTB",
     "diffBadge": "≠ K",
+    "tabEdit": "Picks invullen",
+    "tabView": "Bracket weergave",
+    "reset": "Alle picks wissen",
+    "resetConfirm": "Weet je het zeker? Dit wist alle picks.",
+    "resetDone": "Picks gewist",
+    "emptySlot": "?",
     "championTitle": "JOUW KAMPIOEN",
     "championEmpty": "VUL JE BRACKET VOLLEDIG IN OM JE KAMPIOEN TE ONTHULLEN",
     "championDiffers": "KLEMENT KIEST {team}",

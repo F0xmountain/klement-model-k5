@@ -88,3 +88,10 @@ export function savePicks(picks: MyPicks): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(picks))
   listeners.forEach(l => l())
 }
+
+// Wist alle picks (verwijdert de localStorage-sleutel) en notificeert de subscribers,
+// zodat useSyncExternalStore terugvalt op EMPTY_PICKS.
+export function clearPicks(): void {
+  window.localStorage.removeItem(STORAGE_KEY)
+  listeners.forEach(l => l())
+}
