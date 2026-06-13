@@ -22,7 +22,18 @@
     "after": "Na",
     "timelineTitle": "Kampioenskans over het toernooi",
     "timelineSub": "Top-6 kandidaten — elk punt is een gespeelde wedstrijd.",
-    "predict": "Voorspel deze wedstrijd"
+    "predict": "Voorspel deze wedstrijd",
+    "strongGain": "{team} profiteert sterk — een concurrent viel vroeg af",
+    "moderateGain": "{team} heeft iets meer ruimte gekregen in het schema",
+    "slightGain": "{team} wint licht aan kans door de uitslag in Groep {group}",
+    "negligible": "Verwaarloosbaar effect",
+    "slightLoss": "{team} verliest licht terrein door een sterkere concurrent",
+    "moderateLoss": "{team} krijgt een zwaarder pad door de doorgang van {winner}",
+    "strongLoss": "{team} heeft een stuk moeilijker schema gekregen",
+    "showMore": "Toon ook verwaarloosbare effecten ({n} teams)",
+    "hideMore": "Verberg verwaarloosbare effecten",
+    "summaryCard": "Wedstrijdsamenvatting",
+    "totalVolatility": "Totale volatiliteit"
   },
   "meta": {
     "title": "WC26 Klement — WK 2026 Voorspeller",

@@ -22,7 +22,18 @@
     "after": "After",
     "timelineTitle": "Championship probability over the tournament",
     "timelineSub": "Top-6 contenders — each point is a played match.",
-    "predict": "Predict this match"
+    "predict": "Predict this match",
+    "strongGain": "{team} benefits strongly — a rival went out early",
+    "moderateGain": "{team} has been given a little more room in the bracket",
+    "slightGain": "{team} gains slightly from the result in Group {group}",
+    "negligible": "Negligible effect",
+    "slightLoss": "{team} loses a little ground to a stronger rival",
+    "moderateLoss": "{team} gets a tougher path with {winner} advancing",
+    "strongLoss": "{team} now has a considerably harder schedule",
+    "showMore": "Show negligible effects too ({n} teams)",
+    "hideMore": "Hide negligible effects",
+    "summaryCard": "Match summary",
+    "totalVolatility": "Total volatility"
   },
   "meta": {
     "title": "WC26 Klement — World Cup 2026 Predictor",
