@@ -3,6 +3,7 @@ import eloHistoryRaw from './elo-history.json'
 import { simulateTournament } from './simulate-tournament'
 import type { EloMap } from './klement-custom'
 import { teamNames } from './klement'
+import { teamCode } from './team-codes'
 
 // Kampioenskans-tijdlijn: voor elke gespeelde wedstrijd (uit results.json) wordt
 // de Elo-stand tot dat punt herberekend en het hele toernooi opnieuw gesimuleerd,
@@ -83,7 +84,7 @@ function championProbs(eloOverride: EloMap): Record<string, number> {
   return out
 }
 
-const ABBR = (name: string) => name.slice(0, 3).toUpperCase()
+const ABBR = (name: string) => teamCode(name)
 const roundPrefix = (n: number) => (n <= 72 ? 'GRP' : n <= 88 ? 'R32' : n <= 96 ? 'R16' : n <= 100 ? 'QF' : n <= 102 ? 'SF' : 'F')
 
 // De eerste snapshot is de PRE-toernooi-baseline (vóór wedstrijd 1). Herkenbaar

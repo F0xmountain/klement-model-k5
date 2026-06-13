@@ -23,7 +23,7 @@
   },
   {
     "timestamp": "2026-06-11T19:00:00Z",
-    "matchLabel": "GRP: MEX vs SOU",
+    "matchLabel": "GRP: MEX vs RSA",
     "snapshots": {
       "Argentina": 0.185,
       "Spain": 0.1775,
@@ -45,7 +45,7 @@
   },
   {
     "timestamp": "2026-06-12T02:00:00Z",
-    "matchLabel": "GRP: SOU vs CZE",
+    "matchLabel": "GRP: KOR vs CZE",
     "snapshots": {
       "Argentina": 0.183,
       "Spain": 0.1775,

@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import { getTodaysMatches, getTomorrowsMatches, type TodayMatch } from '@/lib/todays-matches'
+import { teamCode } from '@/lib/team-codes'
 import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 
 const MAX_SHOWN = 4
 const MIN_TODAY = 2
-const abbr = (name: string) => name.slice(0, 3).toUpperCase()
+const abbr = (name: string) => teamCode(name)
 
 export default function TodaysMatches() {
   const t = useTranslations('home')

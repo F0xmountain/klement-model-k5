@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { simResult, calcStandings, teamData } from '@/lib/klement'
 import { venueForPair, resultForPair } from '@/lib/todays-matches'
+import { teamSlug } from '@/lib/team-slug'
+import { Link } from '@/i18n/navigation'
 import type { Standing, WDL } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
 import FlagImg from '@/components/ui/FlagImg'
@@ -109,8 +111,13 @@ export default function GroupCard({ group, teams }: Props) {
               <tr key={s.team}>
                 <td style={{ maxWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {advancing && <span className="qual-dot" />}
-                  <FlagImg name={s.team} h={14} emoji={t?.flag ?? '🏳️'} />
-                  {' '}{s.team}
+                  <Link
+                    href={`/teams/${teamSlug(s.team)}`}
+                    style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                  >
+                    <FlagImg name={s.team} h={14} emoji={t?.flag ?? '🏳️'} />
+                    {s.team}
+                  </Link>
                 </td>
                 <td>{s.w}</td>
                 <td>{s.d}</td>
