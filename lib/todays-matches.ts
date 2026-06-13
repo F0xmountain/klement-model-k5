@@ -1,6 +1,7 @@
 import scheduleRaw from './schedule.json'
 import resultsRaw from './results.json'
 import { matchP } from './klement-custom'
+import type { WDL } from '../types'
 
 // schedule.json is een deterministisch opgebouwd, plausibel groepsfase-schema —
 // NIET de exacte officiële FIFA-fixturelijst (die hangt af van de officiële
@@ -51,6 +52,28 @@ for (const m of scheduleRaw as ScheduleMatch[]) {
 }
 export function venueForPair(a: string, b: string): string | undefined {
   return venueByPair.get(pairKey(a, b))
+}
+
+// Definitieve uitslag van een gespeelde wedstrijd (uit results.json), georiënteerd
+// op het meegegeven teampaar (teams.json-namen). result is de W/D/L-uitkomst t.o.v.
+// team a. Undefined als de wedstrijd nog niet gespeeld is.
+export interface PlayedResult {
+  scoreA: number
+  scoreB: number
+  result: WDL
+}
+const resultByPair = new Map<string, ResultEntry>()
+for (const r of Object.values(results)) {
+  resultByPair.set(pairKey(canon(r.teamA), canon(r.teamB)), r)
+}
+export function resultForPair(a: string, b: string): PlayedResult | undefined {
+  const r = resultByPair.get(pairKey(a, b))
+  if (!r) return undefined
+  const aligned = canon(r.teamA) === a
+  const scoreA = aligned ? r.scoreA : r.scoreB
+  const scoreB = aligned ? r.scoreB : r.scoreA
+  const result: WDL = scoreA > scoreB ? 'A' : scoreA < scoreB ? 'B' : 'D'
+  return { scoreA, scoreB, result }
 }
 
 export interface TodayMatch extends ScheduleMatch {

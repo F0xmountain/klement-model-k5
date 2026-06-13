@@ -2,14 +2,25 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { simResult, calcStandings, teamData } from '@/lib/klement'
-import { venueForPair } from '@/lib/todays-matches'
-import type { MatchResult, Standing } from '@/types'
+import { venueForPair, resultForPair } from '@/lib/todays-matches'
+import type { Standing, WDL } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
 import FlagImg from '@/components/ui/FlagImg'
 
 interface Props {
   group: string
   teams: string[]
+}
+
+// Eén wedstrijd in de groepsweergave: een definitieve uitslag (gespeeld, uit
+// results.json) of een gesimuleerde uitkomst.
+interface GroupMatch {
+  teamA: string
+  teamB: string
+  result: WDL
+  played: boolean
+  scoreA?: number
+  scoreB?: number
 }
 
 function buildFixtures(teams: string[]): [string, string][] {
@@ -20,36 +31,67 @@ function buildFixtures(teams: string[]): [string, string][] {
   return pairs
 }
 
-function simulate(teams: string[]): { standings: Standing[]; results: MatchResult[] } {
-  const results: MatchResult[] = buildFixtures(teams).map(([a, b]) => ({
-    teamA: a, teamB: b, result: simResult(a, b),
-  }))
-  return { standings: calcStandings(teams, results), results }
+// Bouwt de wedstrijden van een groep. Gespeelde wedstrijden krijgen hun echte
+// uitslag uit results.json; niet-gespeelde worden alleen gesimuleerd als
+// simulateUnplayed true is (client-side, na hydratie — simResult gebruikt
+// Math.random en mag niet tijdens SSR draaien).
+function buildMatches(teams: string[], simulateUnplayed: boolean): GroupMatch[] {
+  const out: GroupMatch[] = []
+  for (const [a, b] of buildFixtures(teams)) {
+    const real = resultForPair(a, b)
+    if (real) {
+      out.push({ teamA: a, teamB: b, result: real.result, played: true, scoreA: real.scoreA, scoreB: real.scoreB })
+    } else if (simulateUnplayed) {
+      out.push({ teamA: a, teamB: b, result: simResult(a, b), played: false })
+    }
+  }
+  return out
+}
+
+function standingsFrom(teams: string[], matches: GroupMatch[]): Standing[] {
+  return calcStandings(teams, matches.map(m => ({ teamA: m.teamA, teamB: m.teamB, result: m.result })))
 }
 
 export default function GroupCard({ group, teams }: Props) {
   const t = useTranslations('groups')
   const [open, setOpen] = useState(false)
-  const [{ standings, results }, setData] = useState<{ standings: Standing[]; results: MatchResult[] }>(
-    () => ({ standings: calcStandings(teams, []), results: [] })
+  // Initiële render (SSR + eerste client-render): alleen de gespeelde wedstrijden
+  // — deterministisch, dus geen hydratie-mismatch. De gesimuleerde wedstrijden
+  // komen er client-side in de useEffect bij.
+  const [{ standings, matches }, setData] = useState<{ standings: Standing[]; matches: GroupMatch[] }>(
+    () => {
+      const m = buildMatches(teams, false)
+      return { standings: standingsFrom(teams, m), matches: m }
+    }
   )
 
+  // Alle wedstrijden gespeeld? Dan valt er niets te (her)simuleren → geen 🎲.
+  const allPlayed = buildFixtures(teams).every(([a, b]) => resultForPair(a, b) !== undefined)
+
+  const resimulate = () => {
+    const m = buildMatches(teams, true)
+    setData({ standings: standingsFrom(teams, m), matches: m })
+  }
+
   useEffect(() => {
-    // Math.random()-based simulation must run client-side only, after hydration,
-    // so the server-rendered standings (zeros) match the client's first render.
+    // simResult() gebruikt Math.random en mag alleen client-side draaien, na
+    // hydratie — de server-render toont enkel de echte uitslagen.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setData(simulate(teams))
+    resimulate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teams])
 
   return (
     <div className="group-card">
       <div className="group-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span>{t('groupLabel')} {group}</span>
-        <button
-          onClick={() => setData(simulate(teams))}
-          title={t('resimulate')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: 'var(--color-b)', padding: 0, lineHeight: 1 }}
-        >🎲</button>
+        {!allPlayed && (
+          <button
+            onClick={resimulate}
+            title={t('resimulate')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: 'var(--color-b)', padding: 0, lineHeight: 1 }}
+          >🎲</button>
+        )}
       </div>
       <table className="group-table">
         <thead>
@@ -96,8 +138,17 @@ export default function GroupCard({ group, teams }: Props) {
 
       {open && (
         <div style={{ borderTop: '1px solid var(--color-brd)' }}>
-          {results.map(({ teamA, teamB, result }, i) => (
-            <GroupMatchRow key={i} teamA={teamA} teamB={teamB} result={result} venue={venueForPair(teamA, teamB)} />
+          {matches.map((m, i) => (
+            <GroupMatchRow
+              key={i}
+              teamA={m.teamA}
+              teamB={m.teamB}
+              result={m.result}
+              venue={venueForPair(m.teamA, m.teamB)}
+              played={m.played}
+              scoreA={m.scoreA}
+              scoreB={m.scoreB}
+            />
           ))}
         </div>
       )}
