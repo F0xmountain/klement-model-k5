@@ -4,8 +4,24 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 
-const linkHrefs = ['/versus', '/teams', '/mc', '/groups', '/topscorers', '/knockout/r32', '/sim-bracket', '/my-bracket', '/stats', '/live', '/model', '/about'] as const
-const linkKeys = ['versus', 'teams', 'mc', 'groups', 'topscorers', 'bracket', 'simBracket', 'myBracket', 'stats', 'live', 'model', 'about'] as const
+// Primaire nav — altijd zichtbaar. Secundaire items zitten achter een "More"-
+// dropdown (desktop) en staan plat in het hamburger-menu (mobiel).
+const PRIMARY = [
+  { href: '/versus', key: 'versus' },
+  { href: '/groups', key: 'groups' },
+  { href: '/my-bracket', key: 'myBracket' },
+  { href: '/live', key: 'live' },
+  { href: '/stats', key: 'stats' },
+] as const
+const SECONDARY = [
+  { href: '/teams', key: 'teams' },
+  { href: '/mc', key: 'mc' },
+  { href: '/knockout/r32', key: 'bracket' },
+  { href: '/sim-bracket', key: 'simBracket' },
+  { href: '/topscorers', key: 'topscorers' },
+  { href: '/model', key: 'model' },
+  { href: '/about', key: 'about' },
+] as const
 
 function XIcon() {
   return (
@@ -29,15 +45,18 @@ export default function Nav() {
   const router = useRouter()
   const locale = useLocale()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [prevRoute, setPrevRoute] = useState(`${pathname}|${locale}`)
 
   const isActive = (href: string) =>
     href === '/knockout/r32' ? pathname.startsWith('/knockout') : pathname === href
+  const moreActive = SECONDARY.some(s => isActive(s.href))
 
   const route = `${pathname}|${locale}`
   if (route !== prevRoute) {
     setPrevRoute(route)
     setMenuOpen(false)
+    setMoreOpen(false)
   }
 
   return (
@@ -55,11 +74,29 @@ export default function Nav() {
       </button>
       <div className={`nav-menu${menuOpen ? ' open' : ''}`}>
         <div className="nav-links">
-          {linkHrefs.map((href, i) => (
+          {PRIMARY.map(({ href, key }) => (
             <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
-              {t(linkKeys[i])}
+              {t(key)}
             </Link>
           ))}
+        </div>
+        <div className="nav-more">
+          <button
+            type="button"
+            className={`nav-link nav-more-toggle${moreActive ? ' active' : ''}`}
+            onClick={() => setMoreOpen(o => !o)}
+            aria-expanded={moreOpen}
+            aria-haspopup="true"
+          >
+            {t('more')} ▾
+          </button>
+          <div className={`nav-more-panel${moreOpen ? ' open' : ''}`}>
+            {SECONDARY.map(({ href, key }) => (
+              <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
+                {t(key)}
+              </Link>
+            ))}
+          </div>
         </div>
         <div className="nav-extra">
           {routing.locales.map(loc => (

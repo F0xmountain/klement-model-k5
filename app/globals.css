@@ -346,6 +346,28 @@ main { flex: 1; }
 .nav-link.active { background: var(--color-b-bg); color: var(--color-b); }
 .nav-extra { display: flex; align-items: center; gap: 2px; padding-right: 8px; flex-shrink: 0; }
 
+/* ── Nav "More" dropdown (secundaire links) ── */
+.nav-more { position: relative; display: flex; align-items: stretch; flex-shrink: 0; }
+.nav-more-toggle {
+  background: none;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+.nav-more-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  flex-direction: column;
+  min-width: 160px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-brd2);
+  border-top: none;
+  z-index: 101;
+}
+.nav-more-panel.open { display: flex; }
+.nav-more-panel .nav-link { border-right: none; border-bottom: 1px solid var(--color-brd); padding: 12px 16px; }
+
 /* ── Nav hamburger (mobile) ── */
 .nav-hamburger {
   display: none;
@@ -378,6 +400,11 @@ main { flex: 1; }
   .nav-links { flex-direction: column; flex: none; overflow: visible; }
   .nav-link { border-right: none; border-bottom: 1px solid var(--color-brd); padding: 14px 20px; }
   .nav-extra { flex-direction: row; padding: 14px 20px; border-top: 1px solid var(--color-brd); padding-right: 20px; }
+  /* Mobiel: geen dropdown — alle secundaire links staan plat in het drawer-menu. */
+  .nav-more { flex-direction: column; }
+  .nav-more-toggle { display: none; }
+  .nav-more-panel { display: flex; position: static; min-width: 0; border: none; }
+  .nav-more-panel .nav-link { padding: 14px 20px; }
 }
 
 /* ── Footer ── */
