@@ -4,6 +4,7 @@ import { getModelWeights } from '@/lib/model-config'
 import { Link } from '@/i18n/navigation'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
 import ModelConfigClient from '@/components/admin/ModelConfigClient'
+import SensitivityPanel from '@/components/admin/SensitivityPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,6 +31,7 @@ export default async function ModelConfigPage() {
         <Link href="/admin/model-explain" style={{ fontSize: 9, color: 'var(--color-b)' }}>→ Model internals (live calculation walkthrough)</Link>
       </div>
       <ModelConfigClient initial={getModelWeights()} />
+      <SensitivityPanel weights={getModelWeights()} />
     </div>
   )
 }
