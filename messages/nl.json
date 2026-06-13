@@ -319,7 +319,10 @@
     "w_market": "Polymarket-blend",
     "w_star1": "Sterspeler 1 penalty",
     "w_star2": "Sterspeler 2 penalty",
-    "w_star3": "Sterspeler 3 penalty"
+    "w_star3": "Sterspeler 3 penalty",
+    "normalize": "NORMALISEER",
+    "baseSumNormHint": "⚠️ Factoren tellen op tot {sum} — normaliseer",
+    "saveBlocked": "Basisfactoren moeten optellen tussen 0,95 en 1,05 voordat je opslaat."
   },
   "model": {
     "title": "HET MODEL",

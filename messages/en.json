@@ -319,7 +319,10 @@
     "w_market": "Polymarket blend",
     "w_star1": "Star player 1 penalty",
     "w_star2": "Star player 2 penalty",
-    "w_star3": "Star player 3 penalty"
+    "w_star3": "Star player 3 penalty",
+    "normalize": "NORMALIZE",
+    "baseSumNormHint": "⚠️ Base factors sum to {sum} — normalize",
+    "saveBlocked": "Base factors must sum within 0.95–1.05 before saving."
   },
   "model": {
     "title": "THE MODEL",

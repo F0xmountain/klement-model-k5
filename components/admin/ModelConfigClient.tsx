@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import Btn from '@/components/ui/Btn'
 import WDLBar from '@/components/ui/WDLBar'
 import { previewMatchP } from '@/lib/klement-custom'
-import { DEFAULT_WEIGHTS, BASE_FACTOR_TARGET, baseFactorSum, type ModelWeights } from '@/lib/model-config'
+import { DEFAULT_WEIGHTS, BASE_FACTOR_TARGET, baseFactorSum, baseSumWithinSaveRange, normalizeBaseWeights, type ModelWeights } from '@/lib/model-config'
 
 interface Props {
   initial: ModelWeights
@@ -58,6 +58,7 @@ export default function ModelConfigClient({ initial }: Props) {
 
   const sum = baseFactorSum(w)
   const sumOff = Math.abs(sum - BASE_FACTOR_TARGET) > 0.005
+  const canSave = baseSumWithinSaveRange(w)
 
   // Live preview met de huidige slider-waarden (niet de opgeslagen config)
   const { pA, dr, pB } = previewMatchP(PREVIEW_A, PREVIEW_B, w)
@@ -72,7 +73,13 @@ export default function ModelConfigClient({ initial }: Props) {
     setSaveState('idle')
   }
 
+  function normalize() {
+    setW(prev => normalizeBaseWeights(prev))
+    setSaveState('idle')
+  }
+
   async function save() {
+    if (!canSave) return
     setSaveState('saving')
     try {
       const res = await fetch('/api/admin/model-config', {
@@ -122,10 +129,15 @@ export default function ModelConfigClient({ initial }: Props) {
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-r)', marginBottom: 16 }}>{t('baseFactors')}</div>
         {BASE_SLIDERS.map(renderSlider)}
-        <div style={{ marginTop: 12, fontSize: 9, color: sumOff ? 'var(--color-r)' : 'var(--color-g)' }}>
-          {t('baseSumLabel')}: {sum.toFixed(2)} / {BASE_FACTOR_TARGET.toFixed(2)}
-          {' — '}
-          {sumOff ? t('baseSumWarn') : t('baseSumOk')}
+        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 9, color: sumOff ? 'var(--color-r)' : 'var(--color-g)' }}>
+            {sumOff
+              ? t('baseSumNormHint', { sum: sum.toFixed(2) })
+              : `${t('baseSumLabel')}: ${sum.toFixed(2)} / ${BASE_FACTOR_TARGET.toFixed(2)} — ${t('baseSumOk')}`}
+          </span>
+          {sumOff && (
+            <Btn variant="default" onClick={normalize}>{t('normalize')}</Btn>
+          )}
         </div>
       </div>
 
@@ -152,13 +164,14 @@ export default function ModelConfigClient({ initial }: Props) {
 
       {/* Actions */}
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Btn variant="green" onClick={save} disabled={saveState === 'saving'}>
+        <Btn variant="green" onClick={save} disabled={saveState === 'saving' || !canSave}>
           {saveState === 'saving' ? t('saving') : t('save')}
         </Btn>
         <Btn variant="default" onClick={() => applyPreset(DEFAULT_WEIGHTS)}>{t('reset')}</Btn>
         <span style={{ fontSize: 8 }}>
-          {saveState === 'saved' && <span style={{ color: 'var(--color-g)' }}>{t('saved')}</span>}
-          {saveState === 'error' && <span style={{ color: 'var(--color-r)' }}>{t('saveError')}</span>}
+          {!canSave && <span style={{ color: 'var(--color-r)' }}>{t('saveBlocked')}</span>}
+          {canSave && saveState === 'saved' && <span style={{ color: 'var(--color-g)' }}>{t('saved')}</span>}
+          {canSave && saveState === 'error' && <span style={{ color: 'var(--color-r)' }}>{t('saveError')}</span>}
         </span>
       </div>
     </div>

@@ -39,8 +39,35 @@ export const DEFAULT_WEIGHTS: ModelWeights = {
 // Som van de basisfactoren die rond 1.00 hoort te liggen (configurator-waarschuwing)
 export const BASE_FACTOR_TARGET = 1.00
 
+// Opslaan is alleen toegestaan als de basis-som binnen deze marge van 1.00 ligt;
+// daarbuiten is de configuratie te ver weg om zinvol te zijn.
+export const BASE_SUM_SAVE_MIN = 0.95
+export const BASE_SUM_SAVE_MAX = 1.05
+
 export function baseFactorSum(w: ModelWeights): number {
   return w.gdp + w.pop + w.temp + w.fifa + w.host
+}
+
+export function baseSumWithinSaveRange(w: ModelWeights): boolean {
+  const s = baseFactorSum(w)
+  return s >= BASE_SUM_SAVE_MIN && s <= BASE_SUM_SAVE_MAX
+}
+
+// Schaalt de basisfactoren (gdp/pop/temp/fifa/host) proportioneel zodat hun som
+// exact BASE_FACTOR_TARGET (1.00) is. Uitbreidings- en sterspeler-gewichten
+// blijven ongewijzigd.
+export function normalizeBaseWeights(w: ModelWeights): ModelWeights {
+  const sum = baseFactorSum(w)
+  if (sum <= 0) return w
+  const f = BASE_FACTOR_TARGET / sum
+  return {
+    ...w,
+    gdp: w.gdp * f,
+    pop: w.pop * f,
+    temp: w.temp * f,
+    fifa: w.fifa * f,
+    host: w.host * f,
+  }
 }
 
 export function getModelWeights(): ModelWeights {
