@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
+import { liveMatchNow } from '@/lib/today-schedule'
 
 // Primaire nav — altijd zichtbaar. Secundaire items zitten achter een "More"-
 // dropdown (desktop) en staan plat in het hamburger-menu (mobiel).
@@ -48,6 +49,16 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
   const [prevRoute, setPrevRoute] = useState(`${pathname}|${locale}`)
+  const [live, setLive] = useState(false)
+
+  // Of er nu een wedstrijd bezig is — client-side bepaald (geen hydration-mismatch),
+  // elke minuut herzien.
+  useEffect(() => {
+    const check = () => setLive(liveMatchNow(new Date()) !== null)
+    check()
+    const id = setInterval(check, 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   const isActive = (href: string) =>
     href === '/knockout/r32' ? pathname.startsWith('/knockout') : pathname === href
@@ -65,6 +76,19 @@ export default function Nav() {
       <Link href="/" className="nav-logo">
         <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>Klement
       </Link>
+      {live && (
+        <Link
+          href="/groups"
+          className="blink"
+          style={{
+            marginLeft: 10, padding: '2px 7px', fontSize: 8, letterSpacing: 1,
+            backgroundColor: 'var(--color-r)', color: '#fff', textDecoration: 'none',
+            alignSelf: 'center',
+          }}
+        >
+          ● {t('live')}
+        </Link>
+      )}
       <button
         className="nav-hamburger"
         onClick={() => setMenuOpen(o => !o)}

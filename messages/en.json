@@ -1,4 +1,9 @@
 {
+  "today": {
+    "title": "Today",
+    "next": "Next match: {date} — {teams}",
+    "noMatches": "No matches today"
+  },
   "match": {
     "venue": "Stadium",
     "altitude": "{m}m altitude",

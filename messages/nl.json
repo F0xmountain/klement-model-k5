@@ -1,4 +1,9 @@
 {
+  "today": {
+    "title": "Vandaag",
+    "next": "Volgende wedstrijd: {date} — {teams}",
+    "noMatches": "Geen wedstrijden vandaag"
+  },
   "match": {
     "venue": "Stadion",
     "altitude": "{m}m hoogte",
