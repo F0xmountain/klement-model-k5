@@ -26,7 +26,7 @@ describe('Model correctheid', () => {
     const teams = teamNames()
     for (let i = 0; i < teams.length; i++) {
       for (let j = i + 1; j < teams.length; j++) {
-        const p = matchP(teams[i], teams[j])
+        const p = matchP(teams[i]!, teams[j]!)
         expect(sumsToOne(p)).toBeCloseTo(1, 6)
         expect(allInRange(p)).toBe(true)
       }

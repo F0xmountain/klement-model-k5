@@ -82,13 +82,15 @@ export function calcStandings(teams: string[], results: MatchResult[]): Standing
   for (const t of teams) map[t] = { team: t, pts: 0, w: 0, d: 0, l: 0 }
 
   for (const { teamA, teamB, result } of results) {
+    const a = map[teamA], b = map[teamB]
+    if (!a || !b) continue
     if (result === 'A') {
-      map[teamA].pts += 3; map[teamA].w++; map[teamB].l++
+      a.pts += 3; a.w++; b.l++
     } else if (result === 'B') {
-      map[teamB].pts += 3; map[teamB].w++; map[teamA].l++
+      b.pts += 3; b.w++; a.l++
     } else {
-      map[teamA].pts += 1; map[teamA].d++
-      map[teamB].pts += 1; map[teamB].d++
+      a.pts += 1; a.d++
+      b.pts += 1; b.d++
     }
   }
 

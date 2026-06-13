@@ -55,8 +55,9 @@ export default function ModelExplainClient() {
       .catch(() => {})
   }, [])
 
-  const venue = venueIdx !== null
-    ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
+  const stadium = venueIdx !== null ? stadiums[venueIdx] : undefined
+  const venue = stadium
+    ? { altitude: stadium.altitude_m, lat: stadium.coordinates.lat, lon: stadium.coordinates.lon }
     : undefined
 
   const e = explainMatch(teamA, teamB, venue, polyOdds ?? undefined)
@@ -97,7 +98,7 @@ export default function ModelExplainClient() {
           </thead>
           <tbody>
             {e.teamA.factors.map((fa, i) => {
-              const fb = e.teamB.factors[i]
+              const fb = e.teamB.factors[i]!
               return (
                 <tr key={fa.key}>
                   <td style={{ ...cell, color: 'var(--color-muted)' }}>{FACTOR_LABEL[fa.key]}</td>

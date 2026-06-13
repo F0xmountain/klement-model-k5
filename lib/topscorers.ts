@@ -37,7 +37,7 @@ export function predictedTopScorers(limit = 20, sims = 2000): PredictedScorer[] 
     const em = expected[team.name_en] ?? 3
     const starRank = new Map(team.star_players.map(s => [s.name, s.rank]))
     for (const p of team.squad) {
-      const weight = POSITION_WEIGHT[p.category] ?? POSITION_WEIGHT.midfielder
+      const weight = POSITION_WEIGHT[p.category] ?? POSITION_WEIGHT.midfielder ?? 1
       const starMult = STAR_MULTIPLIER[starRank.get(p.name) ?? 0] ?? 1.0
       players.push({ name: p.name, team: team.name_en, category: p.category, score: (em / weight) * starMult })
     }

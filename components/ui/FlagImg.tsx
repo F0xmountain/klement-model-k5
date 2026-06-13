@@ -8,7 +8,7 @@ interface Props {
   emoji?: string
 }
 
-export default function FlagImg({ name, h = 24, emoji = '🏳' }: Props) {
+export default function FlagImg({ name, h = 24, emoji: _emoji = '🏳' }: Props) {
   const [failed, setFailed] = useState(false)
   const code = FLAG_CODES[name]
 

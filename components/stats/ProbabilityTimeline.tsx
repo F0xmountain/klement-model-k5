@@ -33,7 +33,7 @@ export default function ProbabilityTimeline() {
   }
 
   // Top-6 teams op de meest recente kampioenskans (laatste snapshot)
-  const last = snapshots[snapshots.length - 1].snapshots
+  const last = snapshots[snapshots.length - 1]!.snapshots
   const topTeams = Object.entries(last).sort((a, b) => b[1] - a[1]).slice(0, TOP_LINES).map(([team]) => team)
 
   // Grafiekdata in procenten (1 decimaal)

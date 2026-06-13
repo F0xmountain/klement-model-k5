@@ -26,7 +26,7 @@ type Venue = { altitude: number; lat: number; lon: number }
 const GROUP_LETTERS = Object.keys(GROUPS) // A..L
 
 function groupVenue(groupIndex: number): Venue {
-  const s = stadiums[groupIndex % stadiums.length]
+  const s = stadiums[groupIndex % stadiums.length]!
   return { altitude: s.altitude_m, lat: s.coordinates.lat, lon: s.coordinates.lon }
 }
 
@@ -98,15 +98,17 @@ function simGroup(teams: string[], venue: Venue, eloOverride?: EloMap): GroupSta
 
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
-      const { pA, dr, pB } = matchP(teams[i], teams[j], venue, undefined, undefined, eloOverride)
+      const a = teams[i]!, b = teams[j]!
+      const ta = table[a]!, tb = table[b]!
+      const { pA, dr, pB } = matchP(a, b, venue, undefined, undefined, eloOverride)
       const rnd = Math.random()
       const r: 'A' | 'D' | 'B' = rnd < pA ? 'A' : rnd < pA + dr ? 'D' : 'B'
       const [gi, gj] = sampleScore(pA, pB, r)
-      table[teams[i]].gf += gi; table[teams[i]].ga += gj
-      table[teams[j]].gf += gj; table[teams[j]].ga += gi
-      if (r === 'A') { table[teams[i]].pts += 3; table[teams[i]].w++ }
-      else if (r === 'B') { table[teams[j]].pts += 3; table[teams[j]].w++ }
-      else { table[teams[i]].pts += 1; table[teams[j]].pts += 1 }
+      ta.gf += gi; ta.ga += gj
+      tb.gf += gj; tb.ga += gi
+      if (r === 'A') { ta.pts += 3; ta.w++ }
+      else if (r === 'B') { tb.pts += 3; tb.w++ }
+      else { ta.pts += 1; tb.pts += 1 }
     }
   }
 
@@ -171,9 +173,9 @@ const SEED_TEMPLATE: [Slot, Slot][] = [
 ]
 
 function resolveSlot(slot: Slot, winners: string[], runners: string[], thirds: string[]): string {
-  if (slot.kind === 'W') return winners[slot.group]
-  if (slot.kind === 'R') return runners[slot.group]
-  return thirds[slot.idx]
+  if (slot.kind === 'W') return winners[slot.group] ?? ''
+  if (slot.kind === 'R') return runners[slot.group] ?? ''
+  return thirds[slot.idx] ?? ''
 }
 
 // Past SEED_TEMPLATE toe op de groepsstanden → 32 R32-teams in seed-volgorde
@@ -228,21 +230,23 @@ function makeCounter(size: number): SlotCounter {
   return Array.from({ length: size }, () => ({}))
 }
 function tally(counter: SlotCounter, idx: number, team: string) {
-  counter[idx][team] = (counter[idx][team] ?? 0) + 1
+  const slot = counter[idx]!
+  slot[team] = (slot[team] ?? 0) + 1
 }
 function topSlot(slot: SlotCounter[number], n: number): SlotTeam {
   const ranked = Object.entries(slot)
     .map(([team, c]) => ({ team, prob: n > 0 ? c / n : 0 }))
     .sort((a, b) => b.prob - a.prob)
-  if (ranked.length === 0) return { team: '', prob: 0 }
-  return { team: ranked[0].team, prob: ranked[0].prob, alts: ranked.slice(0, 4) }
+  const top = ranked[0]
+  if (!top) return { team: '', prob: 0 }
+  return { team: top.team, prob: top.prob, alts: ranked.slice(0, 4) }
 }
 
 // Bouwt de "meest waarschijnlijke" wedstrijden uit de per-positie tellers.
 function toMatches(counter: SlotCounter, n: number): BracketMatch[] {
   const out: BracketMatch[] = []
   for (let i = 0; i < counter.length; i += 2) {
-    out.push({ home: topSlot(counter[i], n), away: topSlot(counter[i + 1], n) })
+    out.push({ home: topSlot(counter[i]!, n), away: topSlot(counter[i + 1]!, n) })
   }
   return out
 }
@@ -271,11 +275,11 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     const thirdsRaw: GroupStanding[] = []
 
     GROUP_LETTERS.forEach((g, gi) => {
-      const st = simGroup(GROUPS[g], groupVenue(gi), eloOverride)
-      winners[gi] = st[0].team
-      runners[gi] = st[1].team
-      thirdsRaw.push(st[2])
-      inc(groupWinner, st[0].team)
+      const st = simGroup(GROUPS[g]!, groupVenue(gi), eloOverride)
+      winners[gi] = st[0]!.team
+      runners[gi] = st[1]!.team
+      thirdsRaw.push(st[2]!)
+      inc(groupWinner, st[0]!.team)
     })
 
     // 8 beste nummers-drie: zelfde FIFA-tiebreakervolgorde als de groepsstand
@@ -286,15 +290,15 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     // R32 vullen via de seeding-template
     const r32 = seedR32(winners, runners, thirds) // 32 teams, paarsgewijs (home,away)
     for (let i = 0; i < r32.length; i++) {
-      tally(cR32, i, r32[i])
-      inc(reachR32, r32[i])
+      tally(cR32, i, r32[i]!)
+      inc(reachR32, r32[i]!)
     }
 
     // Knockout: paarsgewijze winnaars per ronde
     const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
       const next: string[] = []
       for (let i = 0; i < teams.length; i += 2) {
-        const wnr = koWinner(teams[i], teams[i + 1], eloOverride)
+        const wnr = koWinner(teams[i]!, teams[i + 1]!, eloOverride)
         next.push(wnr)
         tally(counter, i / 2, wnr)
         inc(reach, wnr)
@@ -306,7 +310,7 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     const qf = advance(r16, cQF, reachQF)       // 16 → 8
     const sf = advance(qf, cSF, reachSF)        // 8 → 4
     const fin = advance(sf, cFinal, reachFinal) // 4 → 2
-    const champ = koWinner(fin[0], fin[1], eloOverride)
+    const champ = koWinner(fin[0]!, fin[1]!, eloOverride)
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }
@@ -325,8 +329,8 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
       r16: toMatches(cR16, n),
       qf: toMatches(cQF, n),
       sf: toMatches(cSF, n),
-      final: toMatches(cFinal, n)[0],
-      champion: topSlot(cChamp[0], n),
+      final: toMatches(cFinal, n)[0]!,
+      champion: topSlot(cChamp[0]!, n),
     },
   }
 }
@@ -354,14 +358,15 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
 
   // R32-sloten liggen vast: elk geseed team staat met 100% in zijn slot.
   for (let i = 0; i < r32.length; i++) {
-    cR32[i][r32[i]] = n
-    reachR32[r32[i]] = (reachR32[r32[i]] ?? 0) + n
+    const team = r32[i]!
+    cR32[i]![team] = n
+    reachR32[team] = (reachR32[team] ?? 0) + n
   }
 
   const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
     const next: string[] = []
     for (let i = 0; i < teams.length; i += 2) {
-      const wnr = koWinner(teams[i], teams[i + 1], eloOverride)
+      const wnr = koWinner(teams[i]!, teams[i + 1]!, eloOverride)
       next.push(wnr)
       tally(counter, i / 2, wnr)
       inc(reach, wnr)
@@ -374,7 +379,7 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
     const qf = advance(r16, cQF, reachQF)
     const sf = advance(qf, cSF, reachSF)
     const fin = advance(sf, cFinal, reachFinal)
-    const champ = koWinner(fin[0], fin[1], eloOverride)
+    const champ = koWinner(fin[0]!, fin[1]!, eloOverride)
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }
@@ -393,8 +398,8 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
       r16: toMatches(cR16, n),
       qf: toMatches(cQF, n),
       sf: toMatches(cSF, n),
-      final: toMatches(cFinal, n)[0],
-      champion: topSlot(cChamp[0], n),
+      final: toMatches(cFinal, n)[0]!,
+      champion: topSlot(cChamp[0]!, n),
     },
   }
 }

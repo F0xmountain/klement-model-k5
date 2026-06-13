@@ -12,14 +12,14 @@ const SIMS = 1000
 const TOP_N = 10
 
 function simulateTournament(): string {
-  const r32 = ROUNDS.r32.map(m => simKO(m.teamA, m.teamB).winner)
+  const r32 = ROUNDS.r32!.map(m => simKO(m.teamA, m.teamB).winner)
   const r16: string[] = []
-  for (let i = 0; i < r32.length; i += 2) r16.push(simKO(r32[i], r32[i + 1]).winner)
+  for (let i = 0; i < r32.length; i += 2) r16.push(simKO(r32[i]!, r32[i + 1]!).winner)
   const qf: string[] = []
-  for (let i = 0; i < r16.length; i += 2) qf.push(simKO(r16[i], r16[i + 1]).winner)
+  for (let i = 0; i < r16.length; i += 2) qf.push(simKO(r16[i]!, r16[i + 1]!).winner)
   const sf: string[] = []
-  for (let i = 0; i < qf.length; i += 2) sf.push(simKO(qf[i], qf[i + 1]).winner)
-  return simKO(sf[0], sf[1]).winner
+  for (let i = 0; i < qf.length; i += 2) sf.push(simKO(qf[i]!, qf[i + 1]!).winner)
+  return simKO(sf[0]!, sf[1]!).winner
 }
 
 function modelChampionProbabilities(): Record<string, number> {

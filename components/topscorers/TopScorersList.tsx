@@ -21,7 +21,7 @@ const POS_COLOR: Record<string, string> = {
 
 export default function TopScorersList({ ranked }: Props) {
   const tCat = useTranslations('admin')
-  const maxScore = ranked.length > 0 ? ranked[0].score : 1
+  const maxScore = ranked.length > 0 ? ranked[0]!.score : 1
 
   return (
     <div className="factor-card" style={{ overflowX: 'auto' }}>

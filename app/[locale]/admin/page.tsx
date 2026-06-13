@@ -51,7 +51,7 @@ function countNotFit(): number {
   const notFit = new Set<string>()
   for (const layer of [player, star]) {
     for (const team of Object.keys(layer)) {
-      for (const [name, status] of Object.entries(layer[team])) {
+      for (const [name, status] of Object.entries(layer[team] ?? {})) {
         if (status !== 'fit') notFit.add(`${team}|${name}`)
       }
     }

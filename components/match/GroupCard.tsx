@@ -16,7 +16,7 @@ function buildFixtures(teams: string[]): [string, string][] {
   const pairs: [string, string][] = []
   for (let i = 0; i < teams.length; i++)
     for (let j = i + 1; j < teams.length; j++)
-      pairs.push([teams[i], teams[j]])
+      pairs.push([teams[i]!, teams[j]!])
   return pairs
 }
 

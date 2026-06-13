@@ -40,8 +40,9 @@ export default function AdminSquadsClient({ teams, lastUpdated }: Props) {
   const [statuses, setStatuses] = useState<StatusMap>(() => {
     const init: StatusMap = {}
     for (const team of teams) {
-      init[team.teamNl] = {}
-      for (const p of team.players) init[team.teamNl][p.name] = p.status
+      const teamStatuses: Record<string, PlayerStatus> = {}
+      for (const p of team.players) teamStatuses[p.name] = p.status
+      init[team.teamNl] = teamStatuses
     }
     return init
   })
@@ -126,13 +127,13 @@ export default function AdminSquadsClient({ teams, lastUpdated }: Props) {
               <div>
                 {sortedPlayers.map(player => (
                   <div key={player.name} className="admin-player-row">
-                    <span className={`status-dot status-dot-${statuses[team.teamNl][player.name]}`} />
+                    <span className={`status-dot status-dot-${statuses[team.teamNl]?.[player.name] ?? 'fit'}`} />
                     <span>{player.isStar && '⭐ '}{player.name}</span>
                     <span style={{ color: 'var(--color-muted)' }}>{player.club ?? '—'}</span>
                     <span style={{ color: 'var(--color-muted)' }}>{t(`category.${player.category}`)}</span>
                     <select
                       className="admin-status-select"
-                      value={statuses[team.teamNl][player.name]}
+                      value={statuses[team.teamNl]?.[player.name] ?? 'fit'}
                       onChange={e => setStatus(team.teamNl, player.name, e.target.value as PlayerStatus)}
                     >
                       <option value="fit">{tCommon('statusFit')}</option>

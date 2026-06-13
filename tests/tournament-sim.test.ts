@@ -48,9 +48,9 @@ describe('Monte Carlo simulator', () => {
 
   it('KO-bracket (R32-seeding) heeft geen duplicaten', () => {
     const r32 = seedR32(
-      Object.keys(GROUPS).map(l => GROUPS[l][0]), // 12 winnaars
-      Object.keys(GROUPS).map(l => GROUPS[l][1]), // 12 nummers-twee
-      Object.keys(GROUPS).slice(0, 8).map(l => GROUPS[l][2]) // 8 nummers-drie
+      Object.keys(GROUPS).map(l => GROUPS[l]![0]!), // 12 winnaars
+      Object.keys(GROUPS).map(l => GROUPS[l]![1]!), // 12 nummers-twee
+      Object.keys(GROUPS).slice(0, 8).map(l => GROUPS[l]![2]!) // 8 nummers-drie
     )
     expect(r32.length).toBe(32)
     expect(new Set(r32).size).toBe(32)
@@ -64,7 +64,7 @@ describe('Monte Carlo simulator', () => {
       expect(sumWin, `group ${letter} win`).toBeCloseTo(1, 6)
       expect(sumTop2, `group ${letter} top2`).toBeCloseTo(2, 6)
       // P(top-2) >= P(groepswinst) voor elk team.
-      for (const t of teams) expect(top2[t]).toBeGreaterThanOrEqual(win[t] - 1e-9)
+      for (const t of teams) expect(top2[t]!).toBeGreaterThanOrEqual(win[t]! - 1e-9)
     }
   })
 })

@@ -35,7 +35,7 @@ export interface ProbabilitySnapshot {
 // Meest recente numerieke Elo voor een team uit elo-history.json
 function historicalElo(name: string): number | undefined {
   for (let i = eloHistory.length - 1; i >= 0; i--) {
-    const v = eloHistory[i][name]
+    const v = eloHistory[i]![name]
     if (typeof v === 'number') return v
   }
   return undefined
@@ -46,7 +46,7 @@ function historicalElo(name: string): number | undefined {
 function eloAfter(results: ResultEntry[], count: number): EloMap {
   const elo: EloMap = {}
   for (let k = 0; k < count; k++) {
-    const { teamA, teamB, scoreA, scoreB } = results[k]
+    const { teamA, teamB, scoreA, scoreB } = results[k]!
     const eloA = elo[teamA] ?? historicalElo(teamA) ?? ELO_DEFAULT
     const eloB = elo[teamB] ?? historicalElo(teamB) ?? ELO_DEFAULT
     const expA = 1 / (1 + 10 ** ((eloB - eloA) / 400))
@@ -86,7 +86,7 @@ export function buildSnapshots(): ProbabilitySnapshot[] {
   const snapshots: ProbabilitySnapshot[] = []
   for (let k = 1; k <= results.length; k++) {
     const probs = championProbs(eloAfter(results, k))
-    const r = results[k - 1]
+    const r = results[k - 1]!
     const picked: Record<string, number> = {}
     for (const team of topTeams) picked[team] = probs[team] ?? 0
     snapshots.push({

@@ -123,7 +123,7 @@ export default function BracketView() {
         alignItems: 'start',
       }}>
         {BRACKET_ROUNDS.map(({ key, connCount }, roundIdx) => {
-          const matches = ROUNDS[key]
+          const matches = ROUNDS[key]!
           return (
             <Fragment key={key}>
               {/* Round column — 1fr, stretches to fill available space */}

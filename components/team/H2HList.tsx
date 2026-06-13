@@ -1,6 +1,5 @@
 import { useTranslations } from 'next-intl'
 import { matchP, teamNames, sc, teamData } from '@/lib/klement'
-import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
 
 interface Props {

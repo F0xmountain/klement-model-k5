@@ -18,7 +18,7 @@ function buildGroupMatches(): ResultMatch[] {
   for (const [group, teams] of Object.entries(GROUPS)) {
     for (let i = 0; i < teams.length; i++) {
       for (let j = i + 1; j < teams.length; j++) {
-        matches.push({ matchKey: makeSlug(teams[i], teams[j]), group, teamA: teams[i], teamB: teams[j] })
+        matches.push({ matchKey: makeSlug(teams[i]!, teams[j]!), group, teamA: teams[i]!, teamB: teams[j]! })
       }
     }
   }

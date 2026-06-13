@@ -35,8 +35,8 @@ export function getUpsets(threshold = UPSET_THRESHOLD): UpsetMatch[] {
   for (const [group, teams] of Object.entries(GROUPS)) {
     for (let i = 0; i < teams.length; i++) {
       for (let j = i + 1; j < teams.length; j++) {
-        const teamA = teams[i]
-        const teamB = teams[j]
+        const teamA = teams[i]!
+        const teamB = teams[j]!
         const { weakerTeam, upsetProb } = getMatchUpset(teamA, teamB)
         if (upsetProb >= threshold) {
           upsets.push({ teamA, teamB, group, weakerTeam, upsetProb, matchLabel: `${group}: ${teamA} vs ${teamB}` })

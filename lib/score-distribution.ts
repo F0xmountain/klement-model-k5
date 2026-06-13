@@ -42,7 +42,7 @@ export function calcScoreDistribution(lambdaA: number, lambdaB: number, maxGoals
   let awayWin = 0
   for (let a = 0; a <= maxGoals; a++) {
     for (let b = 0; b <= maxGoals; b++) {
-      const prob = pa[a] * pb[b]
+      const prob = pa[a]! * pb[b]!
       all.push({ a, b, prob })
       if (a > b) homeWin += prob
       else if (a === b) draw += prob

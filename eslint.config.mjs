@@ -13,6 +13,23 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Sta de "intentioneel ongebruikt"-conventie toe: namen die met _ beginnen
+  // (bv. signatuur-params die voor symmetrie blijven staan) tellen niet als ongebruikt.
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      }],
+    },
+  },
+  // Build-scripts draaien als CommonJS-node-scripts (package "type": "commonjs"),
+  // dus require() is daar correct.
+  {
+    files: ["scripts/**/*.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
 ]);
 
 export default eslintConfig;

@@ -17,7 +17,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
   const { round } = await params
   if (!(round in ROUNDS)) notFound()
 
-  const matches = ROUNDS[round as Round]
+  const matches = ROUNDS[round as Round]!
   const isFinal = round === 'final'
   const tr = await getTranslations('rounds')
   const tk = await getTranslations('knockout')

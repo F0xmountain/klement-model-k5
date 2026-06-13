@@ -8,8 +8,7 @@ import FlagImg from '@/components/ui/FlagImg'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
 import PixelParticles from '@/components/ui/PixelParticles'
 
-const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
-type Round = typeof ROUND_ORDER[number]
+type Round = 'r32' | 'r16' | 'qf' | 'sf' | 'final'
 
 export function generateStaticParams() {
   return Object.entries(ROUNDS).flatMap(([round, matches]) =>
@@ -25,7 +24,7 @@ export default async function MatchPage({
   const { round, match } = await params
   if (!(round in ROUNDS)) notFound()
 
-  const matches = ROUNDS[round as Round]
+  const matches = ROUNDS[round as Round]!
   const found = matches.find(m => makeSlug(m.teamA, m.teamB) === match)
   if (!found) notFound()
 

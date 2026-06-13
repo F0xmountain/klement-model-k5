@@ -69,10 +69,10 @@ describe('calcStandings()', () => {
     ]
     const standings = calcStandings(teams, results)
     expect(standings).toHaveLength(4)
-    expect(standings[0].team).toBe('A')
-    expect(standings[0].pts).toBe(9)
+    expect(standings[0]!.team).toBe('A')
+    expect(standings[0]!.pts).toBe(9)
     for (let i = 0; i < standings.length - 1; i++) {
-      expect(standings[i].pts).toBeGreaterThanOrEqual(standings[i + 1].pts)
+      expect(standings[i]!.pts).toBeGreaterThanOrEqual(standings[i + 1]!.pts)
     }
   })
 })

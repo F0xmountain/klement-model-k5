@@ -8,7 +8,7 @@ import eloHistory from '@/lib/elo-history.json'
 import { teamData } from '@/lib/klement'
 import FlagImg from '@/components/ui/FlagImg'
 
-const ALL_TEAMS = Object.keys(eloHistory[0]).filter(k => k !== 'date').sort()
+const ALL_TEAMS = Object.keys(eloHistory[0]!).filter(k => k !== 'date').sort()
 const DEFAULT_TEAMS = ['Netherlands', 'Portugal', 'Spain', 'France']
 const MAX_TEAMS = 6
 const COLORS = ['var(--color-b)', 'var(--color-r)', 'var(--color-g)', 'var(--color-o)', '#7B4FA0', '#1A8A8A']
@@ -18,7 +18,7 @@ const QUARTER_LABEL: Record<string, string> = { '03': 'Q1', '06': 'Q2', '09': 'Q
 
 function formatQuarter(label: React.ReactNode) {
   const [year, month] = String(label).split('-')
-  return `${QUARTER_LABEL[month]} ${year}`
+  return `${QUARTER_LABEL[month ?? ''] ?? ''} ${year ?? ''}`
 }
 
 export default function EloTrendChart() {

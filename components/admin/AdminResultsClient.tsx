@@ -42,12 +42,12 @@ export default function AdminResultsClient({ matches, initialResults }: Props) {
   const [saveState, setSaveState] = useState<SaveState>({})
 
   function setScore(matchKey: string, side: 'scoreA' | 'scoreB', value: string) {
-    setScores(prev => ({ ...prev, [matchKey]: { ...prev[matchKey], [side]: value } }))
+    setScores(prev => ({ ...prev, [matchKey]: { ...(prev[matchKey] ?? { scoreA: '', scoreB: '' }), [side]: value } }))
     setSaveState(prev => ({ ...prev, [matchKey]: 'idle' }))
   }
 
   async function handleSave(match: ResultMatch) {
-    const { scoreA, scoreB } = scores[match.matchKey]
+    const { scoreA, scoreB } = scores[match.matchKey] ?? { scoreA: '', scoreB: '' }
     if (scoreA === '' || scoreB === '') return
 
     setSaveState(prev => ({ ...prev, [match.matchKey]: 'saving' }))
@@ -90,7 +90,7 @@ export default function AdminResultsClient({ matches, initialResults }: Props) {
                 <input
                   type="number"
                   min={0}
-                  value={scores[match.matchKey].scoreA}
+                  value={scores[match.matchKey]?.scoreA ?? ''}
                   onChange={e => setScore(match.matchKey, 'scoreA', e.target.value)}
                   className="admin-score-input"
                 />
@@ -98,7 +98,7 @@ export default function AdminResultsClient({ matches, initialResults }: Props) {
                 <input
                   type="number"
                   min={0}
-                  value={scores[match.matchKey].scoreB}
+                  value={scores[match.matchKey]?.scoreB ?? ''}
                   onChange={e => setScore(match.matchKey, 'scoreB', e.target.value)}
                   className="admin-score-input"
                 />

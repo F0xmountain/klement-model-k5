@@ -28,15 +28,15 @@ export default function GroupStagePicker({ onSimulate }: Props) {
   // P(top-2) per groep — kans om door te gaan naar de R32. Exact (enumeratie),
   // deterministisch, dus eenmalig te memoïzen.
   const probs = useMemo(
-    () => Object.fromEntries(GROUP_LETTERS.map(l => [l, groupAdvanceProbs(GROUPS[l])])),
+    () => Object.fromEntries(GROUP_LETTERS.map(l => [l, groupAdvanceProbs(GROUPS[l]!)])),
     []
   )
 
   function move(letter: string, idx: number, dir: -1 | 1) {
-    const order = [...picks[letter]]
+    const order = [...picks[letter]!]
     const j = idx + dir
     if (j < 0 || j >= order.length) return
-    ;[order[idx], order[j]] = [order[j], order[idx]]
+    ;[order[idx], order[j]] = [order[j]!, order[idx]!]
     saveGroupPicks({ ...picks, [letter]: order })
   }
 
@@ -50,7 +50,7 @@ export default function GroupStagePicker({ onSimulate }: Props) {
         {GROUP_LETTERS.map(letter => (
           <div key={letter} className="group-card">
             <div className="group-header">{tg('groupLabel')} {letter}</div>
-            {picks[letter].map((team, idx) => {
+            {picks[letter]!.map((team, idx) => {
               const advances = idx < 2
               const isThird = idx === 2
               const bg = advances ? 'var(--color-g-bg)' : isThird ? 'var(--color-o-bg)' : 'transparent'
@@ -59,7 +59,7 @@ export default function GroupStagePicker({ onSimulate }: Props) {
                   <span style={{ width: 12, fontSize: 9, color: 'var(--color-muted)', textAlign: 'center' }}>{idx + 1}</span>
                   <FlagImg name={team} h={13} emoji={teamData(team)?.flag ?? '🏳️'} />
                   <span style={{ flex: 1, fontSize: 9, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{team}</span>
-                  <span style={{ fontSize: 8, color: 'var(--color-muted)', minWidth: 28, textAlign: 'right' }}>{Math.round((probs[letter][team] ?? 0) * 100)}%</span>
+                  <span style={{ fontSize: 8, color: 'var(--color-muted)', minWidth: 28, textAlign: 'right' }}>{Math.round((probs[letter]?.[team] ?? 0) * 100)}%</span>
                   {advances && <span style={{ fontSize: 7, color: 'var(--color-g)' }}>{t('advancesTop2')}</span>}
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <button onClick={() => move(letter, idx, -1)} disabled={idx === 0} aria-label="up" style={{ ...arrowBtn, opacity: idx === 0 ? 0.25 : 1 }}>▲</button>

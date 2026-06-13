@@ -115,8 +115,8 @@ export interface ConfidenceInterval {
 function bounds(xs: number[]): Bounds {
   const sorted = [...xs].sort((a, b) => a - b)
   const mean = xs.reduce((s, x) => s + x, 0) / xs.length
-  const lo = sorted[Math.floor(sorted.length * 0.025)]
-  const hi = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.975))]
+  const lo = sorted[Math.floor(sorted.length * 0.025)] ?? 0
+  const hi = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.975))] ?? 0
   return { mean, low95: lo, high95: hi }
 }
 

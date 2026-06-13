@@ -31,6 +31,11 @@ const stadiums = stadiumsRaw as Stadium[]
 
 const formCache = formCacheRaw as Record<string, { formScore: number | null }>
 
+function venueFromIdx(i: number) {
+  const s = stadiums[i]!
+  return { altitude: s.altitude_m, lat: s.coordinates.lat, lon: s.coordinates.lon }
+}
+
 type FormLevel = 'poor' | 'average' | 'good'
 
 function formLevel(score: number): FormLevel {
@@ -147,16 +152,14 @@ export default function VersusPage() {
       .catch(() => {})
   }, [])
 
-  const venue = venueIdx !== null
-    ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
-    : undefined
+  const venue = venueIdx !== null ? venueFromIdx(venueIdx) : undefined
   const restA = getRestDays(teamA)
   const restB = getRestDays(teamB)
 
   const polyAvailable = !!polyOdds && (polyOdds[teamA] ?? 0) > 0 && (polyOdds[teamB] ?? 0) > 0
   const { pA, dr, pB } = matchP(teamA, teamB, venue, { home: restA, away: restB }, polyOdds ?? undefined)
   const modelOnly = polyAvailable ? matchP(teamA, teamB, venue, { home: restA, away: restB }) : null
-  const marketPA = polyAvailable ? polyOdds![teamA] / (polyOdds![teamA] + polyOdds![teamB]) : null
+  const marketPA = polyAvailable ? polyOdds![teamA]! / (polyOdds![teamA]! + polyOdds![teamB]!) : null
 
   // H2H per teamparing ophalen (lazy, gecachet)
   const h2hKey = `${teamA}:${teamB}`
@@ -177,9 +180,7 @@ export default function VersusPage() {
   useEffect(() => {
     if (ciCache[ciKey]) return
     const id = setTimeout(() => {
-      const v = venueIdx !== null
-        ? { altitude: stadiums[venueIdx].altitude_m, lat: stadiums[venueIdx].coordinates.lat, lon: stadiums[venueIdx].coordinates.lon }
-        : undefined
+      const v = venueIdx !== null ? venueFromIdx(venueIdx) : undefined
       const data = calcConfidenceInterval(teamA, teamB, v, 500)
       setCiCache(prev => ({ ...prev, [ciKey]: data }))
     }, 30)
@@ -220,9 +221,9 @@ export default function VersusPage() {
 
   function surpriseMe() {
     const pool = allTeams.filter(t => t !== teamA && t !== teamB)
-    const a = pool[Math.floor(Math.random() * pool.length)]
+    const a = pool[Math.floor(Math.random() * pool.length)]!
     const remaining = pool.filter(t => t !== a)
-    const b = remaining[Math.floor(Math.random() * remaining.length)]
+    const b = remaining[Math.floor(Math.random() * remaining.length)]!
     setTeamA(a)
     setTeamB(b)
     setSim(null)
@@ -413,13 +414,13 @@ export default function VersusPage() {
             {sim && (
               <div style={{ display: 'flex', gap: 8, fontSize: 8 }}>
                 <span style={{ color: 'var(--color-r)', border: '1px solid var(--color-r)', padding: '4px 8px', backgroundColor: 'var(--color-r-bg)' }}>
-                  {teamA.split(' ')[0].toUpperCase()} {t('win')} {Math.round(sim.w / SIM_N * 100)}%
+                  {teamA.split(' ')[0]!.toUpperCase()} {t('win')} {Math.round(sim.w / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-muted)', border: '1px solid var(--color-brd)', padding: '4px 8px' }}>
                   {tc('draw')} {Math.round(sim.d / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-b)', border: '1px solid var(--color-b)', padding: '4px 8px', backgroundColor: 'var(--color-b-bg)' }}>
-                  {teamB.split(' ')[0].toUpperCase()} {t('win')} {Math.round(sim.l / SIM_N * 100)}%
+                  {teamB.split(' ')[0]!.toUpperCase()} {t('win')} {Math.round(sim.l / SIM_N * 100)}%
                 </span>
                 <span style={{ color: 'var(--color-muted)', fontSize: 7, alignSelf: 'center' }}>{SIM_N} {t('simsLabel')}</span>
               </div>

@@ -24,7 +24,7 @@ type Outcome = 'A' | 'D' | 'B'
 
 function historicalElo(name: string): number | undefined {
   for (let i = eloHistory.length - 1; i >= 0; i--) {
-    const v = eloHistory[i][name]
+    const v = eloHistory[i]![name]
     if (typeof v === 'number') return v
   }
   return undefined
@@ -35,7 +35,7 @@ function historicalElo(name: string): number | undefined {
 function eloAfter(results: ResultEntry[], count: number): EloMap {
   const elo: EloMap = {}
   for (let i = 0; i < count; i++) {
-    const { teamA, teamB, scoreA, scoreB } = results[i]
+    const { teamA, teamB, scoreA, scoreB } = results[i]!
     const eloA = elo[teamA] ?? historicalElo(teamA) ?? ELO_DEFAULT
     const eloB = elo[teamB] ?? historicalElo(teamB) ?? ELO_DEFAULT
     const expA = 1 / (1 + 10 ** ((eloB - eloA) / 400))

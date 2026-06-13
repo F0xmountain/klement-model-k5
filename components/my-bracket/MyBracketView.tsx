@@ -65,7 +65,7 @@ export default function MyBracketView({ resolved }: Props) {
         {/* Midden: finale + kampioen */}
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12, minWidth: 130 }}>
           <div style={{ fontSize: 8, color: 'var(--color-muted)', textAlign: 'center' }}>{t('championTitle')}</div>
-          <MatchCard m={resolved.final[0]} empty={empty} />
+          <MatchCard m={resolved.final[0]!} empty={empty} />
           <div style={{ border: `2px solid ${champion ? (championDiffers ? 'var(--color-o)' : 'var(--color-g)') : 'var(--color-brd)'}`, background: champion ? (championDiffers ? 'var(--color-o-bg)' : 'var(--color-g-bg)') : 'var(--color-surf)', padding: '8px 6px', textAlign: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 9 }}>
               {champion ? (

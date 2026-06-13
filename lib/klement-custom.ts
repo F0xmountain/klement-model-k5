@@ -82,7 +82,7 @@ export function fF(fifa: number): number {
 // Meest recente Elo-waarde voor een team uit elo-history.json (laatste entry met deze sleutel)
 export function historicalElo(name: string): number | undefined {
   for (let i = eloHistory.length - 1; i >= 0; i--) {
-    const v = eloHistory[i][name]
+    const v = eloHistory[i]![name]
     if (typeof v === 'number') return v
   }
   return undefined
@@ -387,7 +387,7 @@ export function applyPolymarketFactor(
   if (!polyOdds || marketWeight <= 0) return probs
   const polyHome = polyOdds[homeTeam]
   const polyAway = polyOdds[awayTeam]
-  if (!(polyHome > 0) || !(polyAway > 0)) return probs
+  if (polyHome === undefined || polyAway === undefined || polyHome <= 0 || polyAway <= 0) return probs
 
   const mHome = polyHome / (polyHome + polyAway)
   const mAway = polyAway / (polyHome + polyAway)

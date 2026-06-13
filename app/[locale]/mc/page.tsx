@@ -16,14 +16,14 @@ const BAR_COLORS = [
 ]
 
 function simulateTournament(): string {
-  const r32 = ROUNDS.r32.map(m => simKO(m.teamA, m.teamB).winner)
+  const r32 = ROUNDS.r32!.map(m => simKO(m.teamA, m.teamB).winner)
   const r16: string[] = []
-  for (let i = 0; i < r32.length; i += 2) r16.push(simKO(r32[i], r32[i + 1]).winner)
+  for (let i = 0; i < r32.length; i += 2) r16.push(simKO(r32[i]!, r32[i + 1]!).winner)
   const qf: string[] = []
-  for (let i = 0; i < r16.length; i += 2) qf.push(simKO(r16[i], r16[i + 1]).winner)
+  for (let i = 0; i < r16.length; i += 2) qf.push(simKO(r16[i]!, r16[i + 1]!).winner)
   const sf: string[] = []
-  for (let i = 0; i < qf.length; i += 2) sf.push(simKO(qf[i], qf[i + 1]).winner)
-  return simKO(sf[0], sf[1]).winner
+  for (let i = 0; i < qf.length; i += 2) sf.push(simKO(qf[i]!, qf[i + 1]!).winner)
+  return simKO(sf[0]!, sf[1]!).winner
 }
 
 function runSims(n: number): ChampCounts {
@@ -58,7 +58,7 @@ export default function MCPage() {
     setRunning(true)
     setResults(null)
     setProgress(0)
-    setPhase(PHASES[0])
+    setPhase(PHASES[0]!)
 
     // Visual delay: 1.4s base + scale with N
     const totalDelay = 1400 + Math.floor((n / 5000) * 600)
@@ -69,7 +69,7 @@ export default function MCPage() {
       tick++
       const pct = Math.min(88, Math.round((tick / 28) * 100))
       setProgress(Math.round((pct / 100) * n))
-      setPhase(PHASES[Math.min(tick >> 2, PHASES.length - 1)])
+      setPhase(PHASES[Math.min(tick >> 2, PHASES.length - 1)]!)
 
       if (tick >= 28) {
         clearInterval(intervalRef.current!)

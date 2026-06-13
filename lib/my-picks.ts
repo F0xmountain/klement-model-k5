@@ -39,8 +39,8 @@ export function resolveBracket(r32Teams: string[], picks: MyPicks): ResolvedBrac
   }
 
   for (let r = 1; r < ROUND_ORDER.length; r++) {
-    const round = ROUND_ORDER[r]
-    const prev = result[ROUND_ORDER[r - 1]]
+    const round = ROUND_ORDER[r]!
+    const prev = result[ROUND_ORDER[r - 1]!]
     const count = prev.length / 2
     for (let i = 0; i < count; i++) {
       const teamA = prev[i * 2]?.pick ?? null
