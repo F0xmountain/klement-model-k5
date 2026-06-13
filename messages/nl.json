@@ -4,6 +4,18 @@
     "next": "Volgende wedstrijd: {date} — {teams}",
     "noMatches": "Geen wedstrijden vandaag"
   },
+  "schedule": {
+    "title": "Speelschema",
+    "rounds": {
+      "group": "Groepsfase",
+      "r32": "Ronde van 32",
+      "r16": "Ronde van 16",
+      "qf": "Kwartfinales",
+      "sf": "Halve finales",
+      "3rd": "Troostfinale",
+      "final": "Finale"
+    }
+  },
   "match": {
     "venue": "Stadion",
     "altitude": "{m}m hoogte",
@@ -48,6 +60,7 @@
   "nav": {
     "versus": "VERSUS",
     "teams": "TEAMS",
+    "schedule": "SCHEMA",
     "mc": "MONTE",
     "groups": "GROEPEN",
     "topscorers": "Topscorers",

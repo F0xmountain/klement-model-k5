@@ -17,6 +17,7 @@ const PRIMARY = [
 ] as const
 const SECONDARY = [
   { href: '/teams', key: 'teams' },
+  { href: '/schedule', key: 'schedule' },
   { href: '/mc', key: 'mc' },
   { href: '/knockout/r32', key: 'bracket' },
   { href: '/sim-bracket', key: 'simBracket' },
