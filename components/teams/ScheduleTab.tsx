@@ -1,15 +1,15 @@
 'use client'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import { matchP } from '@/lib/klement-custom'
 import { topScores } from '@/lib/score-distribution'
 import { teamGroupMatches, canonTeam, type ScheduledMatch } from '@/lib/wc26-schedule'
 import { restDaysBefore } from '@/lib/rest-days'
-import { localKickoff } from '@/lib/venue-timezones'
 import { resultForPair } from '@/lib/todays-matches'
 import { ROUNDS } from '@/lib/fixtures'
 import FlagImg from '@/components/ui/FlagImg'
 import AltitudeBadge from '@/components/match/AltitudeBadge'
+import ViewerKickoff from '@/components/match/ViewerKickoff'
 import ProbabilityHistoryChart from './ProbabilityHistoryChart'
 
 const KO_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
@@ -46,10 +46,7 @@ function RestIndicator({ teamName, matchId }: { teamName: string; matchId: strin
 }
 
 function GroupMatchCard({ teamName, match }: { teamName: string; match: ScheduledMatch }) {
-  const locale = useLocale()
-  const tm = useTranslations('match')
   const opponent = canonTeam(match.homeTeam) === teamName ? canonTeam(match.awayTeam)! : canonTeam(match.homeTeam)!
-  const { date, time } = localKickoff(match.dateUtc, match.venue, locale)
   const { pA, dr, pB } = matchP(teamName, opponent)
   const played = resultForPair(teamName, opponent)
 
@@ -61,7 +58,7 @@ function GroupMatchCard({ teamName, match }: { teamName: string; match: Schedule
   return (
     <div className="factor-card" style={{ padding: 12, borderLeft: `3px solid ${borderColor}`, marginBottom: 10 }}>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-        <span>📅 {date} · {time} {tm('localTime')}</span>
+        <ViewerKickoff dateUtc={match.dateUtc} />
         <RestIndicator teamName={teamName} matchId={match.matchId} />
       </div>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 8 }}>

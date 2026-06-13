@@ -3,17 +3,19 @@
 import { useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
-import { localKickoff } from '@/lib/venue-timezones'
+import { formatKickoff } from '@/lib/venue-timezones'
 import { matchesOnUtcDay, nextMatchAfter, type TodayScheduleMatch } from '@/lib/today-schedule'
 import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import AltitudeBadge from '@/components/match/AltitudeBadge'
+import { useViewerTimeZone } from '@/components/match/ViewerKickoff'
 
 export default function TodayMatches() {
   const t = useTranslations('today')
   const tg = useTranslations('groups')
   const locale = useLocale()
+  const tz = useViewerTimeZone()
   const [state, setState] = useState<{ today: TodayScheduleMatch[]; next: TodayScheduleMatch | null } | null>(null)
 
   // "Vandaag" (UTC-kalenderdag) pas ná mount bepalen, anders verschilt de server-
@@ -28,7 +30,7 @@ export default function TodayMatches() {
   if (!state) return null
 
   const card = (m: TodayScheduleMatch) => {
-    const { time } = localKickoff(m.dateUtc, m.venue, locale)
+    const { time } = formatKickoff(m.dateUtc, tz, locale)
     return (
       <div key={m.matchId} className="factor-card">
         {m.group && (
@@ -85,7 +87,7 @@ export default function TodayMatches() {
             {state.next && (
               <div style={{ marginTop: 6, color: 'var(--color-txt)' }}>
                 {t('next', {
-                  date: localKickoff(state.next.dateUtc, state.next.venue, locale).date,
+                  date: formatKickoff(state.next.dateUtc, tz, locale).date,
                   teams: `${state.next.home} – ${state.next.away}`,
                 })}
               </div>

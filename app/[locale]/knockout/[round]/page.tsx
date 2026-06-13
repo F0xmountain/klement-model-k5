@@ -4,10 +4,10 @@ import { Link } from '@/i18n/navigation'
 import { matchP, teamData } from '@/lib/klement'
 import { ROUNDS, makeSlug } from '@/lib/fixtures'
 import { roundMatches, isHighAltitude } from '@/lib/wc26-schedule'
-import { localKickoff } from '@/lib/venue-timezones'
 import { ALTITUDE_FACTOR_ENABLED } from '@/lib/feature-flags'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
+import ViewerKickoff from '@/components/match/ViewerKickoff'
 
 const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
 type Round = typeof ROUND_ORDER[number]
@@ -17,7 +17,7 @@ export function generateStaticParams() {
 }
 
 export default async function KnockoutPage({ params }: { params: Promise<{ locale: string; round: string }> }) {
-  const { locale, round } = await params
+  const { round } = await params
   if (!(round in ROUNDS)) notFound()
 
   const matches = ROUNDS[round as Round]!
@@ -61,13 +61,12 @@ export default async function KnockoutPage({ params }: { params: Promise<{ local
           const tB = teamData(m.teamB)
           const pickIsA = m.k === m.teamA
           const sched = roundSched[i]
-          const kickoff = sched ? localKickoff(sched.dateUtc, sched.venue, locale) : null
 
           return (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 4 }}>
-            {sched && kickoff && (
+            {sched && (
               <div style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-                <span>📅 {kickoff.date} · {kickoff.time} {tm('localTime')}</span>
+                <ViewerKickoff dateUtc={sched.dateUtc} />
                 <span>🏟 {sched.venue} · {sched.city}</span>
                 {isHighAltitude(sched.altitudeM) && (
                   <span title={tm('altitudeWarning')} style={{ color: 'var(--color-o)', cursor: 'help', whiteSpace: 'nowrap' }}>

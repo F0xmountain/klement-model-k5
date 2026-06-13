@@ -21,25 +21,33 @@ export const VENUE_TIMEZONES: Record<string, string> = {
 
 const LOCALES: Record<string, string> = { nl: 'nl-NL', en: 'en-GB' }
 
-// Datum + tijd van de aftrap in de lokale tijdzone van het stadion. Valt terug op
-// UTC als de venue onbekend is.
-export function localKickoff(dateUtc: string, venue: string, locale: string): { date: string; time: string } {
-  const tz = VENUE_TIMEZONES[venue] ?? 'UTC'
+// Datum + tijd van een UTC-instant in een willekeurige IANA-tijdzone. Basis voor
+// zowel de stadiontijd (localKickoff) als de bezoeker-tijd (useViewerKickoff).
+// Geeft lege strings bij een ongeldige datum, zodat aanroepers veilig kunnen
+// renderen zonder te crashen op Intl.format(Invalid Date).
+export function formatKickoff(dateUtc: string, timeZone: string, locale: string): { date: string; time: string } {
   const d = new Date(dateUtc)
+  if (Number.isNaN(d.getTime())) return { date: '', time: '' }
   const intlLocale = LOCALES[locale] ?? 'en-GB'
-  const date = new Intl.DateTimeFormat(intlLocale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: tz }).format(d)
-  const time = new Intl.DateTimeFormat(intlLocale, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz }).format(d)
+  const date = new Intl.DateTimeFormat(intlLocale, { day: 'numeric', month: 'long', year: 'numeric', timeZone }).format(d)
+  const time = new Intl.DateTimeFormat(intlLocale, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone }).format(d)
   return { date, time }
 }
 
-// Kalenderdatum (YYYY-MM-DD) van de aftrap in de lokale tijdzone van het stadion.
-// Sorteerbare sleutel om wedstrijden onder de juiste lokale dag te groeperen —
-// anders belandt een wedstrijd na middernacht UTC (maar overdag lokaal) onder de
-// verkeerde dag-kop op de schema-pagina.
-export function localDateKey(dateUtc: string, venue: string): string {
-  const tz = VENUE_TIMEZONES[venue] ?? 'UTC'
-  const d = new Date(dateUtc)
+// Kalenderdatum (YYYY-MM-DD, sorteerbaar) van een instant in een gegeven tijdzone.
+export function dateKeyInTz(dateUtc: string, timeZone: string): string {
   return new Intl.DateTimeFormat('en-CA', {
-    year: 'numeric', month: '2-digit', day: '2-digit', timeZone: tz,
-  }).format(d)
+    year: 'numeric', month: '2-digit', day: '2-digit', timeZone,
+  }).format(new Date(dateUtc))
+}
+
+// Datum + tijd van de aftrap in de lokale tijdzone van het stadion. Valt terug op
+// UTC als de venue onbekend is. Behouden voor backward compat.
+export function localKickoff(dateUtc: string, venue: string, locale: string): { date: string; time: string } {
+  return formatKickoff(dateUtc, VENUE_TIMEZONES[venue] ?? 'UTC', locale)
+}
+
+// Kalenderdatum in de lokale tijdzone van het stadion. Behouden voor backward compat.
+export function localDateKey(dateUtc: string, venue: string): string {
+  return dateKeyInTz(dateUtc, VENUE_TIMEZONES[venue] ?? 'UTC')
 }
