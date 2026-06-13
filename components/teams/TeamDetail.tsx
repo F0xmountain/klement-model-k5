@@ -3,6 +3,8 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { teamData, sc } from '@/lib/klement'
+import { GROUPS, ROUNDS } from '@/lib/fixtures'
+import { teamSlug } from '@/lib/team-slug'
 import FlagImg from '@/components/ui/FlagImg'
 import PixelParticles from '@/components/ui/PixelParticles'
 import SquadTab from './SquadTab'
@@ -13,6 +15,19 @@ import BracketPathTab from './BracketPathTab'
 const TABS = ['squad', 'scorers', 'schedule', 'path'] as const
 type Tab = (typeof TABS)[number]
 
+// Standaardtegenstander voor de "Vergelijk →"-knop: Klement's eerste KO-
+// tegenstander als die een WK-team is (in teams.json), anders de eerste
+// groepsgenoot. Zo wijst de link altijd naar een geldige /versus-slug.
+function defaultOpponent(team: string): string | undefined {
+  const r32 = ROUNDS.r32!.find(m => m.teamA === team || m.teamB === team)
+  const koOpp = r32 ? (r32.teamA === team ? r32.teamB : r32.teamA) : undefined
+  if (koOpp && teamData(koOpp)) return koOpp
+  for (const teams of Object.values(GROUPS)) {
+    if (teams.includes(team)) return teams.find(x => x !== team)
+  }
+  return undefined
+}
+
 export default function TeamDetail({ teamName }: { teamName: string }) {
   const tt = useTranslations('teams')
   const pathname = usePathname()
@@ -21,8 +36,10 @@ export default function TeamDetail({ teamName }: { teamName: string }) {
   const raw = params.get('tab')
   const tab: Tab = (TABS as readonly string[]).includes(raw ?? '') ? (raw as Tab) : 'squad'
 
+  const tv = useTranslations('versus')
   const team = teamData(teamName)
   const score = sc(teamName)
+  const opponent = defaultOpponent(teamName)
 
   return (
     <div className="sec page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -43,6 +60,20 @@ export default function TeamDetail({ teamName }: { teamName: string }) {
               {team?.conf} · FIFA {team?.fifa} PTS · MODEL {score.toFixed(3)}
             </div>
           </div>
+          {opponent && (
+            <Link
+              href={`/versus/${teamSlug(teamName)}/${teamSlug(opponent)}`}
+              className="px-btn"
+              style={{
+                marginLeft: 'auto', fontSize: 8, padding: '8px 14px',
+                backgroundColor: 'var(--color-bg)', color: 'var(--color-b)',
+                border: '2px solid var(--color-b)', boxShadow: '3px 3px 0 var(--color-b-sh)',
+                textDecoration: 'none', whiteSpace: 'nowrap',
+              }}
+            >
+              {tv('compareBtn')}
+            </Link>
+          )}
         </div>
 
         {/* Tab-navigatie — horizontaal scrollbaar op mobiel */}

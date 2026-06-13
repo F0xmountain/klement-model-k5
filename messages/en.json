@@ -164,6 +164,9 @@
   },
   "versus": {
     "title": "VERSUS",
+    "radarTitle": "Strength profile",
+    "fullComparison": "Full comparison →",
+    "compareBtn": "Compare →",
     "randomBtn": "🎲 RANDOM",
     "coinFlip": "⚔ COIN FLIP",
     "heavyFavourite": "⚡ HEAVY FAVOURITE",

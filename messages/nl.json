@@ -164,6 +164,9 @@
   },
   "versus": {
     "title": "VERSUS",
+    "radarTitle": "Sterkteprofiel",
+    "fullComparison": "Volledige vergelijking →",
+    "compareBtn": "Vergelijk →",
     "randomBtn": "🎲 WILLEKEURIG",
     "coinFlip": "⚔ KOP OF MUNT",
     "heavyFavourite": "⚡ GROTE FAVORIET",
