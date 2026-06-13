@@ -1,1 +1,44 @@
-{}
+{
+  "mexico-vs-south-africa": {
+    "date": "2026-06-11T19:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "south-korea-vs-czechia": {
+    "date": "2026-06-12T02:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "usa-vs-paraguay": {
+    "date": "2026-06-13T01:00:00Z",
+    "score": {
+      "home": 4,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 3,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  }
+}
