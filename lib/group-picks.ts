@@ -25,6 +25,65 @@ export function groupWinProbs(teams: string[]): Record<string, number> {
   return Object.fromEntries(teams.map((t, i) => [t, exps[i] / total]))
 }
 
+// Exacte plaatsingskansen via volledige enumeratie van de 6 groepswedstrijden
+// (3^6 = 729 uitkomsten). Geeft per team P(top-2) — de kans om door te gaan naar
+// de R32 — én P(groepswinst). Een team kan 2e worden zonder groepswinst, dus
+// top2 > win; dit is de juiste "Advances %"-maat (P(1e) + P(2e)). Tiebreak op
+// punten → overwinningen → modelsterkte (sc), consistent met de simulator.
+export interface GroupOutcomeProbs {
+  win: Record<string, number>
+  top2: Record<string, number>
+}
+
+const outcomeCache = new Map<string, GroupOutcomeProbs>()
+
+export function groupOutcomeProbs(teams: string[]): GroupOutcomeProbs {
+  const key = teams.join('|')
+  const cached = outcomeCache.get(key)
+  if (cached) return cached
+
+  const pairs: [number, number][] = []
+  for (let i = 0; i < teams.length; i++)
+    for (let j = i + 1; j < teams.length; j++) pairs.push([i, j])
+
+  const mp = pairs.map(([i, j]) => matchP(teams[i], teams[j]))
+  const win: Record<string, number> = Object.fromEntries(teams.map(t => [t, 0]))
+  const top2: Record<string, number> = Object.fromEntries(teams.map(t => [t, 0]))
+  const M = pairs.length // 6
+  const combos = 3 ** M
+
+  for (let combo = 0; combo < combos; combo++) {
+    let c = combo
+    let prob = 1
+    const pts = teams.map(() => 0)
+    const wins = teams.map(() => 0)
+    for (let m = 0; m < M; m++) {
+      const outcome = c % 3
+      c = Math.floor(c / 3)
+      const [i, j] = pairs[m]
+      const { pA, dr, pB } = mp[m]
+      if (outcome === 0) { prob *= pA; pts[i] += 3; wins[i]++ }
+      else if (outcome === 1) { prob *= dr; pts[i] += 1; pts[j] += 1 }
+      else { prob *= pB; pts[j] += 3; wins[j]++ }
+    }
+    const order = teams.map((_, idx) => idx).sort((a, b) =>
+      pts[b] !== pts[a] ? pts[b] - pts[a] : wins[b] !== wins[a] ? wins[b] - wins[a] : sc(teams[b]) - sc(teams[a])
+    )
+    win[teams[order[0]]] += prob
+    top2[teams[order[0]]] += prob
+    top2[teams[order[1]]] += prob
+  }
+
+  const result = { win, top2 }
+  outcomeCache.set(key, result)
+  return result
+}
+
+// P(top-2) per team — de kans om de groep te overleven (door naar R32).
+export function groupAdvanceProbs(teams: string[]): Record<string, number> {
+  return groupOutcomeProbs(teams).top2
+}
+
 // Standaardvolgorde van een groep: op win-de-groep-kans aflopend (model-voorspelling).
 export function defaultGroupOrder(letter: string): string[] {
   const probs = groupWinProbs(GROUPS[letter])

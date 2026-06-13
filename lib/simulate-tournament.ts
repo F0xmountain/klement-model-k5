@@ -192,6 +192,7 @@ export function seedR32(winners: string[], runners: string[], thirds: string[]):
 export interface SlotTeam {
   team: string
   prob: number
+  alts?: { team: string; prob: number }[] // top-alternatieven in dit slot (voor hover)
 }
 
 export interface BracketMatch {
@@ -230,11 +231,20 @@ function tally(counter: SlotCounter, idx: number, team: string) {
   counter[idx][team] = (counter[idx][team] ?? 0) + 1
 }
 function topSlot(slot: SlotCounter[number], n: number): SlotTeam {
-  let best = '', bestC = -1
-  for (const [team, c] of Object.entries(slot)) {
-    if (c > bestC) { best = team; bestC = c }
+  const ranked = Object.entries(slot)
+    .map(([team, c]) => ({ team, prob: n > 0 ? c / n : 0 }))
+    .sort((a, b) => b.prob - a.prob)
+  if (ranked.length === 0) return { team: '', prob: 0 }
+  return { team: ranked[0].team, prob: ranked[0].prob, alts: ranked.slice(0, 4) }
+}
+
+// Bouwt de "meest waarschijnlijke" wedstrijden uit de per-positie tellers.
+function toMatches(counter: SlotCounter, n: number): BracketMatch[] {
+  const out: BracketMatch[] = []
+  for (let i = 0; i < counter.length; i += 2) {
+    out.push({ home: topSlot(counter[i], n), away: topSlot(counter[i + 1], n) })
   }
-  return { team: best, prob: n > 0 ? bestC / n : 0 }
+  return out
 }
 
 export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
@@ -301,14 +311,6 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     inc(champion, champ)
   }
 
-  const toMatches = (counter: SlotCounter): BracketMatch[] => {
-    const out: BracketMatch[] = []
-    for (let i = 0; i < counter.length; i += 2) {
-      out.push({ home: topSlot(counter[i], n), away: topSlot(counter[i + 1], n) })
-    }
-    return out
-  }
-
   return {
     n,
     groupWinner,
@@ -319,11 +321,79 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     reachFinal,
     champion,
     bracket: {
-      r32: toMatches(cR32),
-      r16: toMatches(cR16),
-      qf: toMatches(cQF),
-      sf: toMatches(cSF),
-      final: toMatches(cFinal)[0],
+      r32: toMatches(cR32, n),
+      r16: toMatches(cR16, n),
+      qf: toMatches(cQF, n),
+      sf: toMatches(cSF, n),
+      final: toMatches(cFinal, n)[0],
+      champion: topSlot(cChamp[0], n),
+    },
+  }
+}
+
+// Monte Carlo vanaf een VASTE R32-seeding (32 teams in seed-volgorde, paarsgewijs
+// home/away). De groepsfase is door de gebruiker bepaald (vaste top-2 + de 8 beste
+// nummers-drie op modelsterkte), dus alleen de knockout wordt n keer gesimuleerd.
+// Gebruikt door /my-bracket's "Simuleer mijn bracket". reachR32 = n per geseed
+// team (kans 100%); de latere rondes komen volledig uit de simulatie.
+export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap): SimResult {
+  const reachR32: Record<string, number> = {}
+  const reachR16: Record<string, number> = {}
+  const reachQF: Record<string, number> = {}
+  const reachSF: Record<string, number> = {}
+  const reachFinal: Record<string, number> = {}
+  const champion: Record<string, number> = {}
+  const inc = (m: Record<string, number>, t: string) => { m[t] = (m[t] ?? 0) + 1 }
+
+  const cR32 = makeCounter(32)
+  const cR16 = makeCounter(16)
+  const cQF = makeCounter(8)
+  const cSF = makeCounter(4)
+  const cFinal = makeCounter(2)
+  const cChamp = makeCounter(1)
+
+  // R32-sloten liggen vast: elk geseed team staat met 100% in zijn slot.
+  for (let i = 0; i < r32.length; i++) {
+    cR32[i][r32[i]] = n
+    reachR32[r32[i]] = (reachR32[r32[i]] ?? 0) + n
+  }
+
+  const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
+    const next: string[] = []
+    for (let i = 0; i < teams.length; i += 2) {
+      const wnr = koWinner(teams[i], teams[i + 1], eloOverride)
+      next.push(wnr)
+      tally(counter, i / 2, wnr)
+      inc(reach, wnr)
+    }
+    return next
+  }
+
+  for (let s = 0; s < n; s++) {
+    const r16 = advance(r32, cR16, reachR16)
+    const qf = advance(r16, cQF, reachQF)
+    const sf = advance(qf, cSF, reachSF)
+    const fin = advance(sf, cFinal, reachFinal)
+    const champ = koWinner(fin[0], fin[1], eloOverride)
+    tally(cChamp, 0, champ)
+    inc(champion, champ)
+  }
+
+  return {
+    n,
+    groupWinner: {},
+    reachR32,
+    reachR16,
+    reachQF,
+    reachSF,
+    reachFinal,
+    champion,
+    bracket: {
+      r32: toMatches(cR32, n),
+      r16: toMatches(cR16, n),
+      qf: toMatches(cQF, n),
+      sf: toMatches(cSF, n),
+      final: toMatches(cFinal, n)[0],
       champion: topSlot(cChamp[0], n),
     },
   }

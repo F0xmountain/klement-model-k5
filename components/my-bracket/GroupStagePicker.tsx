@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { GROUPS } from '@/lib/fixtures'
 import { teamData } from '@/lib/klement'
 import {
-  GROUP_LETTERS, groupWinProbs, parseGroupPicks, saveGroupPicks,
+  GROUP_LETTERS, groupAdvanceProbs, parseGroupPicks, saveGroupPicks,
   subscribeGroupPicks, getGroupPicksSnapshot, getServerGroupPicksSnapshot,
 } from '@/lib/group-picks'
 import FlagImg from '@/components/ui/FlagImg'
@@ -25,9 +25,10 @@ export default function GroupStagePicker({ onSimulate }: Props) {
   const raw = useSyncExternalStore(subscribeGroupPicks, getGroupPicksSnapshot, getServerGroupPicksSnapshot)
   const picks = useMemo(() => parseGroupPicks(raw), [raw])
 
-  // Win-de-groep-kansen per groep — deterministisch, dus eenmalig te memoïzen.
+  // P(top-2) per groep — kans om door te gaan naar de R32. Exact (enumeratie),
+  // deterministisch, dus eenmalig te memoïzen.
   const probs = useMemo(
-    () => Object.fromEntries(GROUP_LETTERS.map(l => [l, groupWinProbs(GROUPS[l])])),
+    () => Object.fromEntries(GROUP_LETTERS.map(l => [l, groupAdvanceProbs(GROUPS[l])])),
     []
   )
 

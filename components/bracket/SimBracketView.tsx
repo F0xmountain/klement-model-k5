@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
-import { simulateTournament, type SimResult, type SlotTeam, type BracketMatch } from '@/lib/simulate-tournament'
+import { simulateTournament, simulateBracket, type SimResult, type SlotTeam, type BracketMatch } from '@/lib/simulate-tournament'
 import Btn from '@/components/ui/Btn'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -15,10 +15,16 @@ function slotBg(prob: number): string {
   return `rgba(26, 95, 232, ${a.toFixed(2)})`
 }
 
+// Hover-tooltip: alle waarschijnlijke teams voor dit slot met hun kans.
+function slotTitle(s: SlotTeam): string | undefined {
+  if (!s.alts || s.alts.length === 0) return undefined
+  return s.alts.map(a => `${a.team} ${Math.round(a.prob * 100)}%`).join('\n')
+}
+
 function SlotRow({ s }: { s: SlotTeam }) {
   const flag = teamData(s.team)?.flag ?? '🏳️'
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 6px', background: slotBg(s.prob), fontSize: 8 }}>
+    <div title={slotTitle(s)} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 6px', background: slotBg(s.prob), fontSize: 8, cursor: s.alts && s.alts.length > 1 ? 'help' : undefined }}>
       <FlagImg name={s.team} h={10} emoji={flag} />
       <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--color-txt)' }}>{s.team || '—'}</span>
       <span style={{ color: 'var(--color-muted)' }}>{Math.round(s.prob * 100)}%</span>
@@ -44,7 +50,10 @@ function RoundColumn({ matches }: { matches: BracketMatch[] }) {
   )
 }
 
-export default function SimBracketView() {
+// Zonder r32: simuleer het volledige toernooi (groepsfase + KO). Met r32: simuleer
+// alleen de knockout vanaf de meegegeven vaste R32-seeding (de "Simuleer mijn
+// bracket"-flow op /my-bracket, waar de groepsfase door de gebruiker is bepaald).
+export default function SimBracketView({ r32 }: { r32?: string[] } = {}) {
   const t = useTranslations('simBracket')
   const [sim, setSim] = useState<SimResult | null>(null)
   const [running, setRunning] = useState(false)
@@ -52,10 +61,10 @@ export default function SimBracketView() {
   const run = useCallback(() => {
     setRunning(true)
     setTimeout(() => {
-      setSim(simulateTournament(SIM_N))
+      setSim(r32 ? simulateBracket(r32, SIM_N) : simulateTournament(SIM_N))
       setRunning(false)
     }, 20)
-  }, [])
+  }, [r32])
 
   // Initiële run ná mount (Math.random → client-only, anders hydration-mismatch).
   useEffect(() => {

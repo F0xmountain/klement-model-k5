@@ -2,7 +2,7 @@
 import { useState, useMemo, useCallback, useSyncExternalStore } from 'react'
 import { useTranslations } from 'next-intl'
 import {
-  resolveBracket, savePicks, clearPicks, parsePicks,
+  resolveBracket, savePicks, parsePicks,
   subscribePicks, getPicksSnapshot, getServerPicksSnapshot,
   type MyPicks, type Round,
 } from '@/lib/my-picks'
@@ -46,12 +46,12 @@ export default function MyBracketPage() {
     })
   }, [picks])
 
+  // "Simuleer mijn bracket →": ga naar de bracket-tab, die de Monte Carlo-simulatie
+  // van de groepskeuze toont (vaste top-2 + KO 10.000× gesimuleerd). De handmatige
+  // picks blijven bewaard — de simulatie staat los van de eigen bracket eronder.
   const onSimulate = useCallback(() => {
-    const hasKoPicks = Object.values(picks).some(arr => arr.some(p => p !== null))
-    if (hasKoPicks && !window.confirm(t('confirmReset'))) return
-    clearPicks()
     setTab('bracket')
-  }, [picks, t])
+  }, [])
 
   const tabBtn = (id: Tab, label: string) => (
     <button
@@ -89,6 +89,13 @@ export default function MyBracketPage() {
               </button>
               <ResetPicksButton />
             </div>
+
+            <div className="section-title" style={{ marginBottom: 6 }}>{t('simHeading')}</div>
+            <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 1.8, marginBottom: 16 }}>{t('simSub')}</div>
+            <SimBracketView r32={r32Teams} />
+
+            <div style={{ borderTop: '1px solid var(--color-brd)', margin: '32px 0 20px' }} />
+            <div className="section-title" style={{ marginBottom: 16 }}>{t('manualHeading')}</div>
             <MyBracketView resolved={resolved} />
             <div style={{ marginTop: 28 }}>
               <MyBracketEditor resolved={resolved} onPick={handlePick} onCopy={handleCopy} copied={copied} />
