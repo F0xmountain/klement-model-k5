@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
 import TimeAgo from '@/components/ui/TimeAgo'
 import ModelMonteCarlo from '@/components/model/ModelMonteCarlo'
+import Wc2022Validation from '@/components/model/Wc2022Validation'
 import { getModelWeights } from '@/lib/model-config'
 import { getResultsLastUpdated } from '@/lib/rest-days'
 
@@ -84,6 +85,9 @@ export default function ModelPage() {
           {t('mcIntro')}
         </div>
         <ModelMonteCarlo />
+
+        {/* Track record & validatie — terugrekening op WK 2022 */}
+        <Wc2022Validation />
 
         {/* Configurator-link */}
         <div className="factor-card" style={{ marginTop: 32 }}>
