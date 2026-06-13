@@ -357,6 +357,13 @@
     "saveError": "OPSLAAN MISLUKT",
     "group": "GROEP",
     "squadDataErrorWarning": "SPELERSLIJST VOOR DIT TEAM IS ONJUIST (VERKEERDE SELECTIE). AANVOERDER EN STERSPELERS ZIJN WEL CORRECT.",
+    "tabInjuries": "BLESSURES",
+    "tabRatings": "RATINGS",
+    "selectTeam": "SELECTEER TEAM",
+    "selectMatch": "SELECTEER WEDSTRIJD",
+    "noPlayedMatches": "Nog geen gespeelde wedstrijden voor dit team",
+    "teamAvg": "LANDGEMIDDELDE",
+    "ratingLabel": "Rating (1–10)",
     "category": {
       "goalkeeper": "DOELMAN",
       "defender": "VERDEDIGER",

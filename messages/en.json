@@ -357,6 +357,13 @@
     "saveError": "FAILED TO SAVE",
     "group": "GROUP",
     "squadDataErrorWarning": "SQUAD LIST FOR THIS TEAM IS INCORRECT (WRONG ROSTER). CAPTAIN AND STAR PLAYERS ARE CORRECT.",
+    "tabInjuries": "INJURIES",
+    "tabRatings": "RATINGS",
+    "selectTeam": "SELECT TEAM",
+    "selectMatch": "SELECT MATCH",
+    "noPlayedMatches": "No played matches for this team yet",
+    "teamAvg": "TEAM AVERAGE",
+    "ratingLabel": "Rating (1–10)",
     "category": {
       "goalkeeper": "GOALKEEPER",
       "defender": "DEFENDER",

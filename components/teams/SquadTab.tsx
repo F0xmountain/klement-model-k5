@@ -4,6 +4,7 @@ import {
   POSITION_ORDER, getSquadTeam, resolveStatus, starRankOf,
   type Category, type PlayerStatus, type SquadPlayer, type SquadTeam,
 } from '@/lib/squad-utils'
+import { getRatingsForPlayer, getPlayerAvgRating } from '@/lib/player-ratings'
 
 const STATUS_DOT: Record<PlayerStatus, string> = { fit: '🟢', doubtful: '🟡', out: '🔴' }
 
@@ -30,17 +31,29 @@ function groupRows(team: SquadTeam, category: Category): RowData[] {
     })
 }
 
-function PlayerRow({ row }: { row: RowData }) {
+function PlayerRow({ row, teamName }: { row: RowData; teamName: string }) {
   const isStar = row.starRank !== undefined
+  const ratings = getRatingsForPlayer(row.player.name, teamName)
+  const avg = getPlayerAvgRating(row.player.name, teamName)
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 0', borderTop: '1px solid var(--color-brd)', fontSize: 10 }}>
       <span style={{ width: 14, flexShrink: 0, textAlign: 'center' }}>{isStar ? '⭐' : ''}</span>
       <span style={{ color: 'var(--color-txt)', fontWeight: isStar ? 'bold' : 'normal', minWidth: 0, flex: '1 1 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         {row.player.name}
       </span>
+      {ratings.length > 0 && (
+        <span style={{ color: 'var(--color-muted)', fontSize: 8, flexShrink: 0, fontFamily: 'var(--font-pixel)' }} title={ratings.map(r => `${r.matchLabel}: ${r.rating.toFixed(1)}`).join(' · ')}>
+          {ratings.map(r => r.rating.toFixed(1)).join(' | ')}
+        </span>
+      )}
       <span style={{ color: 'var(--color-muted)', fontSize: 8, flex: '1 1 auto', textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         {row.player.club ?? ''}
       </span>
+      {avg !== null && (
+        <span style={{ flexShrink: 0, fontSize: 12, color: 'var(--color-g)', fontFamily: 'var(--font-pixel)', whiteSpace: 'nowrap' }} title="avg">
+          ⌀ {avg.toFixed(1)}
+        </span>
+      )}
       <span style={{ width: 16, flexShrink: 0, textAlign: 'center' }} title={row.status}>{STATUS_DOT[row.status]}</span>
     </div>
   )
@@ -75,7 +88,7 @@ export default function SquadTab({ teamName }: { teamName: string }) {
           <div key={category} style={{ marginBottom: 20 }}>
             <div className="section-title" style={{ marginBottom: 4 }}>{t(`squad.${category}`)}</div>
             <div className="factor-card" style={{ padding: '4px 14px' }}>
-              {rows.map(row => <PlayerRow key={row.player.name} row={row} />)}
+              {rows.map(row => <PlayerRow key={row.player.name} row={row} teamName={teamName} />)}
             </div>
           </div>
         )
