@@ -379,6 +379,7 @@
     "recalculate": "↻ RECALCULATE",
     "recalculating": "⏳ SIMULATING...",
     "basedOn": "Based on {n} simulations",
+    "simulating": "Simulating {n} tournaments…",
     "final": "FINAL",
     "champion": "CHAMPION",
     "upsets": "Upsets to watch"

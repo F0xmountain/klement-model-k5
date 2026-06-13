@@ -119,6 +119,11 @@ export default function VersusPage() {
   const [h2hOpen, setH2hOpen] = useState(false)
   const [scoresOpen, setScoresOpen] = useState(false)
   const [factorsOpen, setFactorsOpen] = useState(false)
+  // CI-cache per teamparing + locatie. De berekening is zwaar (500 simulaties);
+  // de keyed cache zorgt dat een al-berekend interval bij een re-render direct uit
+  // de cache komt en niet opnieuw draait (de effect hieronder slaat over als de
+  // sleutel al bestaat). State i.p.v. ref omdat de waarde tijdens render wordt
+  // gelezen (react-hooks/refs verbiedt ref-toegang in render).
   const [ciCache, setCiCache] = useState<Record<string, ConfidenceInterval>>({})
 
   // URL-params (?a=&b=&venue=) eenmalig inlezen — teams case-insensitief gematcht
@@ -174,7 +179,7 @@ export default function VersusPage() {
     return () => { cancelled = true }
   }, [h2hKey, h2hCache, teamA, teamB])
 
-  // Betrouwbaarheidsinterval (client-side, ~0.5s) per teamparing + locatie, gecachet
+  // Betrouwbaarheidsinterval (client-side, ~0.5s) per teamparing + locatie.
   const ciKey = `${teamA}:${teamB}:${venueIdx}`
   const ci = ciCache[ciKey]
   useEffect(() => {

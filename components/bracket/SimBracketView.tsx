@@ -85,8 +85,13 @@ export default function SimBracketView({ r32 }: { r32?: string[] } = {}) {
         )}
       </div>
 
-      {!sim ? (
-        <div style={{ fontSize: 10, color: 'var(--color-muted)', padding: '20px 0' }}>…</div>
+      {running || !sim ? (
+        <div style={{ padding: '40px 0', textAlign: 'center' }}>
+          <div className="sim-spinner" />
+          <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 14 }}>
+            {t('simulating', { n: SIM_N })}
+          </div>
+        </div>
       ) : (
         <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', minWidth: 1080 }}>

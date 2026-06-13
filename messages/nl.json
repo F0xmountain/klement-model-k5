@@ -379,6 +379,7 @@
     "recalculate": "↻ HERBEREKEN",
     "recalculating": "⏳ SIMULEREN...",
     "basedOn": "Op basis van {n} simulaties",
+    "simulating": "{n} toernooien simuleren…",
     "final": "FINALE",
     "champion": "KAMPIOEN",
     "upsets": "Mogelijke verrassingen"
