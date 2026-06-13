@@ -8,8 +8,9 @@ import PixelParticles from '@/components/ui/PixelParticles'
 import SquadTab from './SquadTab'
 import ScorersTab from './ScorersTab'
 import ScheduleTab from './ScheduleTab'
+import BracketPathTab from './BracketPathTab'
 
-const TABS = ['squad', 'scorers', 'schedule'] as const
+const TABS = ['squad', 'scorers', 'schedule', 'path'] as const
 type Tab = (typeof TABS)[number]
 
 export default function TeamDetail({ teamName }: { teamName: string }) {
@@ -61,6 +62,7 @@ export default function TeamDetail({ teamName }: { teamName: string }) {
         {tab === 'squad' && <SquadTab teamName={teamName} />}
         {tab === 'scorers' && <ScorersTab teamName={teamName} />}
         {tab === 'schedule' && <ScheduleTab teamName={teamName} />}
+        {tab === 'path' && <BracketPathTab teamName={teamName} />}
 
       </div>
     </div>

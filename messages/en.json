@@ -206,7 +206,17 @@
     "formLabel": "RECENT FORM",
     "starPlayersLabel": "KEY PLAYERS",
     "squadCompleteness": "Squad completeness: {pct}%",
-    "tabs": { "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule" },
+    "tabs": { "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule", "path": "Path" },
+    "path": {
+      "title": "Predicted tournament path",
+      "current": "You are here",
+      "played": "{n}/3 played",
+      "advance": "Advance {pct}%",
+      "eliminated": "Eliminated by Klement",
+      "notPredicted": "Not on predicted path",
+      "champion": "Predicted champion 🏆",
+      "group": "Group {letter}"
+    },
     "squad": {
       "coach": "Coach", "captain": "Captain", "players": "players selected",
       "goalkeeper": "Goalkeepers", "defender": "Defenders",

@@ -206,7 +206,17 @@
     "formLabel": "RECENTE VORM",
     "starPlayersLabel": "STERSPELERS",
     "squadCompleteness": "Selectievolledigheid: {pct}%",
-    "tabs": { "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema" },
+    "tabs": { "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema", "path": "Pad" },
+    "path": {
+      "title": "Voorspeld toernooipad",
+      "current": "Nu hier",
+      "played": "{n}/3 gespeeld",
+      "advance": "Doorgang {pct}%",
+      "eliminated": "Uitgeschakeld door Klement",
+      "notPredicted": "Niet op voorspeld pad",
+      "champion": "Voorspeld kampioen 🏆",
+      "group": "Groep {letter}"
+    },
     "squad": {
       "coach": "Coach", "captain": "Aanvoerder", "players": "spelers geselecteerd",
       "goalkeeper": "Keepers", "defender": "Verdedigers",
