@@ -4,7 +4,7 @@ import eloCurrentRaw from './elo-current.json'
 import formCacheRaw from './form-cache.json'
 import leagueDataRaw from './league-data.json'
 import type { TeamData, WDL } from '../types'
-import { fG, fP, fT, fF } from './klement'
+import { fG, fP, fT } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
 import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data'
 import { getModelWeights, type ModelWeights } from './model-config'
@@ -52,9 +52,20 @@ export interface VenueInfo {
 export const ELO_WEIGHT = weights.eloWeight
 export const FIFA_WEIGHT = 1 - weights.eloWeight
 
-// Elo-normalisatie [1000, 2200] → [0, 1], analoog aan fF's FIFA-normalisatie [1400, 2000]
-const ELO_MIN = 1000
+// Elo-normalisatie [950, 2200] → [0, 1], analoog aan fF hieronder. De werkelijke
+// Elo-waarden van de WK-teams lopen van ~978 (Curaçao) tot ~2157 (Spanje); deze
+// grenzen bracketen die range met lichte marge zodat geen enkel team naar exact
+// 0 of 1 wordt geclipt.
+const ELO_MIN = 950
 const ELO_MAX = 2200
+
+// FIFA-normalisatie. De basis-fF in klement.ts (read-only) normaliseert over
+// [1400, 2000], maar de werkelijke FIFA-punten in teams.json lopen van 1410 tot
+// 1880 — met een bovengrens van 2000 bereikt het sterkste team slechts 0.80 en
+// wordt het hele veld in de onderste 80% van de schaal samengedrukt. We
+// normaliseren daarom op de werkelijke datarange met lichte marge: [1400, 1900].
+const FIFA_MIN = 1400
+const FIFA_MAX = 1900
 
 function clamp(v: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, v))
@@ -62,6 +73,10 @@ function clamp(v: number, lo: number, hi: number) {
 
 export function fE(elo: number): number {
   return clamp((elo - ELO_MIN) / (ELO_MAX - ELO_MIN), 0, 1)
+}
+
+export function fF(fifa: number): number {
+  return clamp((fifa - FIFA_MIN) / (FIFA_MAX - FIFA_MIN), 0, 1)
 }
 
 // Meest recente Elo-waarde voor een team uit elo-history.json (laatste entry met deze sleutel)
