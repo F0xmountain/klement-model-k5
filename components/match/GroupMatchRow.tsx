@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import { matchP as matchPCustom } from '@/lib/klement-custom'
 import { UPSET_THRESHOLD } from '@/lib/upset-detector'
+import { Link } from '@/i18n/navigation'
 import FlagImg from '@/components/ui/FlagImg'
 import type { WDL } from '@/types'
 
@@ -9,6 +10,7 @@ interface Props {
   teamA: string
   teamB: string
   result?: WDL
+  venue?: string
 }
 
 // Verwachte goals afgeleid van de winkans (zelfde formule als /versus) — geen
@@ -16,7 +18,7 @@ interface Props {
 // naar winkans. Afgerond op 1 decimaal.
 const expectedGoals = (p: number) => (1.35 * (0.5 + (p - 0.5) * 0.8)).toFixed(1)
 
-export default function GroupMatchRow({ teamA, teamB, result }: Props) {
+export default function GroupMatchRow({ teamA, teamB, result, venue }: Props) {
   const t = useTranslations('groups')
   const { pA, dr, pB } = matchP(teamA, teamB)
   const { pA: cpA, pB: cpB } = matchPCustom(teamA, teamB)
@@ -32,15 +34,25 @@ export default function GroupMatchRow({ teamA, teamB, result }: Props) {
   const resultColor = result === 'A' ? 'var(--color-r)' : result === 'B' ? 'var(--color-b)' : 'var(--color-muted)'
   const resultLabel = result === 'A' ? t('resultWL') : result === 'B' ? t('resultLW') : t('resultDD')
 
+  const query: Record<string, string> = { a: teamA, b: teamB }
+  if (venue) query.venue = venue
+
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 8,
-      padding: '6px 10px',
-      fontSize: 7,
-      borderBottom: '1px solid var(--color-brd)',
-    }}>
+    <Link
+      href={{ pathname: '/versus', query }}
+      title={t('predictThisMatch')}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '6px 10px',
+        fontSize: 7,
+        borderBottom: '1px solid var(--color-brd)',
+        textDecoration: 'none',
+        color: 'inherit',
+        cursor: 'pointer',
+      }}
+    >
       <span style={{ width: 10, flexShrink: 0, textAlign: 'center' }} title={isUpset ? `${t('upsetPotential')}: ${Math.round(upsetProb * 100)}%` : undefined}>
         {isUpset ? '⚡' : ''}
       </span>
@@ -60,6 +72,6 @@ export default function GroupMatchRow({ teamA, teamB, result }: Props) {
       )}
       <span style={{ color: 'var(--color-txt)', minWidth: 64, textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamB}</span>
       <FlagImg name={teamB} h={12} emoji={tB?.flag ?? '🏳️'} />
-    </div>
+    </Link>
   )
 }

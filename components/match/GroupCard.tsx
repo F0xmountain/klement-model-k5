@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { simResult, calcStandings, teamData } from '@/lib/klement'
+import { venueForPair } from '@/lib/todays-matches'
 import type { MatchResult, Standing } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
 import FlagImg from '@/components/ui/FlagImg'
@@ -96,7 +97,7 @@ export default function GroupCard({ group, teams }: Props) {
       {open && (
         <div style={{ borderTop: '1px solid var(--color-brd)' }}>
           {results.map(({ teamA, teamB, result }, i) => (
-            <GroupMatchRow key={i} teamA={teamA} teamB={teamB} result={result} />
+            <GroupMatchRow key={i} teamA={teamA} teamB={teamB} result={result} venue={venueForPair(teamA, teamB)} />
           ))}
         </div>
       )}

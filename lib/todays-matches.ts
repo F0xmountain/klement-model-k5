@@ -43,6 +43,16 @@ const canon = (name: string) => SCHEDULE_NAME_MAP[name] ?? name
 
 const pairKey = (a: string, b: string) => [a, b].sort().join('|')
 
+// Speellocatie ("Estadio Azteca, Mexico City") voor een teampaar (teams.json-namen),
+// uit schedule.json. Gebruikt om groepswedstrijden naar /versus te koppelen.
+const venueByPair = new Map<string, string>()
+for (const m of scheduleRaw as ScheduleMatch[]) {
+  venueByPair.set(pairKey(canon(m.teamA), canon(m.teamB)), m.venue)
+}
+export function venueForPair(a: string, b: string): string | undefined {
+  return venueByPair.get(pairKey(a, b))
+}
+
 export interface TodayMatch extends ScheduleMatch {
   result?: { scoreA: number; scoreB: number }
   prediction: { pA: number; dr: number; pB: number }

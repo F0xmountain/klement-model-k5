@@ -106,6 +106,27 @@ export default function VersusPage() {
   const [scoresOpen, setScoresOpen] = useState(false)
   const [ciCache, setCiCache] = useState<Record<string, ConfidenceInterval>>({})
 
+  // URL-params (?a=&b=&venue=) eenmalig inlezen — teams case-insensitief gematcht
+  // aan teams.json, venue aan stadiums.json ("Stadion, Stad"). Zo kunnen de
+  // homepage-widget en de groepspagina naar een specifieke wedstrijd linken.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const findTeam = (v: string | null) =>
+      v ? allTeams.find(name => name.toLowerCase() === v.toLowerCase()) : undefined
+    const a = findTeam(params.get('a'))
+    const b = findTeam(params.get('b'))
+    const venueParam = params.get('venue')
+    const q = venueParam?.toLowerCase()
+    const venueMatch = q
+      ? stadiums.findIndex(s => q === `${s.stadium}, ${s.city}`.toLowerCase() || q.includes(s.stadium.toLowerCase()))
+      : -1
+    /* eslint-disable react-hooks/set-state-in-effect -- mount-only init from URL params */
+    if (a) setTeamA(a)
+    if (b) setTeamB(b)
+    if (venueMatch >= 0) setVenueIdx(venueMatch)
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [])
+
   // Polymarket-toernooiodds eenmalig ophalen (gecachet server-side via /api/polymarket)
   useEffect(() => {
     fetch('/api/polymarket')
