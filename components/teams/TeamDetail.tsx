@@ -46,9 +46,10 @@ export default function TeamDetail({ teamName }: { teamName: string }) {
       <PixelParticles variant="green" />
       <div style={{ position: 'relative', zIndex: 1 }}>
 
-        {/* Team-header */}
+        {/* Team-header — wrapt op smalle schermen zodat de Vergelijk-knop en lange
+            teamnamen niet buiten de kaart vallen. */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 20, padding: '20px 24px', marginBottom: 20,
+          display: 'flex', alignItems: 'center', gap: 20, rowGap: 12, flexWrap: 'wrap', padding: '20px 24px', marginBottom: 20,
           backgroundColor: 'var(--color-surf)', border: '2px solid var(--color-brd2)', boxShadow: '4px 4px 0 var(--color-brd)',
         }}>
           <FlagImg name={teamName} h={64} emoji={team?.flag ?? '🏳️'} />
