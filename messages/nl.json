@@ -178,7 +178,23 @@
     "scoreGdpCapita": "BBP/INWONER",
     "formLabel": "RECENTE VORM",
     "starPlayersLabel": "STERSPELERS",
-    "squadCompleteness": "Selectievolledigheid: {pct}%"
+    "squadCompleteness": "Selectievolledigheid: {pct}%",
+    "tabs": { "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema" },
+    "squad": {
+      "coach": "Coach", "captain": "Aanvoerder", "players": "spelers geselecteerd",
+      "goalkeeper": "Keepers", "defender": "Verdedigers",
+      "midfielder": "Middenvelders", "attacker": "Aanvallers"
+    },
+    "scorers": {
+      "all": "Totaal", "expectedPoints": "Verwachte punten",
+      "expectedGoals": "Verwachte goals",
+      "legend": "Punten = goals × positiemultiplicator × rondemultiplicator",
+      "disclaimer": "Verwachte waarden o.b.v. historische WK-doelpuntengemiddelden"
+    },
+    "schedule": {
+      "group": "Groepsfase", "knockout": "Knockoutfase",
+      "predicted": "Klement's voorspelling", "eliminated": "Uitgeschakeld"
+    }
   },
   "about": {
     "title": "OVER HET MODEL",

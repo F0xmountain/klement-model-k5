@@ -1,7 +1,8 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { teamNames } from '@/lib/klement'
 import { teamSlug, teamFromSlug } from '@/lib/team-slug'
-import TeamProfile from '@/components/team/TeamProfile'
+import TeamDetail from '@/components/teams/TeamDetail'
 
 // Pre-render een statische pagina per team (/teams/mexico, /teams/south-korea, …).
 export function generateStaticParams() {
@@ -12,5 +13,10 @@ export default async function TeamPage({ params }: { params: Promise<{ team: str
   const { team } = await params
   const name = teamFromSlug(decodeURIComponent(team))
   if (!name) notFound()
-  return <TeamProfile initialTeam={name} />
+  // TeamDetail leest de actieve tab uit ?tab= via useSearchParams → Suspense vereist.
+  return (
+    <Suspense fallback={<div className="sec" />}>
+      <TeamDetail teamName={name} />
+    </Suspense>
+  )
 }

@@ -178,7 +178,23 @@
     "scoreGdpCapita": "GDP/CAPITA",
     "formLabel": "RECENT FORM",
     "starPlayersLabel": "KEY PLAYERS",
-    "squadCompleteness": "Squad completeness: {pct}%"
+    "squadCompleteness": "Squad completeness: {pct}%",
+    "tabs": { "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule" },
+    "squad": {
+      "coach": "Coach", "captain": "Captain", "players": "players selected",
+      "goalkeeper": "Goalkeepers", "defender": "Defenders",
+      "midfielder": "Midfielders", "attacker": "Forwards"
+    },
+    "scorers": {
+      "all": "Total", "expectedPoints": "Expected points",
+      "expectedGoals": "Expected goals",
+      "legend": "Points = goals × position multiplier × round multiplier",
+      "disclaimer": "Expected values based on historical World Cup scoring averages per position"
+    },
+    "schedule": {
+      "group": "Group stage", "knockout": "Knockout stage",
+      "predicted": "Klement's prediction", "eliminated": "Eliminated"
+    }
   },
   "about": {
     "title": "ABOUT THE MODEL",
