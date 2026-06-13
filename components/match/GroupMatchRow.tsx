@@ -1,6 +1,9 @@
+'use client'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import { matchP as matchPCustom } from '@/lib/klement-custom'
+import { topScores } from '@/lib/score-distribution'
 import { UPSET_THRESHOLD } from '@/lib/upset-detector'
 import { Link } from '@/i18n/navigation'
 import FlagImg from '@/components/ui/FlagImg'
@@ -31,13 +34,55 @@ function confidenceColor(favWin: number): string {
   return 'var(--color-muted)'
 }
 
+// Pill-kleur op kans: ≥20% rood (waarschijnlijk), ≤5% groen (onwaarschijnlijk).
+function pillColor(prob: number): string {
+  if (prob >= 0.2) return 'var(--color-r)'
+  if (prob <= 0.05) return 'var(--color-g)'
+  return 'var(--color-muted)'
+}
+
+function ScorePills({ pWin, pLoss, actual }: { pWin: number; pLoss: number; actual?: { a: number; b: number } }) {
+  const t = useTranslations('match')
+  const top = topScores(pWin, pLoss, 5)
+  const covered = top.reduce((s, x) => s + x.probability, 0)
+  const other = Math.max(0, 1 - covered)
+  const actualInTop = actual && top.some(s => s.homeGoals === actual.a && s.awayGoals === actual.b)
+
+  const pill = (label: string, color: string, key: string, border?: string) => (
+    <span key={key} style={{
+      fontSize: 7, padding: '3px 6px', backgroundColor: 'var(--color-bg)',
+      border: `1px solid ${border ?? 'var(--color-brd)'}`, color,
+      whiteSpace: 'nowrap', borderRadius: 2,
+    }}>{label}</span>
+  )
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: '4px 10px 8px 30px' }}>
+      <span style={{ fontSize: 7, color: 'var(--color-muted)', alignSelf: 'center', marginRight: 2 }}>{t('scoreOdds')}:</span>
+      {top.map(s => {
+        const isActual = actual && s.homeGoals === actual.a && s.awayGoals === actual.b
+        return pill(
+          `${s.homeGoals}-${s.awayGoals} ${(s.probability * 100).toFixed(0)}%${isActual ? ' ✓' : ''}`,
+          isActual ? 'var(--color-txt)' : pillColor(s.probability),
+          `${s.homeGoals}-${s.awayGoals}`,
+          isActual ? 'var(--color-g)' : undefined,
+        )
+      })}
+      {actual && !actualInTop && pill(`${actual.a}-${actual.b} ✓`, 'var(--color-txt)', 'actual', 'var(--color-g)')}
+      {other > 0.01 && pill(`${t('other')} ${(other * 100).toFixed(0)}%`, 'var(--color-muted)', 'other')}
+    </div>
+  )
+}
+
 export default function GroupMatchRow({ teamA, teamB, result, venue, played, scoreA, scoreB }: Props) {
   const t = useTranslations('groups')
+  const tm = useTranslations('match')
   const { pA, dr, pB } = matchP(teamA, teamB)
   const { pA: cpA, pB: cpB } = matchPCustom(teamA, teamB)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
   const fmtPct = (v: number) => `${(v * 100).toFixed(0)}%`
+  const [showScores, setShowScores] = useState(false)
 
   // Verrassingspotentieel: winkans van de zwakkere ploeg (lagere FIFA-ranking)
   const aWeaker = (tA?.fifa ?? 0) <= (tB?.fifa ?? 0)
@@ -52,54 +97,76 @@ export default function GroupMatchRow({ teamA, teamB, result, venue, played, sco
 
   const isPlayed = played === true && scoreA !== undefined && scoreB !== undefined
 
+  // 🎯 toggelt de scorekansen; preventDefault houdt de rij-link (/versus) tegen.
+  const toggleScores = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowScores(s => !s)
+  }
+  const scoreBtn = (
+    <button
+      onClick={toggleScores}
+      aria-label={tm('scoreOdds')}
+      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 9, padding: 0, lineHeight: 1, opacity: showScores ? 1 : 0.55 }}
+    >🎯</button>
+  )
+
   return (
-    <Link
-      href={{ pathname: '/versus', query }}
-      title={t('predictThisMatch')}
-      style={{
-        display: 'block',
-        borderBottom: '1px solid var(--color-brd)',
-        textDecoration: 'none',
-        color: 'inherit',
-        cursor: 'pointer',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', fontSize: 7 }}>
-        <span style={{ width: 10, flexShrink: 0, textAlign: 'center' }} title={isUpset ? `${t('upsetPotential')}: ${Math.round(upsetProb * 100)}%` : undefined}>
-          {isPlayed ? '' : isUpset ? '⚡' : ''}
-        </span>
-        <FlagImg name={teamA} h={12} emoji={tA?.flag ?? '🏳️'} />
-        <span style={{ color: 'var(--color-txt)', minWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamA}</span>
-        {isPlayed ? (
-          <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ color: 'var(--color-txt)', fontWeight: 'bold', fontSize: 9 }}>{scoreA} – {scoreB}</span>
-            <span style={{ color: 'var(--color-g)', fontSize: 6 }}>{t('final')}</span>
+    <>
+      <Link
+        href={{ pathname: '/versus', query }}
+        title={t('predictThisMatch')}
+        style={{
+          display: 'block',
+          borderBottom: showScores ? 'none' : '1px solid var(--color-brd)',
+          textDecoration: 'none',
+          color: 'inherit',
+          cursor: 'pointer',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', fontSize: 7 }}>
+          <span style={{ width: 10, flexShrink: 0, textAlign: 'center' }} title={isUpset ? `${t('upsetPotential')}: ${Math.round(upsetProb * 100)}%` : undefined}>
+            {isPlayed ? '' : isUpset ? '⚡' : ''}
           </span>
-        ) : result ? (
-          <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ color: resultColor, fontWeight: 'bold' }}>{resultLabel}</span>
-            <span
-              style={{ color: confidenceColor(Math.max(cpA, cpB)) }}
-              title={`${Math.round(Math.max(cpA, cpB) * 100)}%`}
-            >
-              ~{expectedGoals(cpA)} – {expectedGoals(cpB)}
+          <FlagImg name={teamA} h={12} emoji={tA?.flag ?? '🏳️'} />
+          <span style={{ color: 'var(--color-txt)', minWidth: 56, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamA}</span>
+          {isPlayed ? (
+            <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 6 }}>
+              <span style={{ color: 'var(--color-txt)', fontWeight: 'bold', fontSize: 9 }}>{scoreA} – {scoreB}</span>
+              <span style={{ color: 'var(--color-g)', fontSize: 6 }}>{t('final')}</span>
             </span>
-          </span>
-        ) : (
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: 6 }}>
-            <span style={{ color: 'var(--color-r)' }}>{fmtPct(pA)}</span>
-            <span style={{ color: 'var(--color-muted)' }}>{fmtPct(dr)}</span>
-            <span style={{ color: 'var(--color-b)' }}>{fmtPct(pB)}</span>
+          ) : result ? (
+            <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 6 }}>
+              <span style={{ color: resultColor, fontWeight: 'bold' }}>{resultLabel}</span>
+              <span
+                style={{ color: confidenceColor(Math.max(cpA, cpB)) }}
+                title={`${Math.round(Math.max(cpA, cpB) * 100)}%`}
+              >
+                ~{expectedGoals(cpA)} – {expectedGoals(cpB)}
+              </span>
+            </span>
+          ) : (
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: 6 }}>
+              <span style={{ color: 'var(--color-r)' }}>{fmtPct(pA)}</span>
+              <span style={{ color: 'var(--color-muted)' }}>{fmtPct(dr)}</span>
+              <span style={{ color: 'var(--color-b)' }}>{fmtPct(pB)}</span>
+            </div>
+          )}
+          {scoreBtn}
+          <span style={{ color: 'var(--color-txt)', minWidth: 56, textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamB}</span>
+          <FlagImg name={teamB} h={12} emoji={tB?.flag ?? '🏳️'} />
+        </div>
+        {isPlayed && venue && (
+          <div style={{ padding: '0 10px 6px 30px', fontSize: 6, color: 'var(--color-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            🏟 {venue}
           </div>
         )}
-        <span style={{ color: 'var(--color-txt)', minWidth: 64, textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamB}</span>
-        <FlagImg name={teamB} h={12} emoji={tB?.flag ?? '🏳️'} />
-      </div>
-      {isPlayed && venue && (
-        <div style={{ padding: '0 10px 6px 30px', fontSize: 6, color: 'var(--color-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          🏟 {venue}
+      </Link>
+      {showScores && (
+        <div style={{ borderBottom: '1px solid var(--color-brd)' }}>
+          <ScorePills pWin={cpA} pLoss={cpB} actual={isPlayed ? { a: scoreA!, b: scoreB! } : undefined} />
         </div>
       )}
-    </Link>
+    </>
   )
 }

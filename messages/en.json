@@ -1,4 +1,14 @@
 {
+  "match": {
+    "venue": "Stadium",
+    "altitude": "{m}m altitude",
+    "altitudeWarning": "High altitude — sea-level teams take a small win-probability penalty",
+    "altitudeSoon": "(coming soon in the model)",
+    "localTime": "local time",
+    "scoreOdds": "Score odds",
+    "mostLikely": "Most likely",
+    "other": "other"
+  },
   "impact": {
     "title": "Match impact",
     "intro": "How much did each played match move the title race? We compare the championship probabilities before and after every result.",

@@ -53,3 +53,37 @@ export function calcScoreDistribution(lambdaA: number, lambdaB: number, maxGoals
   all.sort((x, y) => y.prob - x.prob)
   return { scores: all.slice(0, 10), homeWin, draw, awayWin }
 }
+
+// ── Top-scores rechtstreeks uit de W/D/L-winkansen ───────────────────────────
+// Alternatieve ingang die de verwachte goals uit de winkans afleidt (i.p.v. de
+// /versus-expectedGoals): λ = BASE_GOALS × (1 + STRENGTH_FACTOR × (p − 1/3)).
+// Gebruikt door de groepspagina en de schema-tab.
+const BASE_GOALS = 1.18
+const STRENGTH_FACTOR = 1.2
+const MAX_GOALS = 5
+
+function lambdaFromProb(teamProb: number): number {
+  return Math.max(0.05, BASE_GOALS * (1 + STRENGTH_FACTOR * (teamProb - 1 / 3)))
+}
+
+export interface TopScore {
+  homeGoals: number
+  awayGoals: number
+  probability: number
+}
+
+// Top-n meest waarschijnlijke uitslagen voor team A (pWin) tegen team B (pLoss),
+// over het rooster 0..5 × 0..5. Aflopend op kans. De getoonde kansen tellen niet
+// tot 1.00 (afgekapt bij 5-5) — de UI toont het restant als "overige".
+export function topScores(pWin: number, pLoss: number, n = 5): TopScore[] {
+  const lambdaA = lambdaFromProb(pWin)
+  const lambdaB = lambdaFromProb(pLoss)
+  const scores: TopScore[] = []
+  for (let i = 0; i <= MAX_GOALS; i++) {
+    for (let j = 0; j <= MAX_GOALS; j++) {
+      scores.push({ homeGoals: i, awayGoals: j, probability: poisson(i, lambdaA) * poisson(j, lambdaB) })
+    }
+  }
+  scores.sort((a, b) => b.probability - a.probability)
+  return scores.slice(0, n)
+}

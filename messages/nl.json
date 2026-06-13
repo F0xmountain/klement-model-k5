@@ -1,4 +1,14 @@
 {
+  "match": {
+    "venue": "Stadion",
+    "altitude": "{m}m hoogte",
+    "altitudeWarning": "Hoge hoogte — zeeniveau-teams krijgen een kleine kanspenalty",
+    "altitudeSoon": "(binnenkort in het model)",
+    "localTime": "lokale tijd",
+    "scoreOdds": "Scorekansen",
+    "mostLikely": "Meest waarschijnlijk",
+    "other": "overige"
+  },
   "impact": {
     "title": "Wedstrijd impact",
     "intro": "Hoeveel verschoof elke gespeelde wedstrijd de titelstrijd? We vergelijken de kampioenskansen vóór en na elke uitslag.",
