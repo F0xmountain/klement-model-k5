@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import { getTodaysMatches, getTomorrowsMatches, type TodayMatch } from '@/lib/todays-matches'
+import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -14,6 +15,7 @@ const abbr = (name: string) => name.slice(0, 3).toUpperCase()
 export default function TodaysMatches() {
   const t = useTranslations('home')
   const tc = useTranslations('common')
+  const tg = useTranslations('groups')
   const locale = useLocale()
   const [data, setData] = useState<{ today: TodayMatch[]; tomorrow: TodayMatch[] } | null>(null)
 
@@ -35,6 +37,9 @@ export default function TodaysMatches() {
 
   const card = (m: TodayMatch) => (
     <div key={m.matchId} className="factor-card">
+      <div style={{ fontSize: 7, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 8 }}>
+        {tg('groupLabel')} {m.group}
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, minWidth: 0 }}>
           <FlagImg name={m.teamA} h={16} emoji={teamData(m.teamA)?.flag ?? '🏳️'} />
@@ -56,6 +61,14 @@ export default function TodaysMatches() {
       </div>
       <div style={{ textAlign: 'center', fontSize: 8, marginTop: 8, color: 'var(--color-muted)', opacity: m.result ? 0.6 : 1 }}>
         {t('modelPrediction')}: {abbr(m.teamA)} {Math.round(m.prediction.pA * 100)}% · {tc('draw')} {Math.round(m.prediction.dr * 100)}% · {abbr(m.teamB)} {Math.round(m.prediction.pB * 100)}%
+      </div>
+      <div style={{ textAlign: 'center', marginTop: 8 }}>
+        <Link
+          href={{ pathname: '/versus', query: { a: m.teamA, b: m.teamB, venue: m.venue } }}
+          style={{ fontSize: 8, color: 'var(--color-b)', textDecoration: 'none', letterSpacing: 0.5 }}
+        >
+          {tg('predictThisMatch')}
+        </Link>
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { teamNames, teamData, sc } from '@/lib/klement'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
 import H2HList from '@/components/team/H2HList'
+import StarPlayersCard from '@/components/team/StarPlayersCard'
 import FormBar from '@/components/stats/FormBar'
 import FlagImg from '@/components/ui/FlagImg'
 import TeamSelect from '@/components/ui/TeamSelect'
@@ -103,6 +104,8 @@ export default function TeamsPage() {
         </div>
         <FormBar team={selected} />
       </div>
+
+      <StarPlayersCard name={selected} />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
         {[

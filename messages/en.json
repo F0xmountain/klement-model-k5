@@ -159,7 +159,9 @@
     "scoreModelScore": "MODEL SCORE",
     "scoreFifaPts": "FIFA PTS",
     "scoreGdpCapita": "GDP/CAPITA",
-    "formLabel": "RECENT FORM"
+    "formLabel": "RECENT FORM",
+    "starPlayersLabel": "KEY PLAYERS",
+    "squadCompleteness": "Squad completeness: {pct}%"
   },
   "about": {
     "title": "ABOUT THE MODEL",

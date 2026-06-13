@@ -159,7 +159,9 @@
     "scoreModelScore": "MODEL SCORE",
     "scoreFifaPts": "FIFA PTS",
     "scoreGdpCapita": "BBP/INWONER",
-    "formLabel": "RECENTE VORM"
+    "formLabel": "RECENTE VORM",
+    "starPlayersLabel": "STERSPELERS",
+    "squadCompleteness": "Selectievolledigheid: {pct}%"
   },
   "about": {
     "title": "OVER HET MODEL",

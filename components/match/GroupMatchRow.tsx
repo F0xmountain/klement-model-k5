@@ -15,8 +15,16 @@ interface Props {
 
 // Verwachte goals afgeleid van de winkans (zelfde formule als /versus) — geen
 // scorevoorspelling, alleen een indicatie. Basis 1.35 goals/team, bijgesteld
-// naar winkans. Afgerond op 1 decimaal.
-const expectedGoals = (p: number) => (1.35 * (0.5 + (p - 0.5) * 0.8)).toFixed(1)
+// naar winkans. Afgerond op gehele doelpunten voor de groepsweergave.
+const expectedGoals = (p: number) => Math.round(1.35 * (0.5 + (p - 0.5) * 0.8))
+
+// Kleurcodering op zekerheid van de favoriet: duidelijke favoriet (>65%) groen,
+// favoriet (50-65%) oranje, gelijkopgaand (<50%) grijs.
+function confidenceColor(favWin: number): string {
+  if (favWin > 0.65) return 'var(--color-g)'
+  if (favWin > 0.5) return 'var(--color-o)'
+  return 'var(--color-muted)'
+}
 
 export default function GroupMatchRow({ teamA, teamB, result, venue }: Props) {
   const t = useTranslations('groups')
@@ -61,7 +69,12 @@ export default function GroupMatchRow({ teamA, teamB, result, venue }: Props) {
       {result ? (
         <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 6 }}>
           <span style={{ color: resultColor, fontWeight: 'bold' }}>{resultLabel}</span>
-          <span style={{ color: 'var(--color-muted)' }}>{expectedGoals(cpA)} – {expectedGoals(cpB)}</span>
+          <span
+            style={{ color: confidenceColor(Math.max(cpA, cpB)) }}
+            title={`${Math.round(Math.max(cpA, cpB) * 100)}%`}
+          >
+            ~{expectedGoals(cpA)} – {expectedGoals(cpB)}
+          </span>
         </span>
       ) : (
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: 6 }}>
