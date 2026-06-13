@@ -40,5 +40,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "qatar-vs-switzerland": {
+    "date": "2026-06-13T19:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
