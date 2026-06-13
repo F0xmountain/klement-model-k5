@@ -1,7 +1,7 @@
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { SCHEDULE, canonTeam, type ScheduledMatch, type ScheduleRound } from '@/lib/wc26-schedule'
-import { localKickoff } from '@/lib/venue-timezones'
+import { localKickoff, localDateKey, VENUE_TIMEZONES } from '@/lib/venue-timezones'
 import { resultForPair } from '@/lib/todays-matches'
 import { teamData } from '@/lib/klement'
 import FlagImg from '@/components/ui/FlagImg'
@@ -75,21 +75,27 @@ function MatchRow({ m, locale }: { m: ScheduledMatch; locale: string }) {
   return inner
 }
 
-// Groepsfase per kalenderdag (UTC) gegroepeerd, met een datumkop per dag.
+// Groepsfase per lokale kalenderdag (stadiontijd) gegroepeerd, met een datumkop
+// per dag. Groeperen op UTC zou late avond-wedstrijden (na middernacht UTC, maar
+// overdag lokaal) onder de verkeerde dag-kop zetten.
 function GroupStage({ matches, locale }: { matches: ScheduledMatch[]; locale: string }) {
-  const fmtDate = new Intl.DateTimeFormat(INTL_LOCALE[locale] ?? 'en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC',
-  })
+  const intlLocale = INTL_LOCALE[locale] ?? 'en-GB'
   const byDate: { date: string; label: string; matches: ScheduledMatch[] }[] = []
   for (const m of matches) {
-    const date = m.dateUtc.slice(0, 10)
+    const date = localDateKey(m.dateUtc, m.venue)
     let bucket = byDate.find(b => b.date === date)
     if (!bucket) {
-      bucket = { date, label: fmtDate.format(new Date(m.dateUtc)), matches: [] }
+      // Kop in dezelfde venue-tijdzone als de sleutel, zodat kop en kaart dezelfde dag tonen.
+      const tz = VENUE_TIMEZONES[m.venue] ?? 'UTC'
+      const label = new Intl.DateTimeFormat(intlLocale, {
+        weekday: 'long', day: 'numeric', month: 'long', timeZone: tz,
+      }).format(new Date(m.dateUtc))
+      bucket = { date, label, matches: [] }
       byDate.push(bucket)
     }
     bucket.matches.push(m)
   }
+  byDate.sort((a, b) => a.date.localeCompare(b.date))
   return (
     <>
       {byDate.map(b => (

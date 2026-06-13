@@ -31,3 +31,15 @@ export function localKickoff(dateUtc: string, venue: string, locale: string): { 
   const time = new Intl.DateTimeFormat(intlLocale, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz }).format(d)
   return { date, time }
 }
+
+// Kalenderdatum (YYYY-MM-DD) van de aftrap in de lokale tijdzone van het stadion.
+// Sorteerbare sleutel om wedstrijden onder de juiste lokale dag te groeperen —
+// anders belandt een wedstrijd na middernacht UTC (maar overdag lokaal) onder de
+// verkeerde dag-kop op de schema-pagina.
+export function localDateKey(dateUtc: string, venue: string): string {
+  const tz = VENUE_TIMEZONES[venue] ?? 'UTC'
+  const d = new Date(dateUtc)
+  return new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric', month: '2-digit', day: '2-digit', timeZone: tz,
+  }).format(d)
+}
