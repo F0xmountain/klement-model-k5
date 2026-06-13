@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
-import { matchP, simResultCustom, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
+import { matchP, simResultCustom, latestElo, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
 import { calcScoreDistribution } from '@/lib/score-distribution'
 import stadiumsRaw from '@/lib/stadiums.json'
@@ -203,6 +203,8 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
 
   const tA = teamData(teamA)
   const tB = teamData(teamB)
+  const eloA = latestElo(teamA)
+  const eloB = latestElo(teamB)
   const scoreDist = calcScoreDistribution(expectedGoalsNum(pA), expectedGoalsNum(pB))
   const restWarnings = [
     { team: teamA, days: restA },
@@ -321,9 +323,12 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
           </div>
         )}
 
-        {/* 6 — Teamsterkte-split (klein) */}
+        {/* 6 — Teamsterkte-split + actuele Elo-scores (klein) */}
         <div style={{ marginTop: 8, textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
           {t('teamStrengthSplit', { elo: ELO_WEIGHT * 100, fifa: FIFA_WEIGHT * 100 })}
+          {eloA !== undefined && eloB !== undefined && (
+            <span style={{ marginLeft: 8 }}>· {t('eloScores', { a: Math.round(eloA), b: Math.round(eloB) })}</span>
+          )}
         </div>
 
         {/* 6b — Gedeelde 5-assige radar (beide teams op dezelfde assen) */}

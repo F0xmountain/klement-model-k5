@@ -189,6 +189,7 @@
     "win": "WINST",
     "simsLabel": "SIMS",
     "teamStrengthSplit": "Teamsterkte: Elo {elo}% + FIFA {fifa}%",
+    "eloScores": "Elo: {a} vs {b}",
     "venueLabel": "Locatie",
     "venueNeutral": "Neutrale locatie (geen hoogte/reiseffect)",
     "formIndicator": "{team} in {level} vorm ({score}/30)",
