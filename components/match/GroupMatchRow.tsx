@@ -1,12 +1,15 @@
 'use client'
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import { matchP as matchPCustom } from '@/lib/klement-custom'
 import { topScores } from '@/lib/score-distribution'
+import { groupMatchByTeams } from '@/lib/wc26-schedule'
+import { localKickoff } from '@/lib/venue-timezones'
 import { UPSET_THRESHOLD } from '@/lib/upset-detector'
 import { Link } from '@/i18n/navigation'
 import FlagImg from '@/components/ui/FlagImg'
+import AltitudeBadge from '@/components/match/AltitudeBadge'
 import type { WDL } from '@/types'
 
 interface Props {
@@ -77,6 +80,9 @@ function ScorePills({ pWin, pLoss, actual }: { pWin: number; pLoss: number; actu
 export default function GroupMatchRow({ teamA, teamB, result, venue, played, scoreA, scoreB }: Props) {
   const t = useTranslations('groups')
   const tm = useTranslations('match')
+  const locale = useLocale()
+  const sched = groupMatchByTeams(teamA, teamB)
+  const kickoff = sched ? localKickoff(sched.dateUtc, sched.venue, locale) : null
   const { pA, dr, pB } = matchP(teamA, teamB)
   const { pA: cpA, pB: cpB } = matchPCustom(teamA, teamB)
   const tA = teamData(teamA)
@@ -156,9 +162,12 @@ export default function GroupMatchRow({ teamA, teamB, result, venue, played, sco
           <span style={{ color: 'var(--color-txt)', minWidth: 56, textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamB}</span>
           <FlagImg name={teamB} h={12} emoji={tB?.flag ?? '🏳️'} />
         </div>
-        {isPlayed && venue && (
-          <div style={{ padding: '0 10px 6px 30px', fontSize: 6, color: 'var(--color-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            🏟 {venue}
+        {sched && kickoff && (
+          <div style={{ padding: '0 10px 6px 30px', fontSize: 6, color: 'var(--color-muted)', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              🏟 {sched.venue} · {sched.city} · {kickoff.date} {kickoff.time}
+            </span>
+            <AltitudeBadge altitudeM={sched.altitudeM} />
           </div>
         )}
       </Link>

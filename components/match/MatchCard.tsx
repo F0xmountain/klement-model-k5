@@ -1,20 +1,31 @@
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
+import { localKickoff } from '@/lib/venue-timezones'
 import WDLBar from '@/components/ui/WDLBar'
 import FlagImg from '@/components/ui/FlagImg'
+import AltitudeBadge from '@/components/match/AltitudeBadge'
 
 interface Props {
   teamA: string
   teamB: string
   k?: string
   isFinal?: boolean
+  // Optionele speeldatum/venue (FIFA-schema). Bij KO is dit de venue van het
+  // bracket-slot; de tegenstanders zijn Klement's voorspelling.
+  dateUtc?: string
+  venue?: string
+  city?: string
+  altitudeM?: number
 }
 
-export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
+export default function MatchCard({ teamA, teamB, k, isFinal = false, dateUtc, venue, city, altitudeM }: Props) {
   const t = useTranslations('common')
+  const tm = useTranslations('match')
+  const locale = useLocale()
   const { pA, dr, pB } = matchP(teamA, teamB)
   const tA = teamData(teamA)
   const tB = teamData(teamB)
+  const kickoff = dateUtc && venue ? localKickoff(dateUtc, venue, locale) : null
 
   const cardStyle: React.CSSProperties = isFinal
     ? { border: '2px solid var(--color-g)', boxShadow: '0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-g)' }
@@ -29,6 +40,15 @@ export default function MatchCard({ teamA, teamB, k, isFinal = false }: Props) {
 
   return (
     <div style={{ ...cardStyle, padding: 16, backgroundColor: 'var(--color-bg)' }}>
+      {kickoff && venue && (
+        <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 10, lineHeight: 1.8 }}>
+          <div>📅 {kickoff.date} · {kickoff.time} {tm('localTime')}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+            <span>🏟 {venue}{city ? ` · ${city}` : ''}</span>
+            {altitudeM !== undefined && <AltitudeBadge altitudeM={altitudeM} />}
+          </div>
+        </div>
+      )}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: 8, alignItems: 'center', marginBottom: 10 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, ...teamAStyle }}>
           <FlagImg name={teamA} h={28} emoji={tA?.flag ?? '🏳️'} />

@@ -3,6 +3,9 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { matchP, teamData } from '@/lib/klement'
 import { ROUNDS, makeSlug } from '@/lib/fixtures'
+import { roundMatches, isHighAltitude } from '@/lib/wc26-schedule'
+import { localKickoff } from '@/lib/venue-timezones'
+import { ALTITUDE_FACTOR_ENABLED } from '@/lib/feature-flags'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -13,8 +16,8 @@ export function generateStaticParams() {
   return ROUND_ORDER.map(round => ({ round }))
 }
 
-export default async function KnockoutPage({ params }: { params: Promise<{ round: string }> }) {
-  const { round } = await params
+export default async function KnockoutPage({ params }: { params: Promise<{ locale: string; round: string }> }) {
+  const { locale, round } = await params
   if (!(round in ROUNDS)) notFound()
 
   const matches = ROUNDS[round as Round]!
@@ -22,6 +25,11 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
   const tr = await getTranslations('rounds')
   const tk = await getTranslations('knockout')
   const tc = await getTranslations('common')
+  const tm = await getTranslations('match')
+  // Venues/data per bracket-slot uit het FIFA-schema (op wedstrijdnummer). De
+  // koppeling is positioneel: bracket-index i → de i-de KO-wedstrijd van de ronde.
+  // Tegenstanders zijn Klement's voorspelling; de venue van het slot ligt vast.
+  const roundSched = roundMatches(round as Round)
 
   return (
     <div className="page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -52,10 +60,23 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
           const tA = teamData(m.teamA)
           const tB = teamData(m.teamB)
           const pickIsA = m.k === m.teamA
+          const sched = roundSched[i]
+          const kickoff = sched ? localKickoff(sched.dateUtc, sched.venue, locale) : null
 
           return (
+            <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 4 }}>
+            {sched && kickoff && (
+              <div style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                <span>📅 {kickoff.date} · {kickoff.time} {tm('localTime')}</span>
+                <span>🏟 {sched.venue} · {sched.city}</span>
+                {isHighAltitude(sched.altitudeM) && (
+                  <span title={tm('altitudeWarning')} style={{ color: 'var(--color-o)', cursor: 'help', whiteSpace: 'nowrap' }}>
+                    ⚠️ {tm('altitude', { m: sched.altitudeM })}{!ALTITUDE_FACTOR_ENABLED && ` ${tm('altitudeSoon')}`}
+                  </span>
+                )}
+              </div>
+            )}
             <Link
-              key={i}
               href={matchHref}
               className="ko-match"
               style={{
@@ -87,6 +108,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
                 {!pickIsA && m.k === m.teamB && <span className="k-badge">{tc('klementPick')}</span>}
               </div>
             </Link>
+            </div>
           )
         })}
       </div>

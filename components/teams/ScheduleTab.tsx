@@ -3,25 +3,16 @@ import { useLocale, useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import { matchP } from '@/lib/klement-custom'
 import { topScores } from '@/lib/score-distribution'
-import { teamGroupMatches, canonTeam, isHighAltitude, type ScheduledMatch } from '@/lib/wc26-schedule'
+import { teamGroupMatches, canonTeam, type ScheduledMatch } from '@/lib/wc26-schedule'
 import { localKickoff } from '@/lib/venue-timezones'
 import { resultForPair } from '@/lib/todays-matches'
 import { ROUNDS } from '@/lib/fixtures'
 import FlagImg from '@/components/ui/FlagImg'
+import AltitudeBadge from '@/components/match/AltitudeBadge'
 
 const KO_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
 
 const fmtPct = (v: number) => `${Math.round(v * 100)}%`
-
-function AltitudeBadge({ altitudeM }: { altitudeM: number }) {
-  const tm = useTranslations('match')
-  if (!isHighAltitude(altitudeM)) return null
-  return (
-    <span title={tm('altitudeWarning')} style={{ color: 'var(--color-o)', fontSize: 8, marginLeft: 6, whiteSpace: 'nowrap', cursor: 'help' }}>
-      ⚠️ {tm('altitude', { m: altitudeM })}
-    </span>
-  )
-}
 
 // Compacte top-3 scoreverwachting onder de W/D/L-balk van ongespeelde wedstrijden.
 function TopScoresLine({ pWin, pLoss }: { pWin: number; pLoss: number }) {
@@ -51,7 +42,7 @@ function GroupMatchCard({ teamName, match }: { teamName: string; match: Schedule
     <div className="factor-card" style={{ padding: 12, borderLeft: `3px solid ${borderColor}`, marginBottom: 10 }}>
       <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>📅 {date} · {time} {tm('localTime')}</div>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 8 }}>
-        🏟 {match.venue} · {match.city}<AltitudeBadge altitudeM={match.altitudeM} />
+        🏟 {match.venue} · {match.city}<AltitudeBadge altitudeM={match.altitudeM} style={{ marginLeft: 6 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
         <FlagImg name={opponent} h={16} emoji={teamData(opponent)?.flag ?? '🏳️'} />
