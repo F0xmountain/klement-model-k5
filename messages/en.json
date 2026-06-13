@@ -1,4 +1,19 @@
 {
+  "impact": {
+    "title": "Match impact",
+    "intro": "How much did each played match move the title race? We compare the championship probabilities before and after every result.",
+    "biggestWinner": "Biggest winner",
+    "biggestLoser": "Biggest loser",
+    "volatility": "Total volatility",
+    "mostImpactful": "Most impactful match",
+    "empty": "Updates as matches are played",
+    "demoNote": "Demo data — real impact appears as matches are played during the tournament.",
+    "before": "Before",
+    "after": "After",
+    "timelineTitle": "Championship probability over the tournament",
+    "timelineSub": "Top-6 contenders — each point is a played match.",
+    "predict": "Predict this match"
+  },
   "meta": {
     "title": "WC26 Klement — World Cup 2026 Predictor",
     "description": "An econometric model that called 2014, 2018 and 2022 correctly — now running on all 48 teams."
@@ -14,6 +29,7 @@
     "myBracket": "MY BRACKET",
     "stats": "STATS",
     "live": "LIVE",
+    "impact": "IMPACT",
     "model": "MODEL",
     "about": "ABOUT",
     "more": "MORE",

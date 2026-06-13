@@ -1,4 +1,19 @@
 {
+  "impact": {
+    "title": "Wedstrijd impact",
+    "intro": "Hoeveel verschoof elke gespeelde wedstrijd de titelstrijd? We vergelijken de kampioenskansen vóór en na elke uitslag.",
+    "biggestWinner": "Grootste winnaar",
+    "biggestLoser": "Grootste verliezer",
+    "volatility": "Totale volatiliteit",
+    "mostImpactful": "Meest impactvolle wedstrijd",
+    "empty": "Bijgewerkt na elke wedstrijd",
+    "demoNote": "Demo-data — echte impact verschijnt zodra er tijdens het toernooi wordt gespeeld.",
+    "before": "Voor",
+    "after": "Na",
+    "timelineTitle": "Kampioenskans over het toernooi",
+    "timelineSub": "Top-6 kandidaten — elk punt is een gespeelde wedstrijd.",
+    "predict": "Voorspel deze wedstrijd"
+  },
   "meta": {
     "title": "WC26 Klement — WK 2026 Voorspeller",
     "description": "Een econometrisch model dat 2014, 2018 en 2022 correct voorspelde — nu toegepast op alle 48 landen."
@@ -14,6 +29,7 @@
     "myBracket": "MIJN BRACKET",
     "stats": "STATS",
     "live": "LIVE",
+    "impact": "IMPACT",
     "model": "MODEL",
     "about": "OVER",
     "more": "MEER",

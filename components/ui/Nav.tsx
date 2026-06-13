@@ -12,6 +12,7 @@ const PRIMARY = [
   { href: '/my-bracket', key: 'myBracket' },
   { href: '/live', key: 'live' },
   { href: '/stats', key: 'stats' },
+  { href: '/impact', key: 'impact' },
 ] as const
 const SECONDARY = [
   { href: '/teams', key: 'teams' },
