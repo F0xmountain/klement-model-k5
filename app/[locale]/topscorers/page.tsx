@@ -5,7 +5,9 @@ import { predictedTopScorers } from '@/lib/topscorers'
 
 export default function TopScorersPage() {
   const t = useTranslations('topscorers')
-  const ranked = predictedTopScorers(20)
+  // Volledige lijst zodat de positie-tabs in TopScorersList per categorie kunnen
+  // filteren en elk een eigen top-20 tonen.
+  const ranked = predictedTopScorers(500)
 
   return (
     <div className="sec page-enter" style={{ position: 'relative', overflow: 'hidden' }}>

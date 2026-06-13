@@ -478,6 +478,13 @@
     }
   },
   "topscorers": {
+    "tabs": {
+      "all": "Totaal",
+      "attacker": "Aanvallers",
+      "midfielder": "Middenvelders",
+      "defender": "Verdedigers",
+      "goalkeeper": "Keepers"
+    },
     "title": "Verwachte Topscorers",
     "subtitle": "Op basis van toernooi-kans × positiegewicht",
     "posWeight": "Positiegewicht: lager = scoort eerder",

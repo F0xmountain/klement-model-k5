@@ -478,6 +478,13 @@
     }
   },
   "topscorers": {
+    "tabs": {
+      "all": "All",
+      "attacker": "Forwards",
+      "midfielder": "Midfielders",
+      "defender": "Defenders",
+      "goalkeeper": "Goalkeepers"
+    },
     "title": "Predicted Top Scorers",
     "subtitle": "Based on team tournament probability × position weight",
     "posWeight": "Position weight: lower = more likely to score",

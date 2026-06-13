@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { teamData } from '@/lib/klement'
 import type { PredictedScorer } from '@/lib/topscorers'
@@ -19,13 +20,36 @@ const POS_COLOR: Record<string, string> = {
   goalkeeper: 'var(--color-muted)',
 }
 
+const TABS = ['all', 'attacker', 'midfielder', 'defender', 'goalkeeper'] as const
+type Tab = (typeof TABS)[number]
+const PER_TAB = 20
+
 export default function TopScorersList({ ranked }: Props) {
   const tCat = useTranslations('admin')
-  const maxScore = ranked.length > 0 ? ranked[0]!.score : 1
+  const t = useTranslations('topscorers')
+  const [tab, setTab] = useState<Tab>('all')
+
+  // ranked is al op score gesorteerd; per tab filteren op categorie en top-20 tonen.
+  const shown = (tab === 'all' ? ranked : ranked.filter(p => p.category === tab)).slice(0, PER_TAB)
+  const maxScore = shown.length > 0 ? shown[0]!.score : 1
 
   return (
-    <div className="factor-card" style={{ overflowX: 'auto' }}>
-      {ranked.map((p, i) => {
+    <>
+      <div className="ko-tabs" style={{ overflowX: 'auto', marginBottom: 16 }}>
+        {TABS.map(tb => (
+          <button
+            key={tb}
+            onClick={() => setTab(tb)}
+            className={`ko-tab${tab === tb ? ' active' : ''}`}
+            style={{ background: 'none', fontFamily: 'inherit' }}
+          >
+            {t(`tabs.${tb}`)}
+          </button>
+        ))}
+      </div>
+
+      <div className="factor-card" style={{ overflowX: 'auto' }}>
+        {shown.map((p, i) => {
         const flag = teamData(p.team)?.flag ?? '🏳️'
         const color = POS_COLOR[p.category] ?? 'var(--color-muted)'
         return (
@@ -57,8 +81,9 @@ export default function TopScorersList({ ranked }: Props) {
             <PixelBar value={Math.round((p.score / maxScore) * 100)} color={color} />
             <div style={{ fontSize: 10, color: 'var(--color-g)', textAlign: 'right' }}>{p.score.toFixed(1)}</div>
           </div>
-        )
-      })}
-    </div>
+          )
+        })}
+      </div>
+    </>
   )
 }
