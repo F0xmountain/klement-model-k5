@@ -34,7 +34,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add lib/results.json lib/elo-current.json lib/probability-snapshots.json lib/match-stats.json
           git diff --staged --quiet || git commit -m "chore: ingest WC results $(date +%Y-%m-%d)"
-          git push
+          git pull --rebase && git push
 
       - name: Trigger Next.js on-demand revalidation
         run: |
