@@ -1,9 +1,12 @@
 'use client'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
 import { Link } from '@/i18n/navigation'
+import { teamCode } from '@/lib/team-codes'
+import { impactNarrative, matchSummaryNarrative, isNegligible } from '@/lib/impact-narrative'
 import type { ImpactData, MatchImpact } from '@/lib/match-impact'
 
 const COLORS = ['var(--color-b)', 'var(--color-r)', 'var(--color-g)', 'var(--color-o)', '#7B4FA0', '#1A8A8A']
@@ -97,6 +100,91 @@ function BeforeAfterRow({ team, before, after }: { team: string; before: number;
   )
 }
 
+// Horizontale micrometer-balk (60px): middelpunt = 0, rechts = groen (winst),
+// links = rood (verlies), geschaald naar de grootste delta in de lijst.
+function Micrometer({ delta, maxAbs }: { delta: number; maxAbs: number }) {
+  const HALF = 30
+  const w = maxAbs > 0 ? Math.min(HALF, (Math.abs(delta) / maxAbs) * HALF) : 0
+  const positive = delta >= 0
+  return (
+    <div style={{ position: 'relative', width: 60, height: 8, backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-brd)', flexShrink: 0 }}>
+      <div style={{ position: 'absolute', left: HALF, top: 0, bottom: 0, width: 1, backgroundColor: 'var(--color-brd2)' }} />
+      <div style={{ position: 'absolute', top: 1, height: 6, backgroundColor: positive ? 'var(--color-g)' : 'var(--color-r)', left: positive ? HALF : HALF - w, width: w }} />
+    </div>
+  )
+}
+
+interface TeamDelta { team: string; delta: number }
+
+function TeamDeltaRow({ row, maxAbs, narrative }: { row: TeamDelta; maxAbs: number; narrative: string }) {
+  const negligible = isNegligible(row.delta)
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 0', fontSize: 9, opacity: negligible ? 0.55 : 1 }}>
+      <span style={{ width: 70, flexShrink: 0, color: 'var(--color-txt)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.team}</span>
+      <Micrometer delta={row.delta} maxAbs={maxAbs} />
+      <span style={{ width: 44, flexShrink: 0, textAlign: 'right', color: row.delta >= 0 ? 'var(--color-g)' : 'var(--color-r)' }}>{signPct(row.delta)}</span>
+      <span style={{ flex: '1 1 auto', minWidth: 0, color: 'var(--color-muted)', fontSize: 8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{narrative}</span>
+    </div>
+  )
+}
+
+// Context-kaartje voor de meest recente wedstrijd: kop, narratieve duiding,
+// volatiliteit + grootste winnaar/verliezer, en per-team-rijen met micrometer-balk.
+function ContextCard({ m }: { m: MatchImpact }) {
+  const t = useTranslations('impact')
+  const tg = useTranslations('groups')
+  const [showNeg, setShowNeg] = useState(false)
+
+  const rows: TeamDelta[] = topActiveTeams(m.snapshots.after, 10)
+    .map(team => ({ team, delta: (m.snapshots.after[team] ?? 0) - (m.snapshots.before[team] ?? 0) }))
+  const significant = rows.filter(r => !isNegligible(r.delta)).sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+  const negligible = rows.filter(r => isNegligible(r.delta))
+  const maxAbs = Math.max(0.0001, ...significant.map(r => Math.abs(r.delta)))
+
+  const header = [
+    m.teamA && m.teamB ? `${teamCode(m.teamA)} ${m.result} ${teamCode(m.teamB)}` : m.matchLabel,
+    m.group ? `${tg('groupLabel')} ${m.group}` : null,
+    m.venue,
+  ].filter(Boolean).join(' · ')
+
+  const summary = matchSummaryNarrative(t, {
+    group: m.group ?? '',
+    biggestWinner: m.biggestWinner,
+    biggestLoser: m.biggestLoser,
+  })
+
+  return (
+    <div className="factor-card" style={{ padding: 16, border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)', marginBottom: 24 }}>
+      <div style={{ fontSize: 8, color: 'var(--color-b)', fontFamily: 'var(--font-pixel)', marginBottom: 8 }}>{t('summaryCard')}</div>
+      <div style={{ fontSize: 11, color: 'var(--color-txt)', marginBottom: 8 }}>{header}</div>
+      <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 1.9, marginBottom: 10 }}>{summary}</div>
+      <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 14 }}>
+        {t('totalVolatility')}: Σ|Δ| = {pct(m.totalVolatility)}
+        {m.biggestWinner.team && <> · 🔼 {m.biggestWinner.team} {signPct(m.biggestWinner.delta)}</>}
+        {m.biggestLoser.team && <> · 🔽 {m.biggestLoser.team} {signPct(m.biggestLoser.delta)}</>}
+      </div>
+
+      {significant.map(r => (
+        <TeamDeltaRow key={r.team} row={r} maxAbs={maxAbs} narrative={impactNarrative(t, r.team, r.delta, { group: m.group, winner: m.biggestWinner.team })} />
+      ))}
+
+      {negligible.length > 0 && (
+        <>
+          <button
+            onClick={() => setShowNeg(s => !s)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 8, color: 'var(--color-b)', padding: '8px 0 4px' }}
+          >
+            {showNeg ? t('hideMore') : t('showMore', { n: negligible.length })}
+          </button>
+          {showNeg && negligible.map(r => (
+            <TeamDeltaRow key={r.team} row={r} maxAbs={maxAbs} narrative={t('negligible')} />
+          ))}
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function MatchImpactView({ data }: { data: ImpactData }) {
   const t = useTranslations('impact')
 
@@ -131,6 +219,9 @@ export default function MatchImpactView({ data }: { data: ImpactData }) {
           {t('demoNote')}
         </div>
       )}
+
+      {/* Context-kaartje — meest recente wedstrijd */}
+      {feed[0] && <ContextCard m={feed[0]} />}
 
       {/* Most impactful badge */}
       {data.mostImpactful && (
