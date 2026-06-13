@@ -9,6 +9,7 @@ import { resultForPair } from '@/lib/todays-matches'
 import { ROUNDS } from '@/lib/fixtures'
 import FlagImg from '@/components/ui/FlagImg'
 import AltitudeBadge from '@/components/match/AltitudeBadge'
+import ProbabilityHistoryChart from './ProbabilityHistoryChart'
 
 const KO_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
 
@@ -90,6 +91,9 @@ export default function ScheduleTab({ teamName }: { teamName: string }) {
 
   return (
     <div>
+      {/* Kampioenskans-verloop — alleen voor teams met ≥2 snapshots */}
+      <ProbabilityHistoryChart teamName={teamName} />
+
       {/* Groepsfase */}
       <div className="section-title" style={{ marginBottom: 8 }}>{t('schedule.group')}</div>
       {groupMatches.map(m => <GroupMatchCard key={m.matchId} teamName={teamName} match={m} />)}

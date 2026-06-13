@@ -220,6 +220,11 @@
     "schedule": {
       "group": "Groepsfase", "knockout": "Knockoutfase",
       "predicted": "Klement's voorspelling", "eliminated": "Uitgeschakeld"
+    },
+    "probHistory": {
+      "title": "Kampioenskans-verloop",
+      "start": "Start",
+      "tooltip": "Na {match}: kans {dir, select, up {steeg} down {daalde} other {bleef gelijk}} van {from}% → {to}%"
     }
   },
   "about": {

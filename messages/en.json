@@ -220,6 +220,11 @@
     "schedule": {
       "group": "Group stage", "knockout": "Knockout stage",
       "predicted": "Klement's prediction", "eliminated": "Eliminated"
+    },
+    "probHistory": {
+      "title": "Title-chance trend",
+      "start": "Start",
+      "tooltip": "After {match}: chance {dir, select, up {rose} down {fell} other {held}} from {from}% → {to}%"
     }
   },
   "about": {
