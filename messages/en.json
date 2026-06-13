@@ -146,7 +146,9 @@
     "scoreDist": "Score probabilities",
     "scoreDistNote": "Poisson model",
     "showScores": "Show scores ▼",
-    "hideScores": "Hide ▲"
+    "hideScores": "Hide ▲",
+    "showFactors": "Show factor breakdown ▼",
+    "hideFactors": "Hide factor breakdown ▲"
   },
   "teams": {
     "tabProfile": "TEAM PROFILE",

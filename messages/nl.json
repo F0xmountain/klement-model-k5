@@ -146,7 +146,9 @@
     "scoreDist": "Scorekansen",
     "scoreDistNote": "Poisson-model",
     "showScores": "Toon scores ▼",
-    "hideScores": "Verberg ▲"
+    "hideScores": "Verberg ▲",
+    "showFactors": "Toon factoranalyse ▼",
+    "hideFactors": "Verberg factoranalyse ▲"
   },
   "teams": {
     "tabProfile": "TEAMPROFIEL",

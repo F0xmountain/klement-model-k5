@@ -68,6 +68,15 @@ function expectedGoals(p: number): string {
   return expectedGoalsNum(p).toFixed(1)
 }
 
+// Betrouwbaarheidsinterval alleen tonen als het >= 2%-punt breed is — smaller dan
+// dat is er te weinig variatie om zinvol te tonen. Geeft de afgeronde grenzen of null.
+function ciBounds(b: { low95: number; high95: number } | undefined): { low: number; high: number } | null {
+  if (!b) return null
+  const low = Math.round(b.low95 * 100)
+  const high = Math.round(b.high95 * 100)
+  return high - low < 2 ? null : { low, high }
+}
+
 function upsetLabel(pA: number, pB: number): { key: 'coinFlip' | 'heavyFavourite' | 'upsetPotential'; color: string } | null {
   const gap = Math.abs(pA - pB)
   if (gap < 0.1) return { key: 'coinFlip', color: 'var(--color-muted)' }
@@ -104,6 +113,7 @@ export default function VersusPage() {
   const [h2hCache, setH2hCache] = useState<Record<string, H2HResult>>({})
   const [h2hOpen, setH2hOpen] = useState(false)
   const [scoresOpen, setScoresOpen] = useState(false)
+  const [factorsOpen, setFactorsOpen] = useState(false)
   const [ciCache, setCiCache] = useState<Record<string, ConfidenceInterval>>({})
 
   // URL-params (?a=&b=&venue=) eenmalig inlezen — teams case-insensitief gematcht
@@ -186,6 +196,8 @@ export default function VersusPage() {
   const upset = upsetLabel(pA, pB)
   const summaryA = getStarPlayerSummary(toTeamNl(teamA) ?? '')
   const summaryB = getStarPlayerSummary(toTeamNl(teamB) ?? '')
+  const ciWin = ci ? ciBounds(ci.win) : null
+  const ciLoss = ci ? ciBounds(ci.loss) : null
 
   // Reset sim results when teams change
   const key = `${teamA}:${teamB}`
@@ -255,90 +267,91 @@ export default function VersusPage() {
           ))}
         </select>
 
+        {/* 2 — WDL-balk (prominent) */}
         <WDLBar pA={pA} dr={dr} pB={pB} labelA={teamA} labelB={teamB} />
 
-        {/* Win-kans met betrouwbaarheidsinterval (client-side berekend) */}
-        <div style={{ marginTop: 8, display: 'flex', justifyContent: 'center', gap: 18, fontSize: 9, flexWrap: 'wrap' }}>
-          <span style={{ color: 'var(--color-r)' }}>
-            {teamA} {Math.round(pA * 100)}%{' '}
-            <span style={{ color: 'var(--color-muted)' }}>
-              {ci ? t('confidenceInterval', { low: Math.round(ci.win.low95 * 100), high: Math.round(ci.win.high95 * 100) }) : '…'}
-            </span>
+        {/* 3 — Kansen met betrouwbaarheidsinterval (één regel) */}
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 10, fontSize: 11, flexWrap: 'wrap' }}>
+          <span style={{ color: 'var(--color-r)', fontWeight: 'bold' }}>
+            {teamA} {Math.round(pA * 100)}%
+            {ciWin && <span style={{ color: 'var(--color-muted)', fontWeight: 'normal', marginLeft: 4, fontSize: 9 }}>{t('confidenceInterval', ciWin)}</span>}
           </span>
-          <span style={{ color: 'var(--color-b)' }}>
-            {teamB} {Math.round(pB * 100)}%{' '}
-            <span style={{ color: 'var(--color-muted)' }}>
-              {ci ? t('confidenceInterval', { low: Math.round(ci.loss.low95 * 100), high: Math.round(ci.loss.high95 * 100) }) : '…'}
-            </span>
+          <span style={{ color: 'var(--color-muted)' }}>·</span>
+          <span style={{ color: 'var(--color-muted)' }}>{tc('draw')} {Math.round(dr * 100)}%</span>
+          <span style={{ color: 'var(--color-muted)' }}>·</span>
+          <span style={{ color: 'var(--color-b)', fontWeight: 'bold' }}>
+            {teamB} {Math.round(pB * 100)}%
+            {ciLoss && <span style={{ color: 'var(--color-muted)', fontWeight: 'normal', marginLeft: 4, fontSize: 9 }}>{t('confidenceInterval', ciLoss)}</span>}
           </span>
         </div>
 
-        <div style={{ marginTop: 10, textAlign: 'center' }}>
-          <div style={{ fontSize: 11, color: 'var(--color-muted)' }}>
+        {/* 4 — Verwachte score (klein, muted) */}
+        <div style={{ marginTop: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 10, color: 'var(--color-muted)' }}>
             {t('expectedScore', { a: expectedGoals(pA), b: expectedGoals(pB) })}
           </div>
-          <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 4 }}>
+          <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 3 }}>
             {t('expectedScoreNote')}
           </div>
-          {polyAvailable && modelOnly && marketPA !== null && (
-            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 6 }}>
-              {t('polyBreakdown', {
-                model: Math.round(modelOnly.pA * 100),
-                market: Math.round(marketPA * 100),
-                combined: Math.round(pA * 100),
-              })}
-            </div>
-          )}
         </div>
 
-        {/* Scorekansen — Poisson-verdeling (afgeleide weergave, inklapbaar) */}
-        <div style={{ marginTop: 10, textAlign: 'center' }}>
-          <button
-            onClick={() => setScoresOpen(o => !o)}
-            style={{ padding: '4px 12px', fontSize: 8, color: 'var(--color-muted)', border: '1px solid var(--color-brd)', backgroundColor: 'transparent', fontFamily: 'inherit', cursor: 'pointer' }}
-          >
-            {scoresOpen ? t('hideScores') : t('showScores')}
-          </button>
-          {scoresOpen && (
-            <div style={{ marginTop: 10, border: '1px solid var(--color-brd)', padding: 12 }}>
-              <div style={{ fontSize: 9, color: 'var(--color-txt)', marginBottom: 10 }}>{t('scoreDist')}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px', maxWidth: 280, margin: '0 auto' }}>
-                {scoreDist.scores.slice(0, 8).map(s => (
-                  <div key={`${s.a}-${s.b}`} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'var(--color-muted)' }}>
-                    <span style={{ color: 'var(--color-txt)' }}>{s.a}-{s.b}</span>
-                    <span>{Math.round(s.prob * 100)}%</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ fontSize: 7, color: 'var(--color-muted)', marginTop: 10 }}>{t('scoreDistNote')}</div>
-            </div>
-          )}
-        </div>
+        {/* 5 — Polymarket breakdown (alleen als marktdata beschikbaar) */}
+        {polyAvailable && modelOnly && marketPA !== null && (
+          <div style={{ marginTop: 8, textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
+            {t('polyBreakdown', {
+              model: Math.round(modelOnly.pA * 100),
+              market: Math.round(marketPA * 100),
+              combined: Math.round(pA * 100),
+            })}
+          </div>
+        )}
 
-        <div style={{ marginTop: 8, fontSize: 8, color: 'var(--color-muted)' }}>
+        {/* 6 — Teamsterkte-split (klein) */}
+        <div style={{ marginTop: 8, textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
           {t('teamStrengthSplit', { elo: ELO_WEIGHT * 100, fifa: FIFA_WEIGHT * 100 })}
         </div>
 
-        {[teamA, teamB].map(name => {
-          const score = formCache[name]?.formScore
-          if (score == null) return null
-          const level = formLevel(score)
-          return (
-            <div key={name} style={{ marginTop: 4, fontSize: 8, color: 'var(--color-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span className={`form-dot form-dot-${FORM_LEVEL_DOT[level]}`} />
-              {t('formIndicator', { team: name, level: t(FORM_LEVEL_KEY[level]), score })}
-            </div>
-          )
-        })}
-
-        {restWarnings.map(({ team, days }) => (
-          <div key={team} style={{ marginTop: 4, fontSize: 8, color: 'var(--color-r)', display: 'flex', alignItems: 'center', gap: 6 }}>
-            ⚠️ {t('restWarning', { team, days })}
+        {/* 7 — Factor breakdown per team (uitklapbaar, dicht by default) */}
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
+          <button
+            onClick={() => setFactorsOpen(o => !o)}
+            style={{ padding: '5px 12px', fontSize: 8, color: 'var(--color-muted)', border: '1px solid var(--color-brd)', backgroundColor: 'transparent', fontFamily: 'inherit', cursor: 'pointer' }}
+          >
+            {factorsOpen ? t('hideFactors') : t('showFactors')}
+          </button>
+        </div>
+        {factorsOpen && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 16 }}>
+            {[
+              { team: tA, name: teamA, accentColor: 'var(--color-r)' },
+              { team: tB, name: teamB, accentColor: 'var(--color-b)' },
+            ].map(({ team, name, accentColor }) => (
+              <div key={name} className="factor-card" style={{ borderLeft: `4px solid ${accentColor}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: accentColor, marginBottom: 16 }}>
+                  <FlagImg name={name} h={20} emoji={team?.flag ?? '🏳️'} />
+                  {name.toUpperCase()}
+                </div>
+                {[
+                  { label: 'FIFA', val: `${team?.fifa} PTS` },
+                  { label: 'GDP',  val: `$${team?.gdp}K` },
+                  { label: 'CONF', val: team?.conf ?? '' },
+                ].map(({ label, val }) => (
+                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <span style={{ fontSize: 9, color: 'var(--color-muted)' }}>{label}</span>
+                    <span style={{ fontSize: 9, color: 'var(--color-g)', backgroundColor: 'var(--color-g-bg)', padding: '3px 6px', border: '1px solid var(--color-g-sh)' }}>{val}</span>
+                  </div>
+                ))}
+                <div style={{ marginTop: 16 }}>
+                  <FactorBreakdown name={name} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
 
+        {/* 8 — Sterspeler-samenvatting (alleen bij twijfelachtig/out) */}
         {(summaryA.length > 0 || summaryB.length > 0) && (
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 6 }}>
             {[
               { team: teamA, flag: tA?.flag, summary: summaryA },
               { team: teamB, flag: tB?.flag, summary: summaryB },
@@ -359,16 +372,29 @@ export default function VersusPage() {
           </div>
         )}
 
-        {Math.abs(pA - pB) >= PM_GAP_THRESHOLD && (
-          <PolymarketBtn
-            teamName={pA > pB ? teamA : teamB}
-            variant="match"
-          />
-        )}
+        {/* 9 — Rustdagen-waarschuwing (alleen als relevant) */}
+        {restWarnings.map(({ team, days }) => (
+          <div key={team} style={{ marginTop: 6, fontSize: 8, color: 'var(--color-r)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            ⚠️ {t('restWarning', { team, days })}
+          </div>
+        ))}
 
-        {/* Upset badge — click to run quick simulation */}
+        {/* 10 — Vormindicator (alleen als vormdata beschikbaar) */}
+        {[teamA, teamB].map(name => {
+          const score = formCache[name]?.formScore
+          if (score == null) return null
+          const level = formLevel(score)
+          return (
+            <div key={name} style={{ marginTop: 6, fontSize: 8, color: 'var(--color-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span className={`form-dot form-dot-${FORM_LEVEL_DOT[level]}`} />
+              {t('formIndicator', { team: name, level: t(FORM_LEVEL_KEY[level]), score })}
+            </div>
+          )
+        })}
+
+        {/* Verrassings-badge met snelle simulatie (interactief) */}
         {upset && (
-          <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <button
               onClick={runSim}
               style={{
@@ -401,7 +427,31 @@ export default function VersusPage() {
           </div>
         )}
 
-        {/* H2H — onderlinge ontmoetingen (inklapbaar, alleen bij ≥1 wedstrijd) */}
+        {/* 11 — Scorekansverdeling — Poisson (uitklapbaar, dicht by default) */}
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
+          <button
+            onClick={() => setScoresOpen(o => !o)}
+            style={{ padding: '4px 12px', fontSize: 8, color: 'var(--color-muted)', border: '1px solid var(--color-brd)', backgroundColor: 'transparent', fontFamily: 'inherit', cursor: 'pointer' }}
+          >
+            {scoresOpen ? t('hideScores') : t('showScores')}
+          </button>
+          {scoresOpen && (
+            <div style={{ marginTop: 10, border: '1px solid var(--color-brd)', padding: 12 }}>
+              <div style={{ fontSize: 9, color: 'var(--color-txt)', marginBottom: 10 }}>{t('scoreDist')}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 24px', maxWidth: 280, margin: '0 auto' }}>
+                {scoreDist.scores.slice(0, 8).map(s => (
+                  <div key={`${s.a}-${s.b}`} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'var(--color-muted)' }}>
+                    <span style={{ color: 'var(--color-txt)' }}>{s.a}-{s.b}</span>
+                    <span>{Math.round(s.prob * 100)}%</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 7, color: 'var(--color-muted)', marginTop: 10 }}>{t('scoreDistNote')}</div>
+            </div>
+          )}
+        </div>
+
+        {/* 12 — H2H-historie (uitklapbaar, dicht by default, alleen bij ≥1 wedstrijd) */}
         {h2h && h2h.matches.length >= 1 && (
           <div style={{ marginTop: 16 }}>
             <button
@@ -432,32 +482,13 @@ export default function VersusPage() {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 28 }}>
-          {[
-            { team: tA, name: teamA, accentColor: 'var(--color-r)' },
-            { team: tB, name: teamB, accentColor: 'var(--color-b)' },
-          ].map(({ team, name, accentColor }) => (
-            <div key={name} className="factor-card" style={{ borderLeft: `4px solid ${accentColor}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: accentColor, marginBottom: 16 }}>
-                <FlagImg name={name} h={20} emoji={team?.flag ?? '🏳️'} />
-                {name.toUpperCase()}
-              </div>
-              {[
-                { label: 'FIFA', val: `${team?.fifa} PTS` },
-                { label: 'GDP',  val: `$${team?.gdp}K` },
-                { label: 'CONF', val: team?.conf ?? '' },
-              ].map(({ label, val }) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ fontSize: 9, color: 'var(--color-muted)' }}>{label}</span>
-                  <span style={{ fontSize: 9, color: 'var(--color-g)', backgroundColor: 'var(--color-g-bg)', padding: '3px 6px', border: '1px solid var(--color-g-sh)' }}>{val}</span>
-                </div>
-              ))}
-              <div style={{ marginTop: 16 }}>
-                <FactorBreakdown name={name} />
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* 13 — Trade on Polymarket */}
+        {Math.abs(pA - pB) >= PM_GAP_THRESHOLD && (
+          <PolymarketBtn
+            teamName={pA > pB ? teamA : teamB}
+            variant="match"
+          />
+        )}
 
       </div>
     </div>
