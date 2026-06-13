@@ -7,7 +7,7 @@ import { simulateTournament, type SimResult, type SlotTeam, type BracketMatch } 
 import Btn from '@/components/ui/Btn'
 import FlagImg from '@/components/ui/FlagImg'
 
-const SIM_N = 2000
+const SIM_N = 10000
 
 // Kleurintensiteit op zekerheid: hogere kans = donkerder/voller blauw.
 function slotBg(prob: number): string {

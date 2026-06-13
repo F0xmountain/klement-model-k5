@@ -7,7 +7,7 @@ import { simulateTournament, type SimResult } from '@/lib/simulate-tournament'
 import Btn from '@/components/ui/Btn'
 import FlagImg from '@/components/ui/FlagImg'
 
-const SIM_N = 2000
+const SIM_N = 10000
 
 const COLS: { key: keyof Pick<SimResult, 'reachR32' | 'reachR16' | 'reachQF' | 'reachSF' | 'reachFinal' | 'champion'>; label: string; color: string }[] = [
   { key: 'reachR32', label: 'mcColR32', color: 'var(--color-muted)' },

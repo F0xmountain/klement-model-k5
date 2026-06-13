@@ -30,17 +30,50 @@ function groupVenue(groupIndex: number): Venue {
   return { altitude: s.altitude_m, lat: s.coordinates.lat, lon: s.coordinates.lon }
 }
 
-// Eén groepswedstrijd → W/D/L volgens matchP (met venue). eloOverride zet de
-// Elo-stand (voor de kampioenskans-tijdlijn met historische standen).
-function playMatch(a: string, b: string, venue: Venue, eloOverride?: EloMap): 'A' | 'D' | 'B' {
-  const { pA, dr } = matchP(a, b, venue, undefined, undefined, eloOverride)
-  const r = Math.random()
-  if (r < pA) return 'A'
-  if (r < pA + dr) return 'D'
-  return 'B'
+// Verwachte goals per team uit de winkans — dezelfde formule als /versus en
+// GroupMatchRow (lib/score-distribution.ts). Het Klement-model blijft W/D/L-only:
+// een uitslag is een afgeleide illustratie, puur om een doelsaldo te genereren
+// voor de officiële FIFA-groepstiebreakers (doelsaldo, dan gescoorde doelpunten).
+const BASE_SCORING_RATE = 1.35
+function expectedGoals(p: number): number {
+  return BASE_SCORING_RATE * (0.5 + (p - 0.5) * 0.8)
 }
 
-// Knockout-winnaar: gelijkspelkans weggenormaliseerd zodat er altijd één doorgaat
+// Knuth's algoritme voor een Poisson-trekking.
+function samplePoisson(lambda: number): number {
+  const L = Math.exp(-lambda)
+  let k = 0
+  let p = 1
+  do {
+    k++
+    p *= Math.random()
+  } while (p > L)
+  return k - 1
+}
+
+// Trekt een uitslag (goals home, goals away) die consistent is met het reeds
+// getrokken W/D/L-resultaat, zodat de matchP-marginalen exact bewaard blijven en
+// het doelsaldo alleen als tiebreaker dient. Begrensde rejection-sampling met een
+// minimale fallback-uitslag.
+function sampleScore(pA: number, pB: number, result: 'A' | 'D' | 'B'): [number, number] {
+  const lambdaA = expectedGoals(pA)
+  const lambdaB = expectedGoals(pB)
+  for (let tries = 0; tries < 20; tries++) {
+    const ga = samplePoisson(lambdaA)
+    const gb = samplePoisson(lambdaB)
+    if (result === 'A' && ga > gb) return [ga, gb]
+    if (result === 'B' && ga < gb) return [ga, gb]
+    if (result === 'D' && ga === gb) return [ga, gb]
+  }
+  if (result === 'A') return [1, 0]
+  if (result === 'B') return [0, 1]
+  return [1, 1]
+}
+
+// Knockout-winnaar: bij gelijkspel (verlenging + strafschoppen) wordt de
+// gelijkspelkans proportioneel naar beide teams herverdeeld op basis van hun
+// relatieve winkans — P(A gaat door) = pA / (pA + pB). Een sterker team wint dus
+// vaker de tiebreak dan een 50/50-flip zou geven.
 function koWinner(a: string, b: string, eloOverride?: EloMap): string {
   const { pA, pB } = matchP(a, b, undefined, undefined, undefined, eloOverride)
   return Math.random() < pA / (pA + pB) ? a : b
@@ -50,27 +83,44 @@ interface GroupStanding {
   team: string
   pts: number
   w: number
+  gf: number // gescoorde doelpunten
+  ga: number // tegendoelpunten
 }
 
-// Simuleert een groep (round-robin, 6 wedstrijden) → standen gesorteerd op punten,
-// dan overwinningen, dan modelsterkte (sc) als deterministische tiebreak (het model
-// is W/D/L-only, dus geen doelsaldo beschikbaar).
+// Simuleert een groep (round-robin, 6 wedstrijden) → standen gesorteerd volgens de
+// FIFA-tiebreakervolgorde: punten, dan doelsaldo, dan gescoorde doelpunten, met
+// modelsterkte (sc) als laatste deterministische fallback (vervangt onderlinge
+// resultaten/loting). W/D/L komt uit matchP (model blijft W/D/L-only); het
+// doelsaldo is een afgeleide Poisson-illustratie consistent met die uitslag.
 function simGroup(teams: string[], venue: Venue, eloOverride?: EloMap): GroupStanding[] {
   const table: Record<string, GroupStanding> = {}
-  for (const t of teams) table[t] = { team: t, pts: 0, w: 0 }
+  for (const t of teams) table[t] = { team: t, pts: 0, w: 0, gf: 0, ga: 0 }
 
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
-      const r = playMatch(teams[i], teams[j], venue, eloOverride)
+      const { pA, dr, pB } = matchP(teams[i], teams[j], venue, undefined, undefined, eloOverride)
+      const rnd = Math.random()
+      const r: 'A' | 'D' | 'B' = rnd < pA ? 'A' : rnd < pA + dr ? 'D' : 'B'
+      const [gi, gj] = sampleScore(pA, pB, r)
+      table[teams[i]].gf += gi; table[teams[i]].ga += gj
+      table[teams[j]].gf += gj; table[teams[j]].ga += gi
       if (r === 'A') { table[teams[i]].pts += 3; table[teams[i]].w++ }
       else if (r === 'B') { table[teams[j]].pts += 3; table[teams[j]].w++ }
       else { table[teams[i]].pts += 1; table[teams[j]].pts += 1 }
     }
   }
 
-  return Object.values(table).sort((a, b) =>
-    b.pts !== a.pts ? b.pts - a.pts : b.w !== a.w ? b.w - a.w : sc(b.team) - sc(a.team)
-  )
+  return Object.values(table).sort(cmpStanding)
+}
+
+// FIFA-tiebreakervolgorde: punten → doelsaldo → gescoorde doelpunten → modelsterkte.
+function cmpStanding(a: GroupStanding, b: GroupStanding): number {
+  if (b.pts !== a.pts) return b.pts - a.pts
+  const gdA = a.gf - a.ga
+  const gdB = b.gf - b.ga
+  if (gdB !== gdA) return gdB - gdA
+  if (b.gf !== a.gf) return b.gf - a.gf
+  return sc(b.team) - sc(a.team)
 }
 
 // R32-bracket-template: 16 wedstrijden over 12 groepswinnaars (W), 12 nummers-twee
@@ -218,10 +268,9 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
       inc(groupWinner, st[0].team)
     })
 
-    // 8 beste nummers-drie: op punten, dan overwinningen, dan modelsterkte
-    thirdsRaw.sort((a, b) =>
-      b.pts !== a.pts ? b.pts - a.pts : b.w !== a.w ? b.w - a.w : sc(b.team) - sc(a.team)
-    )
+    // 8 beste nummers-drie: zelfde FIFA-tiebreakervolgorde als de groepsstand
+    // (punten → doelsaldo → gescoorde doelpunten → modelsterkte)
+    thirdsRaw.sort(cmpStanding)
     const thirds = thirdsRaw.slice(0, 8).map(t => t.team)
 
     // R32 vullen via de seeding-template
