@@ -4,6 +4,7 @@ import { teamData } from '@/lib/klement'
 import { matchP } from '@/lib/klement-custom'
 import { topScores } from '@/lib/score-distribution'
 import { teamGroupMatches, canonTeam, type ScheduledMatch } from '@/lib/wc26-schedule'
+import { restDaysBefore } from '@/lib/rest-days'
 import { localKickoff } from '@/lib/venue-timezones'
 import { resultForPair } from '@/lib/todays-matches'
 import { ROUNDS } from '@/lib/fixtures'
@@ -26,6 +27,24 @@ function TopScoresLine({ pWin, pLoss }: { pWin: number; pLoss: number }) {
   )
 }
 
+// Rustdagen-indicator: <3 dagen = ⚠️ geel · 3–5 = grijs · >5 = ✅ groen.
+// Toont niets bij de eerste wedstrijd van het team (geen vorige wedstrijd).
+function RestIndicator({ teamName, matchId }: { teamName: string; matchId: string }) {
+  const tm = useTranslations('match')
+  const days = restDaysBefore(teamName, matchId)
+  if (days === null) return null
+  const { icon, color } = days < 3
+    ? { icon: '⚠️', color: 'var(--color-o)' }
+    : days <= 5
+      ? { icon: '', color: 'var(--color-muted)' }
+      : { icon: '✅', color: 'var(--color-g)' }
+  return (
+    <span style={{ fontSize: 8, color, whiteSpace: 'nowrap' }}>
+      {icon && `${icon} `}{tm('restDays', { days })}
+    </span>
+  )
+}
+
 function GroupMatchCard({ teamName, match }: { teamName: string; match: ScheduledMatch }) {
   const locale = useLocale()
   const tm = useTranslations('match')
@@ -41,7 +60,10 @@ function GroupMatchCard({ teamName, match }: { teamName: string; match: Schedule
 
   return (
     <div className="factor-card" style={{ padding: 12, borderLeft: `3px solid ${borderColor}`, marginBottom: 10 }}>
-      <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>📅 {date} · {time} {tm('localTime')}</div>
+      <div style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+        <span>📅 {date} · {time} {tm('localTime')}</span>
+        <RestIndicator teamName={teamName} matchId={match.matchId} />
+      </div>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 8 }}>
         🏟 {match.venue} · {match.city}<AltitudeBadge altitudeM={match.altitudeM} style={{ marginLeft: 6 }} />
       </div>

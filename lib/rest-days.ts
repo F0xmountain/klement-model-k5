@@ -1,4 +1,5 @@
 import resultsRaw from './results.json'
+import { SCHEDULE, canonTeam } from './wc26-schedule'
 
 // Rustdagen per team, afgeleid uit lib/results.json. Elke opgeslagen uitslag krijgt
 // een playedAt-datum (zie app/api/admin/results/route.ts); rustdagen = aantal dagen
@@ -43,4 +44,29 @@ export function getRestDays(team: string, asOf: number = Date.now()): number | u
 // Tijdstip van de meest recente uitslag-invoer (results.json meta), of null.
 export function getResultsLastUpdated(): string | null {
   return (resultsRaw as ResultsFile).meta?.lastUpdated ?? null
+}
+
+// Rustdagen vóór een specifieke wedstrijd, op basis van het officiële
+// lib/wc26-schedule.json (UTC-aftraptijden). Zoekt de vorige wedstrijd van het
+// team (teams.json-naam) chronologisch vóór `matchId` en geeft het verschil in
+// hele dagen. null als dit de eerste wedstrijd van het team is of matchId niet
+// bestaat. Werkt alleen voor wedstrijden met bekende teams (groepsfase).
+export function restDaysBefore(teamName: string, matchId: string): number | null {
+  const target = SCHEDULE.find(m => m.matchId === matchId)
+  if (!target) return null
+  const targetTime = Date.parse(target.dateUtc)
+  if (Number.isNaN(targetTime)) return null
+
+  const isTeam = (m: typeof target) =>
+    canonTeam(m.homeTeam) === teamName || canonTeam(m.awayTeam) === teamName
+
+  let prevTime: number | undefined
+  for (const m of SCHEDULE) {
+    if (m.matchId === matchId || !isTeam(m)) continue
+    const ts = Date.parse(m.dateUtc)
+    if (Number.isNaN(ts) || ts >= targetTime) continue
+    if (prevTime === undefined || ts > prevTime) prevTime = ts
+  }
+  if (prevTime === undefined) return null
+  return Math.floor((targetTime - prevTime) / DAY_MS)
 }
