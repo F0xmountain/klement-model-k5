@@ -11,6 +11,17 @@ const COLORS = ['var(--color-b)', 'var(--color-r)', 'var(--color-g)', 'var(--col
 const signPct = (d: number) => `${d >= 0 ? '+' : ''}${(d * 100).toFixed(1)}%`
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`
 
+// Top-N teams op kampioenskans (na de wedstrijd) die nog actief zijn — een kans
+// van 0 betekent uitgeschakeld (geen pad meer naar de titel). Zijn er minder dan
+// N actief, dan worden ze allemaal getoond.
+function topActiveTeams(after: Record<string, number>, n = 10): string[] {
+  return Object.entries(after)
+    .filter(([, p]) => p > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([team]) => team)
+}
+
 function ImpactCard({ m, highlight, badge }: { m: MatchImpact; highlight?: boolean; badge?: string }) {
   const t = useTranslations('impact')
   return (
@@ -55,7 +66,7 @@ function ImpactCard({ m, highlight, badge }: { m: MatchImpact; highlight?: boole
           {t('before')} → {t('after')}
         </summary>
         <div style={{ marginTop: 6, display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '2px 10px', fontSize: 8 }}>
-          {Object.keys(m.snapshots.after).map(team => (
+          {topActiveTeams(m.snapshots.after).map(team => (
             <BeforeAfterRow key={team} team={team} before={m.snapshots.before[team] ?? 0} after={m.snapshots.after[team] ?? 0} />
           ))}
         </div>

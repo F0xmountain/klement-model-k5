@@ -1,12 +1,13 @@
 import snapshotsRaw from './probability-snapshots.json'
 import resultsRaw from './results.json'
 import scheduleRaw from './schedule.json'
-import { simulateTournament } from './simulate-tournament'
 
 // Wedstrijd-impact: hoeveel verschoof elke gespeelde wedstrijd de kampioenskansen?
-// Bouwt voort op de gepubliceerde kansen-momentopnamen (probability-snapshots.json,
-// één per gespeelde wedstrijd) en koppelt ze aan results.json (volledige namen +
-// uitslag) en schedule.json (venue + groep, voor de "Predict this match"-link).
+// Bouwt voort op de gepubliceerde kansen-momentopnamen (probability-snapshots.json:
+// een pre-toernooi-baseline gevolgd door één snapshot per gespeelde wedstrijd, met
+// common random numbers gegenereerd zodat de verschillen alleen de echte impact
+// tonen) en koppelt ze aan results.json (volledige namen + uitslag) en schedule.json
+// (venue + groep, voor de "Predict this match"-link).
 //
 // Zonder gespeelde wedstrijden valt de tracker terug op een demo-dataset, zodat
 // de UI-structuur al zichtbaar is vóór het toernooi.
@@ -78,16 +79,7 @@ export interface ImpactData {
   isDemo: boolean
 }
 
-const BASELINE_N = 500
-const TOP_SNAPSHOT = 8
 const TOP_LINES = 6
-
-// Top-8 teams op kampioenskans (voor de before/after-momentopname per kaart).
-function topN(probs: Record<string, number>, n: number): Record<string, number> {
-  return Object.fromEntries(
-    Object.entries(probs).sort((a, b) => b[1] - a[1]).slice(0, n)
-  )
-}
 
 function buildImpact(
   before: Record<string, number>,
@@ -118,26 +110,17 @@ function buildImpact(
     biggestWinner,
     biggestLoser,
     totalVolatility,
-    snapshots: { before: topN(before, TOP_SNAPSHOT), after: topN(after, TOP_SNAPSHOT) },
+    // Volledige before/after-maps; de UI kiest hieruit de top-10 actieve teams.
+    snapshots: { before: { ...before }, after: { ...after } },
   }
 }
 
-// Kampioenskansen vóór de eerste wedstrijd (toernooi-baseline), beperkt tot de
-// teams die we in de tijdlijn volgen. Eén simulatie — niet per wedstrijd.
-function baselineProbs(topTeams: string[]): Record<string, number> {
-  const sim = simulateTournament(BASELINE_N)
-  const out: Record<string, number> = {}
-  for (const t of topTeams) out[t] = (sim.champion[t] ?? 0) / sim.n
-  return out
-}
-
 function realImpactData(): ImpactData {
-  const topTeams = Object.keys(snapshots[snapshots.length - 1]!.snapshots)
-  const baseline = baselineProbs(topTeams)
-  const series = [baseline, ...snapshots.map(s => s.snapshots)]
-
-  const impacts = snapshots.map((snap, i) =>
-    buildImpact(series[i]!, series[i + 1]!, snap, results[i])
+  // snapshots[0] = pre-toernooi-baseline; snapshots[1..] = na elke gespeelde
+  // wedstrijd. results[i] hoort bij snapshots[i+1].
+  const played = snapshots.slice(1)
+  const impacts = played.map((snap, i) =>
+    buildImpact(snapshots[i]!.snapshots, snapshots[i + 1]!.snapshots, snap, results[i])
   )
 
   const mostImpactful = impacts.reduce<MatchImpact | null>(
@@ -150,7 +133,7 @@ function realImpactData(): ImpactData {
     .slice(0, TOP_LINES)
     .map(([t]) => t)
 
-  const timeline: TimelinePoint[] = snapshots.map(s => ({
+  const timeline: TimelinePoint[] = played.map(s => ({
     label: s.matchLabel,
     teams: Object.fromEntries(lineTeams.map(t => [t, s.snapshots[t] ?? 0])),
   }))
@@ -213,7 +196,7 @@ function demoImpactData(): ImpactData {
       biggestWinner,
       biggestLoser,
       totalVolatility,
-      snapshots: { before: topN(before, TOP_SNAPSHOT), after: topN(after, TOP_SNAPSHOT) },
+      snapshots: { before: { ...before }, after: { ...after } },
     }
   })
 

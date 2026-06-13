@@ -39,14 +39,52 @@ function expectedGoals(p: number): number {
   return BASE_SCORING_RATE * (0.5 + (p - 0.5) * 0.8)
 }
 
+// ── Willekeurigheid ──────────────────────────────────────────────────────────
+// Een RngSource levert per "slot" (een stabiele sleutel zoals "g.0.1.2.s5") een
+// eigen random-stroom. Twee varianten:
+//  • Math.random — alle sloten delen de globale stroom (default, interactieve sims).
+//  • Seeded (mulberry32) — elk slot krijgt een onafhankelijke, reproduceerbare
+//    stroom op basis van (seed, slotsleutel). Dit geeft "common random numbers":
+//    twee tournooi-runs met dezelfde seed gebruiken per slot identieke trekkingen,
+//    zodat het verschil tussen de runs ALLEEN de veranderde input (bv. een Elo-
+//    update na een wedstrijd) weerspiegelt — niet de Monte-Carlo-ruis. Cruciaal
+//    voor de impact-tijdlijn: een wedstrijd in groep A laat een team in een andere
+//    groep dan ~0% bewegen i.p.v. een schijnbeweging door ruis.
+type RngSource = (slotKey: string) => () => number
+
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0
+  return () => {
+    a += 0x6d2b79f5
+    let t = a
+    t = Math.imul(t ^ (t >>> 15), t | 1)
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function hashStr(s: string): number {
+  let h = 2166136261 >>> 0 // FNV-1a
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+const mathRandomSource: RngSource = () => Math.random
+function seededSource(seed: number): RngSource {
+  return slotKey => mulberry32((Math.imul(seed, 2654435761) ^ hashStr(slotKey)) >>> 0)
+}
+
 // Knuth's algoritme voor een Poisson-trekking.
-function samplePoisson(lambda: number): number {
+function samplePoisson(lambda: number, rng: () => number): number {
   const L = Math.exp(-lambda)
   let k = 0
   let p = 1
   do {
     k++
-    p *= Math.random()
+    p *= rng()
   } while (p > L)
   return k - 1
 }
@@ -55,12 +93,12 @@ function samplePoisson(lambda: number): number {
 // getrokken W/D/L-resultaat, zodat de matchP-marginalen exact bewaard blijven en
 // het doelsaldo alleen als tiebreaker dient. Begrensde rejection-sampling met een
 // minimale fallback-uitslag.
-function sampleScore(pA: number, pB: number, result: 'A' | 'D' | 'B'): [number, number] {
+function sampleScore(pA: number, pB: number, result: 'A' | 'D' | 'B', rng: () => number): [number, number] {
   const lambdaA = expectedGoals(pA)
   const lambdaB = expectedGoals(pB)
   for (let tries = 0; tries < 20; tries++) {
-    const ga = samplePoisson(lambdaA)
-    const gb = samplePoisson(lambdaB)
+    const ga = samplePoisson(lambdaA, rng)
+    const gb = samplePoisson(lambdaB, rng)
     if (result === 'A' && ga > gb) return [ga, gb]
     if (result === 'B' && ga < gb) return [ga, gb]
     if (result === 'D' && ga === gb) return [ga, gb]
@@ -74,9 +112,9 @@ function sampleScore(pA: number, pB: number, result: 'A' | 'D' | 'B'): [number, 
 // gelijkspelkans proportioneel naar beide teams herverdeeld op basis van hun
 // relatieve winkans — P(A gaat door) = pA / (pA + pB). Een sterker team wint dus
 // vaker de tiebreak dan een 50/50-flip zou geven.
-function koWinner(a: string, b: string, eloOverride?: EloMap): string {
+function koWinner(a: string, b: string, rng: () => number, eloOverride?: EloMap): string {
   const { pA, pB } = matchP(a, b, undefined, undefined, undefined, eloOverride)
-  return Math.random() < pA / (pA + pB) ? a : b
+  return rng() < pA / (pA + pB) ? a : b
 }
 
 interface GroupStanding {
@@ -92,7 +130,14 @@ interface GroupStanding {
 // modelsterkte (sc) als laatste deterministische fallback (vervangt onderlinge
 // resultaten/loting). W/D/L komt uit matchP (model blijft W/D/L-only); het
 // doelsaldo is een afgeleide Poisson-illustratie consistent met die uitslag.
-function simGroup(teams: string[], venue: Venue, eloOverride?: EloMap): GroupStanding[] {
+function simGroup(
+  teams: string[],
+  venue: Venue,
+  src: RngSource,
+  groupIndex: number,
+  simIndex: number,
+  eloOverride?: EloMap,
+): GroupStanding[] {
   const table: Record<string, GroupStanding> = {}
   for (const t of teams) table[t] = { team: t, pts: 0, w: 0, gf: 0, ga: 0 }
 
@@ -101,9 +146,11 @@ function simGroup(teams: string[], venue: Venue, eloOverride?: EloMap): GroupSta
       const a = teams[i]!, b = teams[j]!
       const ta = table[a]!, tb = table[b]!
       const { pA, dr, pB } = matchP(a, b, venue, undefined, undefined, eloOverride)
-      const rnd = Math.random()
+      // Eigen random-stroom per wedstrijdslot (groep.i.j.sim) — zie RngSource.
+      const rng = src(`g.${groupIndex}.${i}.${j}.${simIndex}`)
+      const rnd = rng()
       const r: 'A' | 'D' | 'B' = rnd < pA ? 'A' : rnd < pA + dr ? 'D' : 'B'
-      const [gi, gj] = sampleScore(pA, pB, r)
+      const [gi, gj] = sampleScore(pA, pB, r, rng)
       ta.gf += gi; ta.ga += gj
       tb.gf += gj; tb.ga += gi
       if (r === 'A') { ta.pts += 3; ta.w++ }
@@ -251,7 +298,12 @@ function toMatches(counter: SlotCounter, n: number): BracketMatch[] {
   return out
 }
 
-export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
+// seed (optioneel): activeert per-slot "common random numbers" (zie RngSource).
+// Zonder seed gebruikt de simulatie Math.random — ongewijzigd gedrag voor de
+// interactieve sims (/mc, model, sim-bracket). De kansen-tijdlijn geeft WEL een
+// vaste seed mee zodat opeenvolgende snapshots vergelijkbaar zijn.
+export function simulateTournament(n = 10000, eloOverride?: EloMap, seed?: number): SimResult {
+  const src: RngSource = seed === undefined ? mathRandomSource : seededSource(seed)
   const groupWinner: Record<string, number> = {}
   const reachR32: Record<string, number> = {}
   const reachR16: Record<string, number> = {}
@@ -275,7 +327,7 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
     const thirdsRaw: GroupStanding[] = []
 
     GROUP_LETTERS.forEach((g, gi) => {
-      const st = simGroup(GROUPS[g]!, groupVenue(gi), eloOverride)
+      const st = simGroup(GROUPS[g]!, groupVenue(gi), src, gi, s, eloOverride)
       winners[gi] = st[0]!.team
       runners[gi] = st[1]!.team
       thirdsRaw.push(st[2]!)
@@ -294,11 +346,12 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
       inc(reachR32, r32[i]!)
     }
 
-    // Knockout: paarsgewijze winnaars per ronde
-    const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
+    // Knockout: paarsgewijze winnaars per ronde. roundKey + slotindex + sim geven
+    // elk KO-duel een eigen random-stroom (common random numbers over snapshots).
+    const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>, roundKey: string): string[] => {
       const next: string[] = []
       for (let i = 0; i < teams.length; i += 2) {
-        const wnr = koWinner(teams[i]!, teams[i + 1]!, eloOverride)
+        const wnr = koWinner(teams[i]!, teams[i + 1]!, src(`${roundKey}.${i}.${s}`), eloOverride)
         next.push(wnr)
         tally(counter, i / 2, wnr)
         inc(reach, wnr)
@@ -306,11 +359,11 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap): SimResult {
       return next
     }
 
-    const r16 = advance(r32, cR16, reachR16)    // 32 → 16
-    const qf = advance(r16, cQF, reachQF)       // 16 → 8
-    const sf = advance(qf, cSF, reachSF)        // 8 → 4
-    const fin = advance(sf, cFinal, reachFinal) // 4 → 2
-    const champ = koWinner(fin[0]!, fin[1]!, eloOverride)
+    const r16 = advance(r32, cR16, reachR16, 'r16')    // 32 → 16
+    const qf = advance(r16, cQF, reachQF, 'qf')        // 16 → 8
+    const sf = advance(qf, cSF, reachSF, 'sf')         // 8 → 4
+    const fin = advance(sf, cFinal, reachFinal, 'fin') // 4 → 2
+    const champ = koWinner(fin[0]!, fin[1]!, src(`champ.${s}`), eloOverride)
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }
@@ -366,7 +419,7 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
   const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
     const next: string[] = []
     for (let i = 0; i < teams.length; i += 2) {
-      const wnr = koWinner(teams[i]!, teams[i + 1]!, eloOverride)
+      const wnr = koWinner(teams[i]!, teams[i + 1]!, Math.random, eloOverride)
       next.push(wnr)
       tally(counter, i / 2, wnr)
       inc(reach, wnr)
@@ -379,7 +432,7 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
     const qf = advance(r16, cQF, reachQF)
     const sf = advance(qf, cSF, reachSF)
     const fin = advance(sf, cFinal, reachFinal)
-    const champ = koWinner(fin[0]!, fin[1]!, eloOverride)
+    const champ = koWinner(fin[0]!, fin[1]!, Math.random, eloOverride)
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }

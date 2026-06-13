@@ -11,7 +11,9 @@ interface Snapshot {
   snapshots: Record<string, number>
 }
 
-const snapshots = snapshotsRaw as Snapshot[]
+// De eerste snapshot is de pre-toernooi-baseline (lege matchLabel) — die hoort
+// niet in de "kans na elke gespeelde wedstrijd"-tijdlijn.
+const snapshots = (snapshotsRaw as Snapshot[]).filter(s => s.matchLabel !== '')
 const COLORS = ['var(--color-b)', 'var(--color-r)', 'var(--color-g)', 'var(--color-o)', '#7B4FA0', '#1A8A8A']
 const TOP_LINES = 6
 
