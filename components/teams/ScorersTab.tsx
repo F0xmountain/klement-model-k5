@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
-import { getSquadTeam, starRankOf, POSITION_ORDER, type Category } from '@/lib/squad-utils'
+import { getSquadTeam, starRankOf, type Category } from '@/lib/squad-utils'
 import { calcExpectedPoints, calcExpectedGoals } from '@/lib/fantasy-points'
 
 interface ScorerRow {
@@ -47,7 +47,8 @@ export default function ScorersTab({ teamName }: { teamName: string }) {
   }
 
   const shown = filter === 'all' ? rows : rows.filter(r => r.category === filter)
-  const filters: Filter[] = ['all', ...POSITION_ORDER]
+  // Aanvallend → verdedigend, conform de gevraagde tabvolgorde.
+  const filters: Filter[] = ['all', 'attacker', 'midfielder', 'defender', 'goalkeeper']
 
   return (
     <div>
