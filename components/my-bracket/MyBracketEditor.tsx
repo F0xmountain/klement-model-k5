@@ -1,6 +1,7 @@
 'use client'
 import { useTranslations } from 'next-intl'
 import { ROUND_ORDER, type ResolvedBracket, type Round } from '@/lib/my-picks'
+import { roundMatches } from '@/lib/wc26-schedule'
 import MatchPickRow from './MatchPickRow'
 
 type FullKey = 'r32Full' | 'r16Full' | 'qfFull' | 'sfFull' | 'finalFull'
@@ -34,16 +35,22 @@ export default function MyBracketEditor({ resolved, onPick, onCopy, copied }: Pr
         </button>
       </div>
 
-      {ROUND_ORDER.map(round => (
-        <div key={round} style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 9, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 10 }}>
-            {tr(`${round}Full` as FullKey)}
+      {ROUND_ORDER.map(round => {
+        // Venues per bracket-slot uit het FIFA-schema, positioneel gekoppeld
+        // (bracket-index i → i-de KO-wedstrijd van de ronde), net als de
+        // knockout-paginas. De tegenstanders zijn nog TBD; de venue ligt vast.
+        const sched = roundMatches(round)
+        return (
+          <div key={round} style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 9, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 10 }}>
+              {tr(`${round}Full` as FullKey)}
+            </div>
+            {resolved[round].map((m, i) => (
+              <MatchPickRow key={i} match={m} onPick={team => onPick(round, i, team)} sched={sched[i]} />
+            ))}
           </div>
-          {resolved[round].map((m, i) => (
-            <MatchPickRow key={i} match={m} onPick={team => onPick(round, i, team)} />
-          ))}
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

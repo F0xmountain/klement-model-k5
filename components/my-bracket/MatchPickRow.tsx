@@ -4,15 +4,19 @@ import { useTranslations } from 'next-intl'
 import { matchP, teamData } from '@/lib/klement'
 import FlagImg from '@/components/ui/FlagImg'
 import type { ResolvedMatch } from '@/lib/my-picks'
+import { venueAltitude, type ScheduledMatch } from '@/lib/wc26-schedule'
 
 interface Props {
   match: ResolvedMatch
   onPick?: (team: string) => void
+  sched?: ScheduledMatch // venue van het bracket-slot uit het FIFA-schema
 }
 
-export default function MatchPickRow({ match, onPick }: Props) {
+export default function MatchPickRow({ match, onPick, sched }: Props) {
   const tc = useTranslations('common')
   const tmb = useTranslations('myBracket')
+  const tm = useTranslations('match')
+  const alt = venueAltitude(sched?.venue)
   const { teamA, teamB, pick, klementPick, differs } = match
   const ready = teamA !== null && teamB !== null
   const hint = ready ? matchP(teamA, teamB) : null
@@ -79,6 +83,11 @@ export default function MatchPickRow({ match, onPick }: Props) {
         <div style={{ textAlign: 'center', fontSize: 9, color: 'var(--color-muted)' }}>{tmb('tbd')}</div>
       )}
       {renderTeam(teamB, 'B')}
+      {sched?.venue && (
+        <div style={{ gridColumn: '1 / -1', textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
+          🏟 {sched.venue} · {sched.city}{alt !== undefined && ` · ⛰ ${tm('altitudeShort', { m: alt })}`}
+        </div>
+      )}
     </div>
   )
 }
