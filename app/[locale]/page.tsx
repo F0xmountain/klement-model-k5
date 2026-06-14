@@ -6,6 +6,7 @@ import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import PolymarketBtn from '@/components/ui/PolymarketBtn'
 import TodayMatches from '@/components/today/TodayMatches'
+import ModelAccuracyBadge from '@/components/home/ModelAccuracyBadge'
 
 const factors = [
   { key: 'fifa' as const,       pct: 45, color: 'var(--color-r)' },
@@ -79,6 +80,9 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      {/* ── PUBLIC MODEL ACCURACY BADGE ── */}
+      <ModelAccuracyBadge />
 
       {/* ── TODAY'S MATCHES ── */}
       <TodayMatches />
