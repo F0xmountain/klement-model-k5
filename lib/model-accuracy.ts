@@ -75,6 +75,17 @@ const BRIER_MIN_RESULTS = 5
 export function getModelAccuracy(): ModelAccuracy {
   const file = resultsRaw as ResultsFile
   const results = Object.values(file.results ?? {})
+  // Normaliseer teamnamen naar de teams.json-spelling (bv. "Bosnia and
+  // Herzegovina" → "Bosnia-Herz") zodat matchP en de Elo-lookup het team
+  // herkennen; zonder dit kreeg een onbekend team sc()=0 en dus een foutieve
+  // (veel te lage) sterkte. Labels blijven de originele namen uit results.json.
+  const canonResults: ResultEntry[] = results.map(r => ({
+    teamA: canonTeam(r.teamA) ?? r.teamA,
+    teamB: canonTeam(r.teamB) ?? r.teamB,
+    scoreA: r.scoreA,
+    scoreB: r.scoreB,
+    playedAt: r.playedAt,
+  }))
 
   const rows: AccuracyRow[] = []
   let correctCount = 0
@@ -82,8 +93,9 @@ export function getModelAccuracy(): ModelAccuracy {
   const OUTCOMES: Outcome[] = ['A', 'D', 'B']
 
   results.forEach((r, k) => {
-    const elo = eloAfter(results, k) // stand vóór deze wedstrijd
-    const { pA, dr, pB } = matchP(r.teamA, r.teamB, undefined, undefined, undefined, elo)
+    const elo = eloAfter(canonResults, k) // stand vóór deze wedstrijd
+    const cr = canonResults[k]!
+    const { pA, dr, pB } = matchP(cr.teamA, cr.teamB, undefined, undefined, undefined, elo)
     const probs: Record<Outcome, number> = { A: pA, D: dr, B: pB }
 
     const modelPick = OUTCOMES.reduce((best, o) => (probs[o] > probs[best] ? o : best), 'A' as Outcome)

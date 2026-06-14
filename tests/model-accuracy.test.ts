@@ -3,8 +3,10 @@ import {
   calcLogLoss,
   calcBrierScore,
   evaluateAll,
+  getModelAccuracy,
   type MatchPrediction,
 } from '../lib/model-accuracy'
+import { matchP } from '../lib/klement-custom'
 
 function pred(over: Partial<MatchPrediction>): MatchPrediction {
   return {
@@ -60,5 +62,37 @@ describe('evaluateAll', () => {
     expect(r.accuracy).toBe(1)
     expect(r.results[0]!.actualOutcome).toBe('home')
     expect(r.results[1]!.actualOutcome).toBe('draw')
+  })
+})
+
+describe('getModelAccuracy — teamnaam-normalisatie (Canada vs Bosnia-Herz)', () => {
+  // Buggy gedrag: "Bosnia and Herzegovina" werd niet herkend → sc()=0 → Canada
+  // kreeg p≈0.92. Met canonTeam-normalisatie resolvet het naar "Bosnia-Herz".
+  const draw = (pA: number, dr: number, pB: number): MatchPrediction => ({
+    matchId: 'CAN-BIH', homeTeam: 'Canada', awayTeam: 'Bosnia', matchDate: '2026-06-12',
+    predictedHome: pA, predictedDraw: dr, predictedAway: pB, actualHome: 1, actualAway: 1,
+  })
+
+  it('matchP resolves the canonical name to a realistic Canada win probability (~0.71, not 0.92)', () => {
+    const buggy = matchP('Canada', 'Bosnia and Herzegovina') // ruwe naam — historische bug
+    const fixed = matchP('Canada', 'Bosnia-Herz')            // teams.json-spelling
+    expect(buggy.pA).toBeGreaterThan(0.85)                   // bevestigt de buggy waarde
+    expect(fixed.pA).toBeGreaterThan(0.65)
+    expect(fixed.pA).toBeLessThan(0.75)
+  })
+
+  it('getModelAccuracy gives Canada ~0.65–0.75 confidence for the Bosnia match', () => {
+    const row = getModelAccuracy().rows.find(r => /Canada/.test(r.teamA) && /Bosnia/.test(r.teamB))
+    expect(row).toBeDefined()
+    expect(row!.confidence).toBeGreaterThan(0.65)
+    expect(row!.confidence).toBeLessThan(0.75)
+  })
+
+  it('log loss for the 1-1 draw drops vs the buggy value', () => {
+    const buggy = matchP('Canada', 'Bosnia and Herzegovina')
+    const fixed = matchP('Canada', 'Bosnia-Herz')
+    const buggyLoss = calcLogLoss(draw(buggy.pA, buggy.dr, buggy.pB))
+    const fixedLoss = calcLogLoss(draw(fixed.pA, fixed.dr, fixed.pB))
+    expect(fixedLoss).toBeLessThan(buggyLoss)
   })
 })
