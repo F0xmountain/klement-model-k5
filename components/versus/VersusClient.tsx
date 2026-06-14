@@ -5,7 +5,7 @@ import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, latestElo, altitudePct, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import { travelDistance, travelPenalty } from '@/lib/travel-distance'
 import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
-import { calcScoreDistribution } from '@/lib/score-distribution'
+import { calcScoreDistribution, bivariatePoisson, topScoresFromMatrix, overUnder, btts } from '@/lib/score-distribution'
 import stadiumsRaw from '@/lib/stadiums.json'
 import formCacheRaw from '@/lib/form-cache.json'
 import { getStarPlayerSummary, toTeamNl, type PlayerStatus } from '@/lib/squad-modifier'
@@ -23,6 +23,8 @@ import { PM_GAP_THRESHOLD } from '@/lib/polymarket'
 
 const allTeams = teamNames().sort()
 const SIM_N = 500
+// Toon de ruwe lambda's (verwachte goals) alleen als deze debug-flag aan staat.
+const SHOW_LAMBDA_DEBUG = process.env.NEXT_PUBLIC_SHOW_LAMBDA_DEBUG === 'true'
 
 interface Stadium {
   city: string
@@ -213,7 +215,14 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
   const travelKmB = venueCoord ? travelDistance(teamB, venueCoord) : undefined
   const travelPenA = venueCoord ? travelPenalty(teamA, venueCoord) : 0
   const travelPenB = venueCoord ? travelPenalty(teamB, venueCoord) : 0
-  const scoreDist = calcScoreDistribution(expectedGoalsNum(pA), expectedGoalsNum(pB))
+  const lambdaA = expectedGoalsNum(pA)
+  const lambdaB = expectedGoalsNum(pB)
+  const scoreDist = calcScoreDistribution(lambdaA, lambdaB)
+  // Bivariate Poisson-matrix voor de markt-indicatoren (top-uitslagen, O/U, BTTS).
+  const scoreMatrix = bivariatePoisson(lambdaA, lambdaB)
+  const topScoreList = topScoresFromMatrix(scoreMatrix, 5)
+  const ou = overUnder(scoreMatrix, 2.5)
+  const bttsP = btts(scoreMatrix)
   const restWarnings = [
     { team: teamA, days: restA },
     { team: teamB, days: restB },
@@ -318,6 +327,35 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
           <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 3 }}>
             {t('expectedScoreNote')}
           </div>
+        </div>
+
+        {/* 4a — Scoreverwachting + marktindicatoren (bivariate Poisson) */}
+        <div style={{ marginTop: 14, border: '1px solid var(--color-brd)', padding: 12 }}>
+          {/* Blok 1 — meest waarschijnlijke uitslagen als pill-rij */}
+          <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 6 }}>{t('scoreOdds')}</div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+            {topScoreList.map(s => (
+              <span
+                key={`${s.homeGoals}-${s.awayGoals}`}
+                style={{ fontSize: 9, color: 'var(--color-txt)', backgroundColor: 'var(--color-surf)', border: '1px solid var(--color-brd)', padding: '3px 8px' }}
+              >
+                {t('topScore', { a: s.homeGoals, b: s.awayGoals, pct: Math.round(s.probability * 100) })}
+              </span>
+            ))}
+          </div>
+
+          {/* Blok 2 — markt-indicatoren (O/U 2.5 en BTTS) */}
+          <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 1.9 }}>
+            <div>{t('overUnder', { over: Math.round(ou.over * 100), under: Math.round(ou.under * 100) })}</div>
+            <div>{t('btts', { pct: Math.round(bttsP * 100) })} · {t('bttsFalse', { pct: Math.round((1 - bttsP) * 100) })}</div>
+          </div>
+
+          {/* Blok 3 — verwachte doelpunten (lambda's), alleen met debug-flag */}
+          {SHOW_LAMBDA_DEBUG && (
+            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 8 }}>
+              {t('expectedGoals', { a: teamA, ga: lambdaA.toFixed(2), b: teamB, gb: lambdaB.toFixed(2) })}
+            </div>
+          )}
         </div>
 
         {/* 5 — Polymarket breakdown (alleen als marktdata beschikbaar) */}
