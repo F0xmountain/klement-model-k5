@@ -351,9 +351,9 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
         {/* 6c — Reisafstand-bijdrage (alleen bij een venue met effect) */}
         {venue && (travelPenA > 0 || travelPenB > 0) && (
           <div style={{ marginTop: 4, textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
-            {travelPenA > 0 && <span>✈ {teamA} {t('travelLabel')}: {Math.round(travelKmA ?? 0)} km · −{(travelPenA * 100).toFixed(1)}%</span>}
+            {travelPenA > 0 && <span>✈ {teamA} {t('travelDistance')}: {t('travelKm', { km: Math.round(travelKmA ?? 0) })} · −{(travelPenA * 100).toFixed(1)}%</span>}
             {travelPenA > 0 && travelPenB > 0 && <span> · </span>}
-            {travelPenB > 0 && <span>✈ {teamB} {t('travelLabel')}: {Math.round(travelKmB ?? 0)} km · −{(travelPenB * 100).toFixed(1)}%</span>}
+            {travelPenB > 0 && <span>✈ {teamB} {t('travelDistance')}: {t('travelKm', { km: Math.round(travelKmB ?? 0) })} · −{(travelPenB * 100).toFixed(1)}%</span>}
           </div>
         )}
 
