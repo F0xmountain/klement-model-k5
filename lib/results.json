@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-14T10:53:51.113Z"
+    "lastUpdated": "2026-06-14T22:01:10.458Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -58,6 +58,13 @@
       "scoreA": 2,
       "scoreB": 0,
       "playedAt": "2026-06-14T04:00:00Z"
+    },
+    "germany-vs-curacao": {
+      "teamA": "Germany",
+      "teamB": "Curacao",
+      "scoreA": 7,
+      "scoreB": 1,
+      "playedAt": "2026-06-14T17:00:00Z"
     }
   }
 }

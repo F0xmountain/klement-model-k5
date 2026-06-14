@@ -96,5 +96,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "germany-vs-curacao": {
+    "date": "2026-06-14T17:00:00Z",
+    "score": {
+      "home": 7,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 3,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
