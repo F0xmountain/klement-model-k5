@@ -19,6 +19,7 @@ export interface ModelWeights {
   starPenalty1: number // default 0.08
   starPenalty2: number // default 0.05
   starPenalty3: number // default 0.03
+  starPlayerScale: number // 0.5–2.0, default 1.0 — multiplier op alle sterspeler-penalty's
   // Aan/uit-schakelaars voor venue-gebonden factoren
   altitudeEnabled: boolean // default true
   travelEnabled: boolean   // default true
@@ -37,6 +38,7 @@ export const DEFAULT_WEIGHTS: ModelWeights = {
   starPenalty1: 0.08,
   starPenalty2: 0.05,
   starPenalty3: 0.03,
+  starPlayerScale: 1.0,
   altitudeEnabled: true,
   travelEnabled: true,
 }

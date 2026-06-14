@@ -16,14 +16,16 @@ export async function POST(req: Request) {
   const weights: Record<string, number | boolean> = {}
   for (const key of WEIGHT_KEYS) {
     const v = body[key]
-    // Boolean schakelaars (altitude/travel) als bool; overige gewichten in [0,1].
+    // Boolean schakelaars (altitude/travel) als bool; starPlayerScale in [0.5,2.0];
+    // overige gewichten in [0,1].
     if (typeof DEFAULT_WEIGHTS[key] === 'boolean') {
       if (typeof v !== 'boolean') {
         return Response.json({ error: `Invalid toggle: ${key}` }, { status: 400 })
       }
       weights[key] = v
     } else {
-      if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > 1) {
+      const [lo, hi] = key === 'starPlayerScale' ? [0.5, 2.0] : [0, 1]
+      if (typeof v !== 'number' || !Number.isFinite(v) || v < lo || v > hi) {
         return Response.json({ error: `Invalid weight: ${key}` }, { status: 400 })
       }
       weights[key] = v

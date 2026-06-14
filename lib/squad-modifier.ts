@@ -40,17 +40,19 @@ export function toTeamNl(nameEn: string): string | undefined {
 }
 
 // Sterspeler-penalty's komen uit de modelconfig als positieve %-punt-waarden
-// (default 0.08/0.05/0.03) en worden omgezet naar een negatieve logit-shift:
-// een penalty van d %-punt rond p=0.5 is logit-shift log((0.5−d)/(0.5+d)).
+// (default 0.08/0.05/0.03), geschaald met starPlayerScale, en omgezet naar een
+// negatieve logit-shift: een penalty van d %-punt rond p=0.5 is logit-shift
+// log((0.5−d)/(0.5+d)). d wordt onder 0.5 geclampt zodat de logit eindig blijft.
 function pctToLogit(d: number): number {
-  return Math.log((0.5 - d) / (0.5 + d))
+  return Math.log((0.5 - Math.min(d, 0.49)) / (0.5 + Math.min(d, 0.49)))
 }
 
 const starWeights = getModelWeights()
+const STAR_SCALE = starWeights.starPlayerScale
 const STAR_PENALTY: Record<number, number> = {
-  1: pctToLogit(starWeights.starPenalty1),
-  2: pctToLogit(starWeights.starPenalty2),
-  3: pctToLogit(starWeights.starPenalty3),
+  1: pctToLogit(starWeights.starPenalty1 * STAR_SCALE),
+  2: pctToLogit(starWeights.starPenalty2 * STAR_SCALE),
+  3: pctToLogit(starWeights.starPenalty3 * STAR_SCALE),
 }
 
 function sigmoid(x: number): number {

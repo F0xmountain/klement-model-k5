@@ -43,7 +43,6 @@ const BASE_SLIDERS: SliderDef[] = [
 ]
 
 const EXT_SLIDERS: SliderDef[] = [
-  { key: 'eloWeight', labelKey: 'w_elo', max: 1 },
   { key: 'formWeight', labelKey: 'w_form', max: 1 },
   { key: 'leagueWeight', labelKey: 'w_league', max: 1 },
   { key: 'marketWeight', labelKey: 'w_market', max: 1 },
@@ -63,6 +62,8 @@ export default function ModelConfigClient({ initial }: Props) {
   const sum = baseFactorSum(w)
   const sumOff = Math.abs(sum - BASE_FACTOR_TARGET) > 0.005
   const canSave = baseSumWithinSaveRange(w)
+  // FIFA-aandeel van het teamsterkte-slot (Elo krijgt de rest); som altijd 100%.
+  const fifaPct = Math.round((1 - w.eloWeight) * 100)
 
   // Live preview met de huidige slider-waarden (niet de opgeslagen config)
   const { pA, dr, pB } = previewMatchP(PREVIEW_A, PREVIEW_B, w)
@@ -153,6 +154,22 @@ export default function ModelConfigClient({ initial }: Props) {
       {/* Extension factors */}
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-b)', marginBottom: 16 }}>{t('extensions')}</div>
+        {/* FIFA/Elo-verdeling — som altijd 100% (zet eloWeight = 1 − FIFA%) */}
+        <div style={{ marginBottom: 16 }}>
+          <label htmlFor="w-fifaElo" style={{ fontSize: 9, color: 'var(--color-muted)', display: 'block', marginBottom: 4 }}>
+            {t('fifaEloSlider')}: {t('fifaEloValue', { fifa: fifaPct, elo: 100 - fifaPct })}
+          </label>
+          <input
+            id="w-fifaElo"
+            type="range"
+            min={10}
+            max={90}
+            step={5}
+            value={fifaPct}
+            onChange={e => setWeight('eloWeight', 1 - Number(e.target.value) / 100)}
+            style={{ accentColor: 'var(--color-b)', width: '100%' }}
+          />
+        </div>
         {EXT_SLIDERS.map(renderSlider)}
       </div>
 
@@ -160,6 +177,23 @@ export default function ModelConfigClient({ initial }: Props) {
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-g)', marginBottom: 16 }}>{t('starPenalties')}</div>
         {STAR_SLIDERS.map(renderSlider)}
+        {/* Globale schaal op alle sterspeler-penalty's */}
+        <div style={{ marginTop: 14 }}>
+          <label htmlFor="w-starScale" style={{ fontSize: 9, color: 'var(--color-muted)', display: 'block', marginBottom: 4 }}>
+            {t('starPlayerScale')}: {w.starPlayerScale.toFixed(1)}×
+          </label>
+          <input
+            id="w-starScale"
+            type="range"
+            min={0.5}
+            max={2}
+            step={0.1}
+            value={w.starPlayerScale}
+            onChange={e => setWeight('starPlayerScale', Number(e.target.value))}
+            style={{ accentColor: 'var(--color-g)', width: '100%' }}
+          />
+          <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 4 }}>{t('starScaleHint')}</div>
+        </div>
       </div>
 
       {/* Venue-factor schakelaars */}
