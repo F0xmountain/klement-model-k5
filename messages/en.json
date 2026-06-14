@@ -2,7 +2,11 @@
   "today": {
     "title": "Today",
     "next": "Next match: {date} — {teams}",
-    "noMatches": "No matches today"
+    "noMatches": "No matches today",
+    "champChance": "{chance}% title chance",
+    "champChanceRose": "{chance}% ↑ (was {prev}%)",
+    "champChanceFell": "{chance}% ↓ (was {prev}%)",
+    "champChanceUnchanged": "{chance}% → (was {prev}%)"
   },
   "schedule": {
     "title": "Schedule",
@@ -156,6 +160,8 @@
     "statsQualified": "QUALIFIED TEAMS",
     "statsCorrect": "CORRECT CALLS",
     "statsR2": "MODEL R²",
+    "modelBadge": "Model: {correct}/{n} correct · log loss {loss}",
+    "modelBadgeBaseline": "baseline {baseline}",
     "trackRecordTitle": "TRACK RECORD",
     "recordBadge": "✓ WIN",
     "predictionTitle": "2026 PREDICTION",
@@ -424,7 +430,12 @@
       "noPlayedMatches": "No played matches available.",
       "remove": "Remove",
       "chartTitle": "Log loss per match",
-      "chartBaseline": "Baseline (1.099)"
+      "chartBaseline": "Baseline (1.099)",
+      "pendingTitle": "Results to enter",
+      "pendingNote": "result not entered yet",
+      "enterResult": "Enter result",
+      "saveResult": "Save",
+      "goalsLabel": "goals"
     }
   },
   "modelConfig": {

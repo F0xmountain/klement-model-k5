@@ -2,7 +2,11 @@
   "today": {
     "title": "Vandaag",
     "next": "Volgende wedstrijd: {date} — {teams}",
-    "noMatches": "Geen wedstrijden vandaag"
+    "noMatches": "Geen wedstrijden vandaag",
+    "champChance": "{chance}% titelkans",
+    "champChanceRose": "{chance}% ↑ (was {prev}%)",
+    "champChanceFell": "{chance}% ↓ (was {prev}%)",
+    "champChanceUnchanged": "{chance}% → (was {prev}%)"
   },
   "schedule": {
     "title": "Speelschema",
@@ -156,6 +160,8 @@
     "statsQualified": "GEKWALIFICEERDE TEAMS",
     "statsCorrect": "CORRECTE VOORSPELLINGEN",
     "statsR2": "MODEL R²",
+    "modelBadge": "Model: {correct}/{n} correct · log loss {loss}",
+    "modelBadgeBaseline": "baseline {baseline}",
     "trackRecordTitle": "TRACK RECORD",
     "recordBadge": "✓ GOED",
     "predictionTitle": "VOORSPELLING 2026",
@@ -424,7 +430,12 @@
       "noPlayedMatches": "Geen gespeelde wedstrijden beschikbaar.",
       "remove": "Verwijder",
       "chartTitle": "Log loss per wedstrijd",
-      "chartBaseline": "Baseline (1.099)"
+      "chartBaseline": "Baseline (1.099)",
+      "pendingTitle": "Nog in te vullen uitslagen",
+      "pendingNote": "uitslag nog niet ingevuld",
+      "enterResult": "Uitslag invoeren",
+      "saveResult": "Opslaan",
+      "goalsLabel": "goals"
     }
   },
   "modelConfig": {

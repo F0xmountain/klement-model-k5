@@ -10,6 +10,19 @@ import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import AltitudeBadge from '@/components/match/AltitudeBadge'
 import { useViewerTimeZone } from '@/components/match/ViewerKickoff'
+import snapshotsRaw from '@/lib/probability-snapshots.json'
+
+interface ChampSnapshot {
+  timestamp: string
+  matchLabel: string
+  snapshots: Record<string, number>
+}
+
+// Kampioenskansen per moment (lib/probability-snapshots.json). De laatste entry is
+// de huidige stand, de voorlaatste de vorige — daaruit volgt de trend per team.
+const champSnaps = snapshotsRaw as ChampSnapshot[]
+const latestChamp = champSnaps[champSnaps.length - 1]?.snapshots
+const prevChamp = champSnaps[champSnaps.length - 2]?.snapshots
 
 export default function TodayMatches() {
   const t = useTranslations('today')
@@ -29,7 +42,44 @@ export default function TodayMatches() {
 
   if (!state) return null
 
+  // Kampioenskans-trend voor één team: huidige kans + pijl t.o.v. het vorige
+  // snapshot. Toont niets als het team niet in de snapshots voorkomt; zonder
+  // vorig snapshot alleen de huidige kans (geen pijl).
+  const champTrend = (team: string) => {
+    const cur = latestChamp?.[team]
+    if (cur === undefined) return null
+    const curPct = (cur * 100).toFixed(1)
+    const prev = prevChamp?.[team]
+
+    let text: string
+    let color = 'var(--color-muted)'
+    if (prev === undefined) {
+      text = t('champChance', { chance: curPct })
+    } else {
+      const prevPct = (prev * 100).toFixed(1)
+      if (cur > prev) {
+        text = t('champChanceRose', { chance: curPct, prev: prevPct })
+        color = 'var(--color-g)'
+      } else if (cur < prev) {
+        text = t('champChanceFell', { chance: curPct, prev: prevPct })
+        color = 'var(--color-r)'
+      } else {
+        text = t('champChanceUnchanged', { chance: curPct, prev: prevPct })
+      }
+    }
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 8 }}>
+        <FlagImg name={team} h={10} emoji={teamData(team)?.flag ?? '🏳️'} />
+        <span style={{ color: 'var(--color-muted)' }}>{team}</span>
+        <span style={{ color }}>{text}</span>
+      </div>
+    )
+  }
+
   const card = (m: TodayScheduleMatch) => {
+    const homeTrend = champTrend(m.home)
+    const awayTrend = champTrend(m.away)
     const { time } = formatKickoff(m.dateUtc, tz, locale)
     return (
       <div key={m.matchId} className="factor-card">
@@ -68,6 +118,12 @@ export default function TodayMatches() {
             {tg('predictThisMatch')}
           </Link>
         </div>
+        {(homeTrend || awayTrend) && (
+          <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--color-brd)', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {homeTrend}
+            {awayTrend}
+          </div>
+        )}
       </div>
     )
   }
