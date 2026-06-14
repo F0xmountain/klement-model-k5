@@ -84,7 +84,9 @@
     "followX": "Follow on X",
     "viewGithub": "View on GitHub",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "tournament": "TOURNAMENT",
+    "insights": "INSIGHTS"
   },
   "footer": {
     "copyright": "© 2026 KLEMENT MODEL · ALL SIMULATIONS RUN IN-BROWSER",

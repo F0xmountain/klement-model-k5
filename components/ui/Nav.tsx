@@ -5,25 +5,36 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { liveMatchNow } from '@/lib/today-schedule'
 
-// Primaire nav — altijd zichtbaar. Secundaire items zitten achter een "More"-
-// dropdown (desktop) en staan plat in het hamburger-menu (mobiel).
+// Vier hubs in de hoofdnav: twee directe kernacties (Versus, My Bracket) en twee
+// gegroepeerde dropdowns (Tournament, Insights). Op desktop klappen de groepen uit
+// als dropdown; op mobiel staan ze plat onder een sectiekop in het drawer-menu.
 const PRIMARY = [
   { href: '/versus', key: 'versus' },
-  { href: '/groups', key: 'groups' },
   { href: '/my-bracket', key: 'myBracket' },
-  { href: '/live', key: 'live' },
-  { href: '/stats', key: 'stats' },
-  { href: '/impact', key: 'impact' },
 ] as const
-const SECONDARY = [
-  { href: '/teams', key: 'teams' },
-  { href: '/schedule', key: 'schedule' },
-  { href: '/mc', key: 'mc' },
-  { href: '/knockout/r32', key: 'bracket' },
-  { href: '/sim-bracket', key: 'simBracket' },
-  { href: '/topscorers', key: 'topscorers' },
-  { href: '/model', key: 'model' },
-  { href: '/about', key: 'about' },
+
+const GROUPS = [
+  {
+    key: 'tournament',
+    items: [
+      { href: '/groups', key: 'groups' },
+      { href: '/schedule', key: 'schedule' },
+      { href: '/knockout/r32', key: 'bracket' },
+      { href: '/teams', key: 'teams' },
+      { href: '/topscorers', key: 'topscorers' },
+      { href: '/live', key: 'live' },
+    ],
+  },
+  {
+    key: 'insights',
+    items: [
+      { href: '/model', key: 'model' },
+      { href: '/stats', key: 'stats' },
+      { href: '/impact', key: 'impact' },
+      { href: '/mc', key: 'mc' },
+      { href: '/about', key: 'about' },
+    ],
+  },
 ] as const
 
 function XIcon() {
@@ -48,7 +59,7 @@ export default function Nav() {
   const router = useRouter()
   const locale = useLocale()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [moreOpen, setMoreOpen] = useState(false)
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
   const [prevRoute, setPrevRoute] = useState(`${pathname}|${locale}`)
   const [live, setLive] = useState(false)
 
@@ -61,15 +72,20 @@ export default function Nav() {
     return () => clearInterval(id)
   }, [])
 
-  const isActive = (href: string) =>
-    href === '/knockout/r32' ? pathname.startsWith('/knockout') : pathname === href
-  const moreActive = SECONDARY.some(s => isActive(s.href))
+  // Prefix-matching voor routes met subpagina's; de rest matcht exact.
+  const isActive = (href: string) => {
+    if (href === '/knockout/r32') return pathname.startsWith('/knockout')
+    if (href === '/teams') return pathname.startsWith('/teams')
+    if (href === '/versus') return pathname.startsWith('/versus')
+    if (href === '/my-bracket') return pathname.startsWith('/my-bracket')
+    return pathname === href
+  }
 
   const route = `${pathname}|${locale}`
   if (route !== prevRoute) {
     setPrevRoute(route)
     setMenuOpen(false)
-    setMoreOpen(false)
+    setOpenGroup(null)
   }
 
   return (
@@ -106,24 +122,30 @@ export default function Nav() {
             </Link>
           ))}
         </div>
-        <div className="nav-more">
-          <button
-            type="button"
-            className={`nav-link nav-more-toggle${moreActive ? ' active' : ''}`}
-            onClick={() => setMoreOpen(o => !o)}
-            aria-expanded={moreOpen}
-            aria-haspopup="true"
-          >
-            {t('more')} ▾
-          </button>
-          <div className={`nav-more-panel${moreOpen ? ' open' : ''}`}>
-            {SECONDARY.map(({ href, key }) => (
-              <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
-                {t(key)}
-              </Link>
-            ))}
-          </div>
-        </div>
+        {GROUPS.map(({ key, items }) => {
+          const groupActive = items.some(i => isActive(i.href))
+          return (
+            <div key={key} className="nav-more">
+              <button
+                type="button"
+                className={`nav-link nav-more-toggle${groupActive ? ' active' : ''}`}
+                onClick={() => setOpenGroup(o => (o === key ? null : key))}
+                aria-expanded={openGroup === key}
+                aria-haspopup="true"
+              >
+                {t(key)} ▾
+              </button>
+              <div className={`nav-more-panel${openGroup === key ? ' open' : ''}`}>
+                {items.map(({ href, key: itemKey }) => (
+                  <Link key={href} href={href} className={`nav-link${isActive(href) ? ' active' : ''}`}>
+                    {t(itemKey)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+        <div className="nav-spacer" />
         <div className="nav-extra">
           {routing.locales.map(loc => (
             <button

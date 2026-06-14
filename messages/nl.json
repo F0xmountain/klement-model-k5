@@ -84,7 +84,9 @@
     "followX": "Volg op X",
     "viewGithub": "Bekijk op GitHub",
     "openMenu": "Menu openen",
-    "closeMenu": "Menu sluiten"
+    "closeMenu": "Menu sluiten",
+    "tournament": "TOERNOOI",
+    "insights": "INSIGHTS"
   },
   "footer": {
     "copyright": "© 2026 KLEMENT MODEL · ALLE SIMULATIES DRAAIEN IN DE BROWSER",

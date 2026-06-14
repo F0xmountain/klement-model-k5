@@ -327,7 +327,8 @@ main { flex: 1; }
 }
 .nav-logo span { color: var(--color-b); }
 .nav-menu { display: flex; flex: 1; align-items: stretch; }
-.nav-links { display: flex; flex: 1; overflow: hidden; }
+.nav-links { display: flex; }
+.nav-spacer { flex: 1; }
 .nav-link {
   color: var(--color-muted);
   padding: 0 16px;
@@ -400,11 +401,12 @@ main { flex: 1; }
   .nav-links { flex-direction: column; flex: none; overflow: visible; }
   .nav-link { border-right: none; border-bottom: 1px solid var(--color-brd); padding: 14px 20px; }
   .nav-extra { flex-direction: row; padding: 14px 20px; border-top: 1px solid var(--color-brd); padding-right: 20px; }
-  /* Mobiel: geen dropdown — alle secundaire links staan plat in het drawer-menu. */
+  /* Mobiel: geen dropdown — de groepskop wordt een statische sectiekop met de
+     bijbehorende links er plat onder, ingesprongen. */
   .nav-more { flex-direction: column; }
-  .nav-more-toggle { display: none; }
+  .nav-more-toggle { pointer-events: none; color: var(--color-b); }
   .nav-more-panel { display: flex; position: static; min-width: 0; border: none; }
-  .nav-more-panel .nav-link { padding: 14px 20px; }
+  .nav-more-panel .nav-link { padding: 14px 20px 14px 32px; }
 }
 
 /* ── Footer ── */
