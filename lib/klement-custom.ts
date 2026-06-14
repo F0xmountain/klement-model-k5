@@ -6,9 +6,10 @@ import leagueDataRaw from './league-data.json'
 import type { TeamData, WDL } from '../types'
 import { fG, fP, fT } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
-import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data'
+import { getHomeAltitude, getWcEditions } from './squad-data'
 import { getModelWeights, type ModelWeights } from './model-config'
 import { ALTITUDE_FACTOR_ENABLED } from './feature-flags'
+import { travelPenalty } from './travel-distance'
 
 // Wrapper rond klement.ts's matchP. lib/klement.ts is read-only — modelaanpassingen
 // (Elo-weging, sterspeler-blessures) leven hier.
@@ -126,22 +127,6 @@ function shiftPA(probs: MatchProbs, net: number): MatchProbs {
   return { pA: pAadj, dr: dr * scale, pB: pB * scale }
 }
 
-const EARTH_RADIUS_KM = 6371
-
-function toRad(deg: number): number {
-  return (deg * Math.PI) / 180
-}
-
-// Boogafstand (great-circle) tussen twee coördinaten in km
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const dLat = toRad(lat2 - lat1)
-  const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
-  return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-}
-
 // Optionele Elo-override per team — voor de kampioenskans-tijdlijn, die de
 // simulatie met historische Elo-standen (na elke uitslag) opnieuw draait.
 export type EloMap = Record<string, number>
@@ -233,12 +218,16 @@ export function applyAltitudeFactor(
   return shiftPA(probs, net)
 }
 
-// Logit-shift van ~-0.13 ≈ -3%-punt rond p=0.5
-const TRAVEL_PENALTY = -0.13
-const TRAVEL_DISTANCE_THRESHOLD_KM = 8000
+// Zet een penalty van d %-punt (rond p=0.5) om naar een logit-shift, net als de
+// sterspeler- en hoogte-factor. d=0 → geen shift; d>0 → negatieve shift.
+function pctToLogit(d: number): number {
+  return Math.log((0.5 - d) / (0.5 + d))
+}
 
-// Teams die > 8000km (boogafstand vanaf het centroid van het thuisland) van
-// huis spelen leveren ~3%-punt winkans in.
+// Reisafstand-factor: elk team krijgt zijn eigen penalty (travelPenalty, lineair
+// 3000–8000km → max 4%) op basis van de afstand thuisland→stadion. De penalty
+// verlaagt de winkans van het reizende team; netto verschil op logit-schaal zodat
+// de kansensom 1 blijft. Zonder venue-coördinaten een no-op.
 export function applyTravelFactor(
   probs: MatchProbs,
   homeTeam: string,
@@ -248,16 +237,9 @@ export function applyTravelFactor(
 ): MatchProbs {
   if (venueLat === undefined || venueLon === undefined) return probs
 
-  const coordA = getHomeCoordinates(homeTeam)
-  const coordB = getHomeCoordinates(awayTeam)
-
-  let net = 0
-  if (coordA && haversineKm(coordA.lat, coordA.lon, venueLat, venueLon) > TRAVEL_DISTANCE_THRESHOLD_KM) {
-    net += TRAVEL_PENALTY
-  }
-  if (coordB && haversineKm(coordB.lat, coordB.lon, venueLat, venueLon) > TRAVEL_DISTANCE_THRESHOLD_KM) {
-    net -= TRAVEL_PENALTY
-  }
+  const venue = { lat: venueLat, lon: venueLon }
+  const net = pctToLogit(travelPenalty(homeTeam, venue)) - pctToLogit(travelPenalty(awayTeam, venue))
+  if (net === 0) return probs
 
   return shiftPA(probs, net)
 }

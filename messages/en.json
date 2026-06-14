@@ -191,6 +191,7 @@
     "teamStrengthSplit": "Team strength: Elo {elo}% + FIFA {fifa}%",
     "eloScores": "Elo: {a} vs {b}",
     "altitudeLabel": "Altitude {m}m",
+    "travelLabel": "Travel distance",
     "venueLabel": "Venue",
     "venueNeutral": "Neutral venue (no altitude/travel effect)",
     "formIndicator": "{team} in {level} form ({score}/30)",

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
 import { matchP, simResultCustom, latestElo, altitudePct, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
+import { travelDistance, travelPenalty } from '@/lib/travel-distance'
 import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
 import { calcScoreDistribution } from '@/lib/score-distribution'
 import stadiumsRaw from '@/lib/stadiums.json'
@@ -207,6 +208,11 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
   const eloB = latestElo(teamB)
   const altPctA = venue ? altitudePct(teamA, venue.altitude ?? 0) : 0
   const altPctB = venue ? altitudePct(teamB, venue.altitude ?? 0) : 0
+  const venueCoord = venue && venue.lat !== undefined && venue.lon !== undefined ? { lat: venue.lat, lon: venue.lon } : undefined
+  const travelKmA = venueCoord ? travelDistance(teamA, venueCoord) : undefined
+  const travelKmB = venueCoord ? travelDistance(teamB, venueCoord) : undefined
+  const travelPenA = venueCoord ? travelPenalty(teamA, venueCoord) : 0
+  const travelPenB = venueCoord ? travelPenalty(teamB, venueCoord) : 0
   const scoreDist = calcScoreDistribution(expectedGoalsNum(pA), expectedGoalsNum(pB))
   const restWarnings = [
     { team: teamA, days: restA },
@@ -339,6 +345,15 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
             ⛰ {t('altitudeLabel', { m: venue.altitude })}
             {altPctA !== 0 && <span> · {teamA} {altPctA.toFixed(1)}%</span>}
             {altPctB !== 0 && <span> · {teamB} {altPctB.toFixed(1)}%</span>}
+          </div>
+        )}
+
+        {/* 6c — Reisafstand-bijdrage (alleen bij een venue met effect) */}
+        {venue && (travelPenA > 0 || travelPenB > 0) && (
+          <div style={{ marginTop: 4, textAlign: 'center', fontSize: 8, color: 'var(--color-muted)' }}>
+            {travelPenA > 0 && <span>✈ {teamA} {t('travelLabel')}: {Math.round(travelKmA ?? 0)} km · −{(travelPenA * 100).toFixed(1)}%</span>}
+            {travelPenA > 0 && travelPenB > 0 && <span> · </span>}
+            {travelPenB > 0 && <span>✈ {teamB} {t('travelLabel')}: {Math.round(travelKmB ?? 0)} km · −{(travelPenB * 100).toFixed(1)}%</span>}
           </div>
         )}
 
