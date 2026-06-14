@@ -44,8 +44,7 @@ Erft alle harde regels uit de originele `CLAUDE.md`, plus:
    Gebruik `/api/polymarket` met `revalidate = 300`.
 7. **Nieuws-API-calls gaan via `/api/news/[team]`** — nooit vanuit een client component.
 8. **Simulatie is altijd client-side.** `'use client'` op alles wat `simResult`/`simKO` aanroept.
-9. **Geen dark mode.** Light only.
-10. **i18n via `next-intl`** — nooit strings hardcoden in componenten. Alles via `useTranslations()`.
+9. **i18n via `next-intl`** — nooit strings hardcoden in componenten. Alles via `useTranslations()`.
 
 ---
 
