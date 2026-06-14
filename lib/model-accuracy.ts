@@ -141,13 +141,25 @@ export interface MatchPrediction {
   predictedHome: number // P(thuiswinst) op moment van voorspelling
   predictedDraw: number
   predictedAway: number // P(uitwinst)
-  actualHome: number // werkelijke goals thuis
-  actualAway: number // werkelijke goals uit
+  actualHome: number | null // werkelijke goals thuis (null = uitslag nog niet ingevuld)
+  actualAway: number | null // werkelijke goals uit (null = uitslag nog niet ingevuld)
+}
+
+// Een voorspelling waarvan de uitslag is ingevuld — alleen deze tellen mee in de
+// scoring (log loss/Brier). Pre-match entries (actualHome/Away null) worden door
+// evaluateAll uitgefilterd.
+export interface CompletedPrediction extends MatchPrediction {
+  actualHome: number
+  actualAway: number
+}
+
+export function isComplete(p: MatchPrediction): p is CompletedPrediction {
+  return p.actualHome !== null && p.actualAway !== null
 }
 
 export type PredOutcome = 'home' | 'draw' | 'away'
 
-export interface MatchResult extends MatchPrediction {
+export interface MatchResult extends CompletedPrediction {
   actualOutcome: PredOutcome
   logLoss: number
   brierScore: number
@@ -179,13 +191,13 @@ function probForOutcome(p: MatchPrediction, o: PredOutcome): number {
   return o === 'home' ? p.predictedHome : o === 'away' ? p.predictedAway : p.predictedDraw
 }
 
-export function calcLogLoss(pred: MatchPrediction): number {
+export function calcLogLoss(pred: CompletedPrediction): number {
   const o = predOutcomeOf(pred.actualHome, pred.actualAway)
   // + 0 normaliseert −0 (bij p=1) naar +0.
   return -Math.log(Math.max(probForOutcome(pred, o), LOGLOSS_EPS)) + 0
 }
 
-export function calcBrierScore(pred: MatchPrediction): number {
+export function calcBrierScore(pred: CompletedPrediction): number {
   const o = predOutcomeOf(pred.actualHome, pred.actualAway)
   return (
     (pred.predictedHome - (o === 'home' ? 1 : 0)) ** 2 +
@@ -201,7 +213,7 @@ function modelPickOutcome(p: MatchPrediction): PredOutcome {
 }
 
 export function evaluateAll(predictions: MatchPrediction[]): AccuracySummary {
-  const results: MatchResult[] = predictions.map(p => {
+  const results: MatchResult[] = predictions.filter(isComplete).map(p => {
     const actualOutcome = predOutcomeOf(p.actualHome, p.actualAway)
     return {
       ...p,

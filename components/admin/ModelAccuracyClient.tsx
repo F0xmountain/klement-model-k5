@@ -7,7 +7,7 @@ import {
 } from 'recharts'
 import Btn from '@/components/ui/Btn'
 import {
-  evaluateAll, BASELINE_LOG_LOSS, BASELINE_BRIER, type MatchPrediction,
+  evaluateAll, isComplete, BASELINE_LOG_LOSS, BASELINE_BRIER, type MatchPrediction,
 } from '@/lib/model-accuracy'
 
 interface Props {
@@ -42,6 +42,13 @@ export default function ModelAccuracyClient({ initialLog, available }: Props) {
   const loggedIds = useMemo(() => new Set(log.map(e => e.matchId)), [log])
   const candidates = available.filter(m => !loggedIds.has(m.matchId))
   const selected = candidates.find(m => m.matchId === selectedId) ?? null
+
+  // Pre-match entries waarvan de uitslag nog niet is ingevuld.
+  const pending = useMemo(() => log.filter(e => !isComplete(e)), [log])
+
+  function saveResult(matchId: string, home: number, away: number) {
+    setLog(prev => prev.map(e => (e.matchId === matchId ? { ...e, actualHome: home, actualAway: away } : e)))
+  }
 
   const fmtDate = (iso: string) =>
     iso ? new Date(iso).toLocaleDateString(locale, { day: '2-digit', month: 'short' }) : '—'
@@ -209,6 +216,18 @@ export default function ModelAccuracyClient({ initialLog, available }: Props) {
         )}
       </div>
 
+      {/* Sectie B2 — pre-match entries, uitslag invoeren */}
+      {pending.length > 0 && (
+        <div>
+          <div className="section-title" style={{ marginBottom: 8 }}>{t('pendingTitle')}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {pending.map(e => (
+              <PendingResultRow key={e.matchId} entry={e} onSaved={saveResult} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Sectie C — voorspelling toevoegen */}
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-b)', marginBottom: 14 }}>{t('addPrediction')}</div>
@@ -258,6 +277,84 @@ export default function ModelAccuracyClient({ initialLog, available }: Props) {
 
 const th: React.CSSProperties = { padding: '6px 8px', fontWeight: 'normal', whiteSpace: 'nowrap' }
 const td: React.CSSProperties = { padding: '6px 8px', whiteSpace: 'nowrap' }
+
+// Eén pre-match entry met een knop om de uitslag in te voeren. Houdt zijn eigen
+// invoer-state lokaal; meldt een geslaagde opslag terug aan de ouder.
+function PendingResultRow({
+  entry,
+  onSaved,
+}: {
+  entry: MatchPrediction
+  onSaved: (matchId: string, home: number, away: number) => void
+}) {
+  const t = useTranslations('admin.accuracy')
+  const [open, setOpen] = useState(false)
+  const [home, setHome] = useState('')
+  const [away, setAway] = useState('')
+  const [saveState, setSaveState] = useState<AddState>('idle')
+
+  async function save() {
+    const h = Number(home)
+    const a = Number(away)
+    if (home.trim() === '' || away.trim() === '' || !Number.isInteger(h) || !Number.isInteger(a) || h < 0 || a < 0) {
+      setSaveState('error')
+      return
+    }
+    setSaveState('saving')
+    try {
+      const res = await fetch('/api/admin/prediction-log', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matchId: entry.matchId, actualHome: h, actualAway: a }),
+      })
+      if (!res.ok) throw new Error('patch failed')
+      onSaved(entry.matchId, h, a)
+    } catch {
+      setSaveState('error')
+    }
+  }
+
+  return (
+    <div className="factor-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ fontSize: 9, color: 'var(--color-txt)' }}>
+        ⏳ {entry.homeTeam} – {entry.awayTeam} · {t('pendingNote')}
+      </div>
+      {!open ? (
+        <div>
+          <Btn variant="green" onClick={() => { setOpen(true); setSaveState('idle') }}>{t('enterResult')}</Btn>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <input
+            type="number"
+            min={0}
+            value={home}
+            onChange={e => { setHome(e.target.value); setSaveState('idle') }}
+            aria-label={`${entry.homeTeam} ${t('goalsLabel')}`}
+            style={goalInput}
+          />
+          <span style={{ fontSize: 11 }}>–</span>
+          <input
+            type="number"
+            min={0}
+            value={away}
+            onChange={e => { setAway(e.target.value); setSaveState('idle') }}
+            aria-label={`${entry.awayTeam} ${t('goalsLabel')}`}
+            style={goalInput}
+          />
+          <Btn variant="green" onClick={save} disabled={saveState === 'saving'}>{t('saveResult')}</Btn>
+          {saveState === 'error' && <span style={{ fontSize: 8, color: 'var(--color-r)' }}>{t('addError')}</span>}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const goalInput: React.CSSProperties = {
+  width: 56, padding: '6px 8px', textAlign: 'center',
+  backgroundColor: 'var(--color-bg)', border: '2px solid var(--color-brd2)',
+  boxShadow: '3px 3px 0 var(--color-brd)', fontFamily: 'inherit', fontSize: 10, color: 'var(--color-txt)',
+}
 
 function Stat({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
   return (

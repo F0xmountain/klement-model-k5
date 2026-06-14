@@ -4,11 +4,11 @@ import {
   calcBrierScore,
   evaluateAll,
   getModelAccuracy,
-  type MatchPrediction,
+  type CompletedPrediction,
 } from '../lib/model-accuracy'
 import { matchP } from '../lib/klement-custom'
 
-function pred(over: Partial<MatchPrediction>): MatchPrediction {
+function pred(over: Partial<CompletedPrediction>): CompletedPrediction {
   return {
     matchId: 'M',
     homeTeam: 'A',
@@ -68,7 +68,7 @@ describe('evaluateAll', () => {
 describe('getModelAccuracy — teamnaam-normalisatie (Canada vs Bosnia-Herz)', () => {
   // Buggy gedrag: "Bosnia and Herzegovina" werd niet herkend → sc()=0 → Canada
   // kreeg p≈0.92. Met canonTeam-normalisatie resolvet het naar "Bosnia-Herz".
-  const draw = (pA: number, dr: number, pB: number): MatchPrediction => ({
+  const draw = (pA: number, dr: number, pB: number): CompletedPrediction => ({
     matchId: 'CAN-BIH', homeTeam: 'Canada', awayTeam: 'Bosnia', matchDate: '2026-06-12',
     predictedHome: pA, predictedDraw: dr, predictedAway: pB, actualHome: 1, actualAway: 1,
   })

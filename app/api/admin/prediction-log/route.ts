@@ -60,6 +60,33 @@ export async function POST(req: Request) {
   return Response.json({ ok: true })
 }
 
+// Vult de uitslag in voor een bestaande (pre-match) entry. Pas ná de wedstrijd
+// aangeroepen vanuit de admin-pagina; berekent geen kansen opnieuw — alleen
+// actualHome/actualAway worden gezet zodat log loss/Brier mee gaan tellen.
+export async function PATCH(req: Request) {
+  if (!(await isAdminAuthed())) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const b = await req.json()
+  if (typeof b.matchId !== 'string' || !isGoals(b.actualHome) || !isGoals(b.actualAway)) {
+    return Response.json({ error: 'Invalid body' }, { status: 400 })
+  }
+
+  const log = readLog()
+  const entry = log.find(e => e.matchId === b.matchId)
+  if (!entry) {
+    return Response.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  entry.actualHome = b.actualHome
+  entry.actualAway = b.actualAway
+  writeLog(log)
+
+  revalidatePath('/', 'layout')
+  return Response.json({ ok: true })
+}
+
 export async function DELETE(req: Request) {
   if (!(await isAdminAuthed())) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })

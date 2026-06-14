@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "matchId": "GRP-F1",
+    "homeTeam": "Netherlands",
+    "awayTeam": "Japan",
+    "matchDate": "2026-06-14",
+    "predictedHome": 0.3364,
+    "predictedDraw": 0.176,
+    "predictedAway": 0.4876,
+    "actualHome": null,
+    "actualAway": null
+  }
+]
