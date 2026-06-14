@@ -1,5 +1,6 @@
 import { GROUPS } from './fixtures'
-import { matchP, sc, type EloMap } from './klement-custom'
+import { matchP, sc, type EloMap, type VenueInfo } from './klement-custom'
+import { roundMatches } from './wc26-schedule'
 import stadiumsRaw from './stadiums.json'
 
 // Volledige toernooi-simulator: simuleert de groepsfase (12 groepen × 6
@@ -108,12 +109,33 @@ function sampleScore(pA: number, pB: number, result: 'A' | 'D' | 'B', rng: () =>
   return [1, 1]
 }
 
+// Hoogte (m) per KO-wedstrijd uit wc26-schedule.json, per ronde op
+// wedstrijdvolgorde (matchNum). Hiermee krijgt matchP ook in de knockout de
+// venue-hoogte mee, zodat de hoogte-factor ook in R32→finale werkt. wc26-schedule
+// bevat geen coördinaten, dus de reisafstand-factor blijft hier (net als voorheen)
+// buiten beschouwing.
+const KO_ALTITUDES: Record<string, number[]> = {
+  r32: roundMatches('r32').map(m => m.altitudeM),
+  r16: roundMatches('r16').map(m => m.altitudeM),
+  qf: roundMatches('qf').map(m => m.altitudeM),
+  sf: roundMatches('sf').map(m => m.altitudeM),
+  final: roundMatches('final').map(m => m.altitudeM),
+}
+
+// VenueInfo (alleen hoogte) voor het matchIndex-de duel van een KO-ronde, of
+// undefined als er geen schema-wedstrijd voor dat slot is (dan blijft de
+// hoogte-factor een no-op).
+function koVenue(round: string, matchIndex: number): VenueInfo | undefined {
+  const alt = KO_ALTITUDES[round]?.[matchIndex]
+  return alt === undefined ? undefined : { altitude: alt }
+}
+
 // Knockout-winnaar: bij gelijkspel (verlenging + strafschoppen) wordt de
 // gelijkspelkans proportioneel naar beide teams herverdeeld op basis van hun
 // relatieve winkans — P(A gaat door) = pA / (pA + pB). Een sterker team wint dus
-// vaker de tiebreak dan een 50/50-flip zou geven.
-function koWinner(a: string, b: string, rng: () => number, eloOverride?: EloMap): string {
-  const { pA, pB } = matchP(a, b, undefined, undefined, undefined, eloOverride)
+// vaker de tiebreak dan een 50/50-flip zou geven. venue geeft de hoogte-factor mee.
+function koWinner(a: string, b: string, rng: () => number, eloOverride?: EloMap, venue?: VenueInfo): string {
+  const { pA, pB } = matchP(a, b, venue, undefined, undefined, eloOverride)
   return rng() < pA / (pA + pB) ? a : b
 }
 
@@ -348,10 +370,12 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap, seed?: numbe
 
     // Knockout: paarsgewijze winnaars per ronde. roundKey + slotindex + sim geven
     // elk KO-duel een eigen random-stroom (common random numbers over snapshots).
-    const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>, roundKey: string): string[] => {
+    // playedRound is de wc26-schedule-ronde die in deze stap wordt gespeeld (de
+    // R32 produceert de teams die R16 bereiken), voor de venue-hoogte per slot.
+    const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>, roundKey: string, playedRound: string): string[] => {
       const next: string[] = []
       for (let i = 0; i < teams.length; i += 2) {
-        const wnr = koWinner(teams[i]!, teams[i + 1]!, src(`${roundKey}.${i}.${s}`), eloOverride)
+        const wnr = koWinner(teams[i]!, teams[i + 1]!, src(`${roundKey}.${i}.${s}`), eloOverride, koVenue(playedRound, i / 2))
         next.push(wnr)
         tally(counter, i / 2, wnr)
         inc(reach, wnr)
@@ -359,11 +383,11 @@ export function simulateTournament(n = 10000, eloOverride?: EloMap, seed?: numbe
       return next
     }
 
-    const r16 = advance(r32, cR16, reachR16, 'r16')    // 32 → 16
-    const qf = advance(r16, cQF, reachQF, 'qf')        // 16 → 8
-    const sf = advance(qf, cSF, reachSF, 'sf')         // 8 → 4
-    const fin = advance(sf, cFinal, reachFinal, 'fin') // 4 → 2
-    const champ = koWinner(fin[0]!, fin[1]!, src(`champ.${s}`), eloOverride)
+    const r16 = advance(r32, cR16, reachR16, 'r16', 'r32')   // 32 → 16 (speelt R32)
+    const qf = advance(r16, cQF, reachQF, 'qf', 'r16')       // 16 → 8 (speelt R16)
+    const sf = advance(qf, cSF, reachSF, 'sf', 'qf')         // 8 → 4 (speelt QF)
+    const fin = advance(sf, cFinal, reachFinal, 'fin', 'sf') // 4 → 2 (speelt SF)
+    const champ = koWinner(fin[0]!, fin[1]!, src(`champ.${s}`), eloOverride, koVenue('final', 0))
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }
@@ -416,10 +440,10 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
     reachR32[team] = (reachR32[team] ?? 0) + n
   }
 
-  const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>): string[] => {
+  const advance = (teams: string[], counter: SlotCounter, reach: Record<string, number>, playedRound: string): string[] => {
     const next: string[] = []
     for (let i = 0; i < teams.length; i += 2) {
-      const wnr = koWinner(teams[i]!, teams[i + 1]!, Math.random, eloOverride)
+      const wnr = koWinner(teams[i]!, teams[i + 1]!, Math.random, eloOverride, koVenue(playedRound, i / 2))
       next.push(wnr)
       tally(counter, i / 2, wnr)
       inc(reach, wnr)
@@ -428,11 +452,11 @@ export function simulateBracket(r32: string[], n = 10000, eloOverride?: EloMap):
   }
 
   for (let s = 0; s < n; s++) {
-    const r16 = advance(r32, cR16, reachR16)
-    const qf = advance(r16, cQF, reachQF)
-    const sf = advance(qf, cSF, reachSF)
-    const fin = advance(sf, cFinal, reachFinal)
-    const champ = koWinner(fin[0]!, fin[1]!, Math.random, eloOverride)
+    const r16 = advance(r32, cR16, reachR16, 'r32')   // speelt R32
+    const qf = advance(r16, cQF, reachQF, 'r16')      // speelt R16
+    const sf = advance(qf, cSF, reachSF, 'qf')        // speelt QF
+    const fin = advance(sf, cFinal, reachFinal, 'sf') // speelt SF
+    const champ = koWinner(fin[0]!, fin[1]!, Math.random, eloOverride, koVenue('final', 0))
     tally(cChamp, 0, champ)
     inc(champion, champ)
   }
