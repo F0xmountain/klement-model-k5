@@ -24,7 +24,9 @@ export async function POST(req: Request) {
       }
       weights[key] = v
     } else {
-      const [lo, hi] = key === 'starPlayerScale' ? [0.5, 2.0] : [0, 1]
+      const [lo, hi] = key === 'starPlayerScale' ? [0.5, 2.0]
+        : key === 'bivariateCorrelation' ? [0.05, 0.20]
+        : [0, 1]
       if (typeof v !== 'number' || !Number.isFinite(v) || v < lo || v > hi) {
         return Response.json({ error: `Invalid weight: ${key}` }, { status: 400 })
       }

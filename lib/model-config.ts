@@ -20,6 +20,8 @@ export interface ModelWeights {
   starPenalty2: number // default 0.05
   starPenalty3: number // default 0.03
   starPlayerScale: number // 0.5–2.0, default 1.0 — multiplier op alle sterspeler-penalty's
+  // Bivariate Poisson correlatieparameter (lambda3) voor de scoreverdeling op /versus
+  bivariateCorrelation: number // default 0.11, range 0.05–0.20 (Karlis-Ntzoufras 2003)
   // Aan/uit-schakelaars voor venue-gebonden factoren
   altitudeEnabled: boolean // default true
   travelEnabled: boolean   // default true
@@ -39,6 +41,7 @@ export const DEFAULT_WEIGHTS: ModelWeights = {
   starPenalty2: 0.05,
   starPenalty3: 0.03,
   starPlayerScale: 1.0,
+  bivariateCorrelation: 0.11,
   altitudeEnabled: true,
   travelEnabled: true,
 }
