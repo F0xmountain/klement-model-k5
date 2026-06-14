@@ -1,5 +1,6 @@
 'use client'
-import { useState, useMemo, useCallback, useSyncExternalStore } from 'react'
+import { Suspense, useState, useMemo, useCallback, useSyncExternalStore } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   resolveBracket, savePicks, parsePicks,
@@ -16,11 +17,29 @@ import MyBracketView from '@/components/my-bracket/MyBracketView'
 import ResetPicksButton from '@/components/my-bracket/ResetPicksButton'
 import SimBracketView from '@/components/bracket/SimBracketView'
 import PixelParticles from '@/components/ui/PixelParticles'
+import FlagImg from '@/components/ui/FlagImg'
+import TimeAgo from '@/components/ui/TimeAgo'
+import { teamData } from '@/lib/klement'
+import { getUpsets } from '@/lib/upset-detector'
+import { getResultsLastUpdated } from '@/lib/rest-days'
 
 type Tab = 'groups' | 'bracket' | 'klement'
 
+const TABS: readonly Tab[] = ['groups', 'bracket', 'klement']
+
+// useSearchParams vereist een Suspense-grens tijdens prerender.
 export default function MyBracketPage() {
+  return (
+    <Suspense fallback={<div className="sec" />}>
+      <MyBracketInner />
+    </Suspense>
+  )
+}
+
+function MyBracketInner() {
   const t = useTranslations('myBracket')
+  const ts = useTranslations('simBracket')
+  const tc = useTranslations('common')
 
   const koRaw = useSyncExternalStore(subscribePicks, getPicksSnapshot, getServerPicksSnapshot)
   const picks = useMemo(() => parsePicks(koRaw), [koRaw])
@@ -30,8 +49,17 @@ export default function MyBracketPage() {
   const r32Teams = useMemo(() => seedR32FromGroups(groupPicks), [groupPicks])
   const resolved = useMemo(() => resolveBracket(r32Teams, picks), [r32Teams, picks])
 
-  const [tab, setTab] = useState<Tab>('groups')
+  // Begin-tab uit ?tab= (zo landen de redirects van /sim-bracket en
+  // /knockout/bracket direct op de model-bracket). Tab-wisselen blijft lokaal.
+  const tabParam = useSearchParams().get('tab')
+  const initialTab: Tab = TABS.includes(tabParam as Tab) ? (tabParam as Tab) : 'groups'
+  const [tab, setTab] = useState<Tab>(initialTab)
   const [copied, setCopied] = useState(false)
+
+  // Context die voorheen op /sim-bracket stond, nu naast de model-bracket in de
+  // klement-tab (deterministisch — leest results.json + modelkansen).
+  const lastUpdated = getResultsLastUpdated()
+  const upsets = getUpsets().slice(0, 5)
 
   const handlePick = useCallback((round: Round, index: number, team: string) => {
     const next: MyPicks = { ...picks, [round]: [...picks[round]] }
@@ -103,7 +131,38 @@ export default function MyBracketPage() {
           </div>
         )}
 
-        {tab === 'klement' && <SimBracketView />}
+        {tab === 'klement' && (
+          <div>
+            <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2, marginBottom: 6 }}>{ts('subtitle')}</div>
+            {lastUpdated && (
+              <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 16 }}>
+                {ts('updated')} <TimeAgo iso={lastUpdated} />
+              </div>
+            )}
+            <SimBracketView />
+
+            {upsets.length > 0 && (
+              <div style={{ marginTop: 28 }}>
+                <div className="section-title">⚡ {ts('upsets')}</div>
+                <div className="factor-card">
+                  {upsets.map((u, i) => (
+                    <div key={u.matchLabel} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 9, padding: '7px 0', borderTop: i > 0 ? '1px solid var(--color-brd)' : 'none' }}>
+                      <span style={{ color: 'var(--color-muted)', minWidth: 22 }}>{u.group}</span>
+                      <FlagImg name={u.teamA} h={12} emoji={teamData(u.teamA)?.flag ?? '🏳️'} />
+                      <span style={{ color: 'var(--color-txt)' }}>{u.teamA}</span>
+                      <span style={{ color: 'var(--color-muted)' }}>{tc('vs')}</span>
+                      <FlagImg name={u.teamB} h={12} emoji={teamData(u.teamB)?.flag ?? '🏳️'} />
+                      <span style={{ color: 'var(--color-txt)' }}>{u.teamB}</span>
+                      <span style={{ marginLeft: 'auto', color: 'var(--color-r)' }}>
+                        {u.weakerTeam} {Math.round(u.upsetProb * 100)}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

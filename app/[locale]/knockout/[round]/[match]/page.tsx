@@ -46,7 +46,7 @@ export default async function MatchPage({
 
         {/* Breadcrumb nav */}
         <div className="ko-tabs">
-          <Link href="/knockout/bracket" className="ko-tab">{tr('bracket')}</Link>
+          <Link href={{ pathname: '/my-bracket', query: { tab: 'klement' } }} className="ko-tab">{tr('bracket')}</Link>
           <Link href={`/knockout/${round}`} className="ko-tab active">
             {roundFull}
           </Link>

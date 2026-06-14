@@ -35,7 +35,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ local
       <PixelParticles variant={isFinal ? 'green' : 'mix'} />
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div className="ko-tabs">
-        <Link href="/knockout/bracket" className="ko-tab">{tr('bracket')}</Link>
+        <Link href={{ pathname: '/my-bracket', query: { tab: 'klement' } }} className="ko-tab">{tr('bracket')}</Link>
         {ROUND_ORDER.map(r => (
           <Link key={r} href={`/knockout/${r}`} className={`ko-tab${round === r ? ' active' : ''}`}>
             {tr(r)}
