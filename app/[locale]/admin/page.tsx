@@ -42,6 +42,12 @@ const CARDS = [
     description: 'Step-by-step calculation for any match. Shows every factor, formula, and modifier.',
     href: '/admin/model-explain',
   },
+  {
+    icon: 'ti-chart-line',
+    title: 'Model Accuracy',
+    description: 'Track log loss and Brier score per played match against the random baseline.',
+    href: '/admin/model-accuracy',
+  },
 ] as const
 
 // Aantal spelers met status doubtful/out over beide statuslagen, ontdubbeld op team+naam
