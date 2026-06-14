@@ -439,6 +439,8 @@
     "factorToggles": "Venue-factoren",
     "altitudeToggle": "Hoogte-factor",
     "travelToggle": "Reisafstand",
+    "opponentAdjustToggle": "Tegenstander-gecorrigeerde sterkte",
+    "opponentAdjustHint": "Weegt recente wedstrijden op basis van tegenstander kwaliteit (Dixon-Coles)",
     "fifaEloSlider": "FIFA/Elo-verdeling",
     "fifaEloValue": "FIFA {fifa}% · Elo {elo}%",
     "starPlayerScale": "Sterspeler-penalty schaal",

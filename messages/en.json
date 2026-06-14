@@ -439,6 +439,8 @@
     "factorToggles": "Venue factors",
     "altitudeToggle": "Altitude factor",
     "travelToggle": "Travel distance",
+    "opponentAdjustToggle": "Opponent-adjusted strength",
+    "opponentAdjustHint": "Weights recent matches by opponent quality (Dixon-Coles)",
     "fifaEloSlider": "FIFA/Elo split",
     "fifaEloValue": "FIFA {fifa}% · Elo {elo}%",
     "starPlayerScale": "Star-player penalty scale",

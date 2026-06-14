@@ -73,7 +73,7 @@ export default function ModelConfigClient({ initial }: Props) {
     setSaveState('idle')
   }
 
-  function setToggle(key: 'altitudeEnabled' | 'travelEnabled', value: boolean) {
+  function setToggle(key: 'altitudeEnabled' | 'travelEnabled' | 'opponentAdjustmentEnabled', value: boolean) {
     setW(prev => ({ ...prev, [key]: value }))
     setSaveState('idle')
   }
@@ -200,18 +200,22 @@ export default function ModelConfigClient({ initial }: Props) {
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-o)', marginBottom: 16 }}>{t('factorToggles')}</div>
         {([
-          { key: 'altitudeEnabled', labelKey: 'altitudeToggle' },
-          { key: 'travelEnabled', labelKey: 'travelToggle' },
-        ] as const).map(({ key, labelKey }) => (
-          <label key={key} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 9, color: 'var(--color-muted)', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={w[key]}
-              onChange={e => setToggle(key, e.target.checked)}
-              style={{ accentColor: 'var(--color-b)' }}
-            />
-            {t(labelKey)}
-          </label>
+          { key: 'altitudeEnabled', labelKey: 'altitudeToggle', hintKey: undefined },
+          { key: 'travelEnabled', labelKey: 'travelToggle', hintKey: undefined },
+          { key: 'opponentAdjustmentEnabled', labelKey: 'opponentAdjustToggle', hintKey: 'opponentAdjustHint' },
+        ] as const).map(({ key, labelKey, hintKey }) => (
+          <div key={key} style={{ marginBottom: 10 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 9, color: 'var(--color-muted)', cursor: 'pointer' }} title={hintKey ? t(hintKey) : undefined}>
+              <input
+                type="checkbox"
+                checked={w[key]}
+                onChange={e => setToggle(key, e.target.checked)}
+                style={{ accentColor: 'var(--color-b)' }}
+              />
+              {t(labelKey)}
+            </label>
+            {hintKey && <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 4, marginLeft: 26 }}>{t(hintKey)}</div>}
+          </div>
         ))}
       </div>
 

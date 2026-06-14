@@ -3,6 +3,7 @@ import eloHistoryRaw from './elo-history.json'
 import eloCurrentRaw from './elo-current.json'
 import formCacheRaw from './form-cache.json'
 import leagueDataRaw from './league-data.json'
+import resultsRaw from './results.json'
 import type { TeamData, WDL } from '../types'
 import { fG, fP, fT } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
@@ -10,6 +11,7 @@ import { getHomeAltitude, getWcEditions } from './squad-data'
 import { getModelWeights, type ModelWeights } from './model-config'
 import { ALTITUDE_FACTOR_ENABLED } from './feature-flags'
 import { travelPenalty } from './travel-distance'
+import { canonTeam } from './wc26-schedule'
 
 // Wrapper rond klement.ts's matchP. lib/klement.ts is read-only — modelaanpassingen
 // (Elo-weging, sterspeler-blessures) leven hier.
@@ -340,6 +342,110 @@ export function applyLeagueFactor(
   return shiftPA(probs, net)
 }
 
+// ── Tegenstander-gecorrigeerde sterkte (Dixon-Coles 1997, Karlis-Ntzoufras 2003) ──
+// Ruwe doelpunten-gemiddelden zijn slechte predictors zonder correctie voor
+// tegenstanderkwaliteit: 2.7 GF/game tegen zwakke landen weegt anders dan 1.8
+// GF/game tegen toplanden. We wegen elke wedstrijd met een sterkte-tier afgeleid
+// van de FIFA-punten van de tegenstander.
+
+export interface MatchStat {
+  team: string // teams.json-naam
+  opponent: string // teams.json-naam
+  goalsFor: number
+  goalsAgainst: number
+}
+
+export interface OpponentAdjustedStats {
+  adjustedAttack: number // genormaliseerd, gemiddeld internationaal team ≈ 1.0
+  adjustedDefense: number // idem (hoger = meer tegengoals, dus zwakkere defensie)
+  sampleSize: number // aantal wedstrijden in de berekening
+  confidence: number // 0–1, stijgt met de steekproefgrootte
+}
+
+// FIFA-punten → sterkte-tier (proxy voor de FIFA-rang-band uit de Dixon-Coles-
+// methode). De puntdrempels benaderen de rangbanden top-10 / 11-25 / 26-50 /
+// 51-100 / 101+. Onbekend team → gemiddeld (1.0).
+function opponentTier(team: string): number {
+  const pts = td[team]?.fifa ?? td[canonTeam(team) ?? team]?.fifa
+  if (pts === undefined) return 1.0
+  if (pts >= 1800) return 3.0
+  if (pts >= 1700) return 2.0
+  if (pts >= 1600) return 1.5
+  if (pts >= 1500) return 1.0
+  return 0.6
+}
+
+const ADJ_MIN_MATCHES = 3 // minder dan dit → null (te weinig data)
+const ADJ_LEAGUE_AVG_GOALS = 1.3 // normalisatie: gemiddeld team ≈ 1.0 tegen tier-1.0
+const ADJ_CONFIDENCE_FULL = 10 // aantal wedstrijden voor volledige confidence
+
+// Tegenstander-gecorrigeerde aanvals-/verdedigingssterkte voor één team uit zijn
+// recente wedstrijden. Aanval weegt doelpunten omhoog naarmate de tegenstander
+// sterker was; verdediging weegt tegengoals omlaag (tegen een sterk team
+// incasseren is minder erg). null bij < ADJ_MIN_MATCHES wedstrijden.
+export function getOpponentAdjustedStrength(
+  teamName: string,
+  matchStats: MatchStat[]
+): OpponentAdjustedStats | null {
+  const matches = matchStats.filter(m => m.team === teamName)
+  if (matches.length < ADJ_MIN_MATCHES) return null
+
+  let attack = 0
+  let defense = 0
+  for (const m of matches) {
+    const tier = opponentTier(m.opponent)
+    attack += m.goalsFor * tier
+    defense += m.goalsAgainst / tier
+  }
+  const n = matches.length
+  return {
+    adjustedAttack: attack / n / ADJ_LEAGUE_AVG_GOALS,
+    adjustedDefense: defense / n / ADJ_LEAGUE_AVG_GOALS,
+    sampleSize: n,
+    confidence: clamp(n / ADJ_CONFIDENCE_FULL, 0, 1),
+  }
+}
+
+const ADJ_CONFIDENCE_GATE = 0.4
+const ADJ_SIGMA = 0.28
+
+// Past de tegenstander-gecorrigeerde aanvalssterkte toe als logit-shift (net als
+// de vorm- en competitiefactor, zodat de kansensom 1 blijft). Hergebruikt
+// formWeight als gewicht/gate. No-op tenzij de toggle aan staat, formWeight > 0,
+// en BEIDE teams genoeg data hebben (confidence > 0.4).
+export function applyOpponentAdjustFactor(
+  probs: MatchProbs,
+  statsA: OpponentAdjustedStats | null,
+  statsB: OpponentAdjustedStats | null,
+  formWeight: number = weights.formWeight
+): MatchProbs {
+  if (!weights.opponentAdjustmentEnabled || formWeight <= 0) return probs
+  if (!statsA || !statsB) return probs
+  if (statsA.confidence <= ADJ_CONFIDENCE_GATE || statsB.confidence <= ADJ_CONFIDENCE_GATE) return probs
+
+  const net = (formWeight * (statsA.adjustedAttack - statsB.adjustedAttack)) / ADJ_SIGMA
+  return shiftPA(probs, net)
+}
+
+// Bouwt per-team wedstrijdstatistieken uit de gespeelde uitslagen (results.json),
+// elke wedstrijd vanuit beide teams gezien. Teamnamen genormaliseerd naar
+// teams.json. Gememoïseerd — results.json is statisch binnen een build.
+interface ResultEntryRaw { teamA: string; teamB: string; scoreA: number; scoreB: number }
+let resultsStatsCache: MatchStat[] | null = null
+function resultsMatchStats(): MatchStat[] {
+  if (resultsStatsCache) return resultsStatsCache
+  const file = resultsRaw as { results?: Record<string, ResultEntryRaw> }
+  const out: MatchStat[] = []
+  for (const r of Object.values(file.results ?? {})) {
+    const a = canonTeam(r.teamA) ?? r.teamA
+    const b = canonTeam(r.teamB) ?? r.teamB
+    out.push({ team: a, opponent: b, goalsFor: r.scoreA, goalsAgainst: r.scoreB })
+    out.push({ team: b, opponent: a, goalsFor: r.scoreB, goalsAgainst: r.scoreA })
+  }
+  resultsStatsCache = out
+  return out
+}
+
 // Logit-shift van ~-0.16 ≈ -4%-punt rond p=0.5 (zelfde schaal als de andere
 // post-hoc factoren). Een team met < 3 rustdagen levert ~4%-punt winkans in.
 const REST_PENALTY = -0.16
@@ -419,6 +525,10 @@ export function matchP(
   probs = applyExperienceFactor(probs, nA, nB)
   probs = applyFormFactor(probs, nA, nB)
   probs = applyLeagueFactor(probs, nA, nB)
+  if (weights.opponentAdjustmentEnabled) {
+    const stats = resultsMatchStats()
+    probs = applyOpponentAdjustFactor(probs, getOpponentAdjustedStrength(nA, stats), getOpponentAdjustedStrength(nB, stats))
+  }
   probs = applyRestDaysFactor(probs, nA, nB, restDays?.home, restDays?.away)
   const teamNlA = toTeamNl(nA) ?? ''
   const teamNlB = toTeamNl(nB) ?? ''

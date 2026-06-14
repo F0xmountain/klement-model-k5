@@ -25,6 +25,9 @@ export interface ModelWeights {
   // Aan/uit-schakelaars voor venue-gebonden factoren
   altitudeEnabled: boolean // default true
   travelEnabled: boolean   // default true
+  // Tegenstander-gecorrigeerde sterkte (Dixon-Coles): weegt recente wedstrijden
+  // op tegenstanderkwaliteit. Default uit — activeer zodra er genoeg data is.
+  opponentAdjustmentEnabled: boolean // default false
 }
 
 export const DEFAULT_WEIGHTS: ModelWeights = {
@@ -44,6 +47,7 @@ export const DEFAULT_WEIGHTS: ModelWeights = {
   bivariateCorrelation: 0.11,
   altitudeEnabled: true,
   travelEnabled: true,
+  opponentAdjustmentEnabled: false,
 }
 
 // Som van de basisfactoren die rond 1.00 hoort te liggen (configurator-waarschuwing)
