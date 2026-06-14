@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { teamNames, teamData } from '@/lib/klement'
-import { matchP, simResultCustom, latestElo, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
+import { matchP, simResultCustom, latestElo, altitudePct, ELO_WEIGHT, FIFA_WEIGHT } from '@/lib/klement-custom'
 import { calcConfidenceInterval, type ConfidenceInterval } from '@/lib/confidence'
 import { calcScoreDistribution } from '@/lib/score-distribution'
 import stadiumsRaw from '@/lib/stadiums.json'
@@ -205,6 +205,8 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
   const tB = teamData(teamB)
   const eloA = latestElo(teamA)
   const eloB = latestElo(teamB)
+  const altPctA = venue ? altitudePct(teamA, venue.altitude ?? 0) : 0
+  const altPctB = venue ? altitudePct(teamB, venue.altitude ?? 0) : 0
   const scoreDist = calcScoreDistribution(expectedGoalsNum(pA), expectedGoalsNum(pB))
   const restWarnings = [
     { team: teamA, days: restA },
@@ -330,6 +332,15 @@ export default function VersusClient({ initialA, initialB }: { initialA?: string
             <span style={{ marginLeft: 8 }}>· {t('eloScores', { a: Math.round(eloA), b: Math.round(eloB) })}</span>
           )}
         </div>
+
+        {/* 6a — Hoogte-bijdrage (alleen bij een hooggelegen venue met effect) */}
+        {venue && venue.altitude > 1500 && (altPctA !== 0 || altPctB !== 0) && (
+          <div style={{ marginTop: 4, textAlign: 'center', fontSize: 8, color: 'var(--color-o)' }}>
+            ⛰ {t('altitudeLabel', { m: venue.altitude })}
+            {altPctA !== 0 && <span> · {teamA} {altPctA.toFixed(1)}%</span>}
+            {altPctB !== 0 && <span> · {teamB} {altPctB.toFixed(1)}%</span>}
+          </div>
+        )}
 
         {/* 6b — Gedeelde 5-assige radar (beide teams op dezelfde assen) */}
         <div style={{ marginTop: 20 }}>

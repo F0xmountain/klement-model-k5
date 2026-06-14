@@ -8,6 +8,7 @@ import { fG, fP, fT } from './klement'
 import { applyStarPlayerModifier, toTeamNl } from './squad-modifier'
 import { getHomeAltitude, getHomeCoordinates, getWcEditions } from './squad-data'
 import { getModelWeights, type ModelWeights } from './model-config'
+import { ALTITUDE_FACTOR_ENABLED } from './feature-flags'
 
 // Wrapper rond klement.ts's matchP. lib/klement.ts is read-only — modelaanpassingen
 // (Elo-weging, sterspeler-blessures) leven hier.
@@ -187,31 +188,48 @@ function matchPElo(nA: string, nB: string, eloOverride?: EloMap): MatchProbs {
   return matchPEloWith(nA, nB, weights, eloOverride)
 }
 
-// Logit-shift van ~-0.22 ≈ -5%-punt rond p=0.5 (zelfde schaal als STAR_PENALTY
-// in squad-modifier.ts)
-const ALTITUDE_PENALTY = -0.22
-const ALTITUDE_VENUE_THRESHOLD_M = 1500
-const SEA_LEVEL_THRESHOLD_M = 500
+// Volledige logit-penalty (~-0.22 ≈ -5%-punt rond p=0.5) bij de bovengrens van de
+// hoogte-normalisatie; lineair geschaald naar de genormaliseerde venue-hoogte.
+const ALTITUDE_MAX_PENALTY = -0.22
+const ALTITUDE_NORM_MAX_M = 2500     // hoogte genormaliseerd naar [0,1] over 0–2500m
+const ALTITUDE_VENUE_THRESHOLD_M = 1500   // factor activeert pas boven deze venue-hoogte
+const SEA_LEVEL_THRESHOLD_M = 500    // team is "niet gewend aan hoogte" als thuishoogte < dit
 
-// Teams uit een land op zeeniveau (gemiddelde hoogte < 500m) leveren ~5%-punt
-// winkans in als de wedstrijd op > 1500m hoogte wordt gespeeld (Mexico-Stad,
-// Guadalajara). Geldt voor beide teams gelijk, dus als beiden uit een laagland
-// komen heffen de verschuivingen elkaar op.
+// Genormaliseerde venue-hoogte in [0,1] over 0–2500m.
+function altitudeNorm(m: number): number {
+  return clamp(m / ALTITUDE_NORM_MAX_M, 0, 1)
+}
+
+// Logit-penalty voor één team op een venue van venueAltitude meter. Een team uit
+// een zeeniveau-land (thuishoogte < SEA_LEVEL_THRESHOLD_M, proxy voor "niet gewend
+// aan hoogte") levert winkans in, geschaald naar de genormaliseerde venue-hoogte.
+// Teams uit een hooggelegen land (Mexico, Ecuador, Iran, …) krijgen geen penalty.
+// 0 als de factor uit staat, het venue onder de drempel ligt, of de thuishoogte
+// onbekend is.
+export function altitudePenalty(team: string, venueAltitude: number): number {
+  if (!ALTITUDE_FACTOR_ENABLED) return 0
+  if (venueAltitude <= ALTITUDE_VENUE_THRESHOLD_M) return 0
+  const home = getHomeAltitude(team)
+  if (home === undefined || home >= SEA_LEVEL_THRESHOLD_M) return 0
+  return ALTITUDE_MAX_PENALTY * altitudeNorm(venueAltitude)
+}
+
+// Hoogte-bijdrage als ~percentagepunt rond p=0.5 (voor weergave op /versus).
+export function altitudePct(team: string, venueAltitude: number): number {
+  return (sigmoid(altitudePenalty(team, venueAltitude)) - 0.5) * 100
+}
+
+// Past de hoogte-factor toe: het netto logit-verschil tussen beide teams (een
+// laagland-team op hoogte verliest, de tegenstander wint relatief). Komen beide
+// uit een laagland, dan heffen de verschuivingen elkaar op.
 export function applyAltitudeFactor(
   probs: MatchProbs,
   homeTeam: string,
   awayTeam: string,
   venueAltitude: number = 0
 ): MatchProbs {
-  if (venueAltitude <= ALTITUDE_VENUE_THRESHOLD_M) return probs
-
-  const altA = getHomeAltitude(homeTeam)
-  const altB = getHomeAltitude(awayTeam)
-
-  let net = 0
-  if (altA !== undefined && altA < SEA_LEVEL_THRESHOLD_M) net += ALTITUDE_PENALTY
-  if (altB !== undefined && altB < SEA_LEVEL_THRESHOLD_M) net -= ALTITUDE_PENALTY
-
+  const net = altitudePenalty(homeTeam, venueAltitude) - altitudePenalty(awayTeam, venueAltitude)
+  if (net === 0) return probs
   return shiftPA(probs, net)
 }
 
