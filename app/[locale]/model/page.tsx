@@ -61,7 +61,7 @@ export default function ModelPage() {
         {/* Factoren */}
         <div className="section-title" style={{ marginTop: 32 }}>{t('factorsTitle')}</div>
         <div className="factor-card" style={{ overflowX: 'auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '24px 1.4fr 2.4fr 70px 1fr', gap: 10, fontSize: 8, color: 'var(--color-muted)', marginBottom: 10, minWidth: 520 }}>
+          <div className="model-table-head">
             <span />
             <span>{t('colFactor')}</span>
             <span>{t('colDesc')}</span>
@@ -69,7 +69,7 @@ export default function ModelPage() {
             <span style={{ textAlign: 'right' }}>{t('colSource')}</span>
           </div>
           {factors.map(f => (
-            <div key={f.key} style={{ display: 'grid', gridTemplateColumns: '24px 1.4fr 2.4fr 70px 1fr', gap: 10, fontSize: 9, alignItems: 'center', padding: '8px 0', borderTop: '1px solid var(--color-brd)', minWidth: 520 }}>
+            <div key={f.key} className="model-table-row">
               <span style={{ fontSize: 13 }}>{f.icon}</span>
               <span style={{ color: 'var(--color-txt)' }}>{t(`factors.${f.key}.name`)}</span>
               <span style={{ color: 'var(--color-muted)', fontSize: 8, lineHeight: 1.7 }}>{t(`factors.${f.key}.desc`)}</span>

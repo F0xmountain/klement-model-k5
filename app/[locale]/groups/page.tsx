@@ -14,7 +14,7 @@ export default function GroupsPage() {
       <div style={{ fontSize: 9, color: 'var(--color-muted)', marginBottom: 24, lineHeight: 2, display: 'flex', alignItems: 'center', gap: 8 }}>
         <span className="qual-dot" /> {t('qualifiedLegend')}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div className="groups-grid">
         {Object.entries(GROUPS).map(([group, teams]) => (
           <GroupCard key={group} group={group} teams={teams} />
         ))}

@@ -123,7 +123,7 @@ export default async function MatchPage({
           </div>
 
           {/* Factor breakdowns */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div className="match-split">
             {[
               { team: tA, name: teamA, color: 'var(--color-r)' },
               { team: tB, name: teamB, color: 'var(--color-b)' },

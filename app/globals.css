@@ -637,3 +637,55 @@ main { flex: 1; }
   .admin-result-row { grid-template-columns: 1fr 36px 12px 36px 1fr 56px; }
   .admin-result-row > span:last-child { display: none; }
 }
+
+/* ── Responsieve layout-fixes (sessie 15, stap 2) ──
+   Inline-grids verplaatst naar classes zodat ze op mobiel (<768px) stapelen.
+   Desktopgedrag (≥768px) is identiek aan de oude inline-waarden. */
+
+/* Home-hero — tekst + mascotte */
+.hero-grid { display: grid; grid-template-columns: 1fr 220px; gap: 32px; align-items: center; }
+
+/* Groepen-raster (/groups) */
+.groups-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Twee-koloms factor-vergelijking (/knockout/[round]/[match]) */
+.match-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Factor-tabel (/model) */
+.model-table-head,
+.model-table-row { display: grid; grid-template-columns: 24px 1.4fr 2.4fr 70px 1fr; gap: 10px; }
+.model-table-head { font-size: 8px; color: var(--color-muted); margin-bottom: 10px; }
+.model-table-row { font-size: 9px; align-items: center; padding: 8px 0; border-top: 1px solid var(--color-brd); }
+
+@media (max-width: 768px) {
+  /* Minder horizontale sectiemarge → meer leesbare contentbreedte op 380px */
+  .sec { padding: 24px 16px; }
+
+  /* Alles wat naast elkaar stond stapelt netjes onder elkaar */
+  .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+  .groups-grid { grid-template-columns: 1fr; }
+  .match-split { grid-template-columns: 1fr; }
+
+  /* Factor-tabel: geen horizontale scroll meer. Kop verdwijnt; per rij komt de
+     omschrijving op een tweede regel, gewicht rechtsboven, bron rechtsonder. */
+  .model-table-head { display: none; }
+  .model-table-row {
+    grid-template-columns: 24px 1fr auto;
+    grid-template-areas:
+      "icon name weight"
+      "desc desc source";
+    gap: 4px 10px;
+    align-items: start;
+  }
+  .model-table-row > :nth-child(1) { grid-area: icon; }
+  .model-table-row > :nth-child(2) { grid-area: name; }
+  .model-table-row > :nth-child(3) { grid-area: desc; }
+  .model-table-row > :nth-child(4) { grid-area: weight; }
+  .model-table-row > :nth-child(5) { grid-area: source; }
+
+  /* Home 3-koloms rasters: iets minder padding zodat ze op 380px ademruimte houden
+     (fr-gebaseerd, dus ze veroorzaken nooit horizontale scroll). */
+  .stat-cell { padding: 16px 6px; }
+  .record-grid { gap: 10px; }
+  .record-card { padding: 16px 8px; }
+}

@@ -29,7 +29,7 @@ export default function LandingPage() {
         <div className="scanline" />
         <PixelParticles variant="mix" />
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 220px', gap: 32, alignItems: 'center' }}>
+        <div className="hero-grid" style={{ position: 'relative', zIndex: 1 }}>
           {/* Left — text */}
           <div>
             <div className="eyebrow fade-in">{t('eyebrow')}</div>
