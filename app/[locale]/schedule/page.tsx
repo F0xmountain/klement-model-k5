@@ -48,7 +48,7 @@ function MatchRow({ m }: { m: ScheduledMatch }) {
     <div className="factor-card" style={{ padding: 12, marginBottom: 8, borderLeft: `3px solid ${borderColor}` }}>
       <div style={{ fontSize: 8, color: 'var(--color-muted)' }}><ViewerKickoff dateUtc={m.dateUtc} /></div>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 8 }}>
-        🏟 {m.venue} · {m.city}<AltitudeBadge altitudeM={m.altitudeM} style={{ marginLeft: 6 }} />
+        🏟 {m.venue} · {m.city}<AltitudeBadge venue={m.venue} style={{ marginLeft: 6 }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 10 }}>
         {side(home, m.homeSlot, 'left')}

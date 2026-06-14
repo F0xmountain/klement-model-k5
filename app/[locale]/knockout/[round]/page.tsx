@@ -3,11 +3,11 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { matchP, teamData } from '@/lib/klement'
 import { ROUNDS, makeSlug } from '@/lib/fixtures'
-import { roundMatches, isHighAltitude } from '@/lib/wc26-schedule'
-import { ALTITUDE_FACTOR_ENABLED } from '@/lib/feature-flags'
+import { roundMatches } from '@/lib/wc26-schedule'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import ViewerKickoff from '@/components/match/ViewerKickoff'
+import AltitudeBadge from '@/components/match/AltitudeBadge'
 
 const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'] as const
 type Round = typeof ROUND_ORDER[number]
@@ -25,7 +25,6 @@ export default async function KnockoutPage({ params }: { params: Promise<{ local
   const tr = await getTranslations('rounds')
   const tk = await getTranslations('knockout')
   const tc = await getTranslations('common')
-  const tm = await getTranslations('match')
   // Venues/data per bracket-slot uit het FIFA-schema (op wedstrijdnummer). De
   // koppeling is positioneel: bracket-index i → de i-de KO-wedstrijd van de ronde.
   // Tegenstanders zijn Klement's voorspelling; de venue van het slot ligt vast.
@@ -68,11 +67,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ local
               <div style={{ fontSize: 8, color: 'var(--color-muted)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
                 <ViewerKickoff dateUtc={sched.dateUtc} />
                 <span>🏟 {sched.venue} · {sched.city}</span>
-                {isHighAltitude(sched.altitudeM) && (
-                  <span title={tm('altitudeWarning')} style={{ color: 'var(--color-o)', cursor: 'help', whiteSpace: 'nowrap' }}>
-                    ⚠️ {tm('altitude', { m: sched.altitudeM })}{!ALTITUDE_FACTOR_ENABLED && ` ${tm('altitudeSoon')}`}
-                  </span>
-                )}
+                <AltitudeBadge venue={sched.venue} />
               </div>
             )}
             <Link

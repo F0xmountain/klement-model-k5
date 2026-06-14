@@ -15,10 +15,9 @@ interface Props {
   dateUtc?: string
   venue?: string
   city?: string
-  altitudeM?: number
 }
 
-export default function MatchCard({ teamA, teamB, k, isFinal = false, dateUtc, venue, city, altitudeM }: Props) {
+export default function MatchCard({ teamA, teamB, k, isFinal = false, dateUtc, venue, city }: Props) {
   const t = useTranslations('common')
   const { pA, dr, pB } = matchP(teamA, teamB)
   const tA = teamData(teamA)
@@ -42,7 +41,7 @@ export default function MatchCard({ teamA, teamB, k, isFinal = false, dateUtc, v
           <div><ViewerKickoff dateUtc={dateUtc} /></div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
             <span>🏟 {venue}{city ? ` · ${city}` : ''}</span>
-            {altitudeM !== undefined && <AltitudeBadge altitudeM={altitudeM} />}
+            <AltitudeBadge venue={venue} />
           </div>
         </div>
       )}

@@ -167,7 +167,7 @@ export default function GroupMatchRow({ teamA, teamB, result, venue, played, sco
             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               🏟 {sched.venue} · {sched.city} · {kickoff.date} {kickoff.time}
             </span>
-            <AltitudeBadge altitudeM={sched.altitudeM} />
+            <AltitudeBadge venue={sched.venue} />
           </div>
         )}
       </Link>

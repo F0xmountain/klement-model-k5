@@ -23,6 +23,7 @@
   "match": {
     "venue": "Stadium",
     "altitude": "{m}m altitude",
+    "altitudeShort": "{m}m",
     "altitudeWarning": "High altitude — sea-level teams take a small win-probability penalty",
     "altitudeSoon": "(coming soon in the model)",
     "localTime": "local time",

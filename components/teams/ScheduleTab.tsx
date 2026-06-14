@@ -62,7 +62,7 @@ function GroupMatchCard({ teamName, match }: { teamName: string; match: Schedule
         <RestIndicator teamName={teamName} matchId={match.matchId} />
       </div>
       <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 8 }}>
-        🏟 {match.venue} · {match.city}<AltitudeBadge altitudeM={match.altitudeM} style={{ marginLeft: 6 }} />
+        🏟 {match.venue} · {match.city}<AltitudeBadge venue={match.venue} style={{ marginLeft: 6 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
         <FlagImg name={opponent} h={16} emoji={teamData(opponent)?.flag ?? '🏳️'} />

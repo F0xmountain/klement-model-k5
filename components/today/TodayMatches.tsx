@@ -108,7 +108,7 @@ export default function TodayMatches() {
           </div>
         </div>
         <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 8, textAlign: 'center' }}>
-          🏟 {m.venue} · {m.city}<AltitudeBadge altitudeM={m.altitudeM} style={{ marginLeft: 6 }} />
+          🏟 {m.venue} · {m.city}<AltitudeBadge venue={m.venue} style={{ marginLeft: 6 }} />
         </div>
         <div style={{ textAlign: 'center', marginTop: 8 }}>
           <Link

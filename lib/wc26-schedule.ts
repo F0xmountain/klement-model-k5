@@ -1,4 +1,5 @@
 import scheduleRaw from './wc26-schedule.json'
+import stadiumsRaw from './stadiums.json'
 import type { ScheduledMatch, ScheduleRound } from './types/schedule'
 
 export type { ScheduledMatch, ScheduleRound }
@@ -22,9 +23,19 @@ export function canonTeam(name: string | undefined): string | undefined {
 
 export const SCHEDULE = scheduleRaw as ScheduledMatch[]
 
-const ALTITUDE_THRESHOLD_M = 1500
-export function isHighAltitude(altitudeM: number): boolean {
-  return altitudeM > ALTITUDE_THRESHOLD_M
+interface Stadium {
+  stadium: string
+  fifaName: string
+  altitude_m: number
+}
+const STADIUMS = stadiumsRaw as Stadium[]
+
+// Hoogte (m) van een venue uit lib/stadiums.json. De venue-naam uit het schedule
+// is de stadionnaam (met fifaName als fallback). Undefined als het venue niet in
+// stadiums.json staat — de UI toont dan geen hoogte.
+export function venueAltitude(venue: string | undefined): number | undefined {
+  if (!venue) return undefined
+  return STADIUMS.find(s => s.stadium === venue || s.fifaName === venue)?.altitude_m
 }
 
 export function matchById(matchId: string): ScheduledMatch | undefined {

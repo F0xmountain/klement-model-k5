@@ -1,18 +1,16 @@
 import { useTranslations } from 'next-intl'
-import { isHighAltitude } from '@/lib/wc26-schedule'
-import { ALTITUDE_FACTOR_ENABLED } from '@/lib/feature-flags'
+import { venueAltitude } from '@/lib/wc26-schedule'
 
-// ⚠️-badge bij venues > 1500m. Zichtbaar ongeacht de feature-flag; de tekst
-// vermeldt "(binnenkort in het model)" zolang de hoogte-factor nog uit staat.
-export default function AltitudeBadge({ altitudeM, style }: { altitudeM: number; style?: React.CSSProperties }) {
+// Toont altijd de hoogte van het venue ("⛰ Xm"), ongeacht de hoogte — geen
+// drempel, geen waarschuwing. De hoogte komt uit lib/stadiums.json via de
+// venue-lookup; staat het venue daar niet in, dan toont de badge niets.
+export default function AltitudeBadge({ venue, style }: { venue: string | undefined; style?: React.CSSProperties }) {
   const tm = useTranslations('match')
-  if (!isHighAltitude(altitudeM)) return null
+  const m = venueAltitude(venue)
+  if (m === undefined) return null
   return (
-    <span
-      title={tm('altitudeWarning')}
-      style={{ color: 'var(--color-o)', fontSize: 8, whiteSpace: 'nowrap', cursor: 'help', ...style }}
-    >
-      ⚠️ {tm('altitude', { m: altitudeM })}{!ALTITUDE_FACTOR_ENABLED && ` ${tm('altitudeSoon')}`}
+    <span style={{ color: 'var(--color-muted)', fontSize: 8, whiteSpace: 'nowrap', ...style }}>
+      ⛰ {tm('altitudeShort', { m })}
     </span>
   )
 }
