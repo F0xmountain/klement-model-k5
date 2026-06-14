@@ -22,10 +22,14 @@ const PRESETS: Record<string, ModelWeights> = {
   presetEloHeavy: { ...DEFAULT_WEIGHTS, eloWeight: 0.60 },
   presetFormHeavy: { ...DEFAULT_WEIGHTS, formWeight: 0.30 },
   presetMarketFocused: { ...DEFAULT_WEIGHTS, marketWeight: 0.50 },
+  presetConservative: { ...DEFAULT_WEIGHTS, altitudeEnabled: false, travelEnabled: false },
 }
 
+// Alleen de numerieke gewicht-velden zijn slider-instelbaar (booleans zijn toggles).
+type NumericWeightKey = { [K in keyof ModelWeights]: ModelWeights[K] extends number ? K : never }[keyof ModelWeights]
+
 interface SliderDef {
-  key: keyof ModelWeights
+  key: NumericWeightKey
   labelKey: string
   max: number
 }
@@ -63,7 +67,12 @@ export default function ModelConfigClient({ initial }: Props) {
   // Live preview met de huidige slider-waarden (niet de opgeslagen config)
   const { pA, dr, pB } = previewMatchP(PREVIEW_A, PREVIEW_B, w)
 
-  function setWeight(key: keyof ModelWeights, value: number) {
+  function setWeight(key: NumericWeightKey, value: number) {
+    setW(prev => ({ ...prev, [key]: value }))
+    setSaveState('idle')
+  }
+
+  function setToggle(key: 'altitudeEnabled' | 'travelEnabled', value: boolean) {
     setW(prev => ({ ...prev, [key]: value }))
     setSaveState('idle')
   }
@@ -151,6 +160,25 @@ export default function ModelConfigClient({ initial }: Props) {
       <div className="factor-card">
         <div style={{ fontSize: 10, color: 'var(--color-g)', marginBottom: 16 }}>{t('starPenalties')}</div>
         {STAR_SLIDERS.map(renderSlider)}
+      </div>
+
+      {/* Venue-factor schakelaars */}
+      <div className="factor-card">
+        <div style={{ fontSize: 10, color: 'var(--color-o)', marginBottom: 16 }}>{t('factorToggles')}</div>
+        {([
+          { key: 'altitudeEnabled', labelKey: 'altitudeToggle' },
+          { key: 'travelEnabled', labelKey: 'travelToggle' },
+        ] as const).map(({ key, labelKey }) => (
+          <label key={key} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 9, color: 'var(--color-muted)', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={w[key]}
+              onChange={e => setToggle(key, e.target.checked)}
+              style={{ accentColor: 'var(--color-b)' }}
+            />
+            {t(labelKey)}
+          </label>
+        ))}
       </div>
 
       {/* Live preview */}

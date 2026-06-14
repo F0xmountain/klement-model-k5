@@ -13,17 +13,25 @@ export async function POST(req: Request) {
 
   const body = await req.json()
 
-  const weights: Partial<ModelWeights> = {}
+  const weights: Record<string, number | boolean> = {}
   for (const key of WEIGHT_KEYS) {
     const v = body[key]
-    if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > 1) {
-      return Response.json({ error: `Invalid weight: ${key}` }, { status: 400 })
+    // Boolean schakelaars (altitude/travel) als bool; overige gewichten in [0,1].
+    if (typeof DEFAULT_WEIGHTS[key] === 'boolean') {
+      if (typeof v !== 'boolean') {
+        return Response.json({ error: `Invalid toggle: ${key}` }, { status: 400 })
+      }
+      weights[key] = v
+    } else {
+      if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > 1) {
+        return Response.json({ error: `Invalid weight: ${key}` }, { status: 400 })
+      }
+      weights[key] = v
     }
-    weights[key] = v
   }
 
   // Weiger te ver-van-1.00 basisgewichten (te grote afwijking om zinvol te zijn).
-  const sum = baseFactorSum(weights as ModelWeights)
+  const sum = baseFactorSum(weights as unknown as ModelWeights)
   if (sum < BASE_SUM_SAVE_MIN || sum > BASE_SUM_SAVE_MAX) {
     return Response.json({ error: `Base weights sum to ${sum.toFixed(2)}; must be within [${BASE_SUM_SAVE_MIN}, ${BASE_SUM_SAVE_MAX}]` }, { status: 400 })
   }

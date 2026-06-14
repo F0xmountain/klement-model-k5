@@ -192,7 +192,7 @@ function altitudeNorm(m: number): number {
 // 0 als de factor uit staat, het venue onder de drempel ligt, of de thuishoogte
 // onbekend is.
 export function altitudePenalty(team: string, venueAltitude: number): number {
-  if (!ALTITUDE_FACTOR_ENABLED) return 0
+  if (!ALTITUDE_FACTOR_ENABLED || !weights.altitudeEnabled) return 0
   if (venueAltitude <= ALTITUDE_VENUE_THRESHOLD_M) return 0
   const home = getHomeAltitude(team)
   if (home === undefined || home >= SEA_LEVEL_THRESHOLD_M) return 0
@@ -235,6 +235,7 @@ export function applyTravelFactor(
   venueLat?: number,
   venueLon?: number
 ): MatchProbs {
+  if (!weights.travelEnabled) return probs
   if (venueLat === undefined || venueLon === undefined) return probs
 
   const venue = { lat: venueLat, lon: venueLon }

@@ -19,6 +19,9 @@ export interface ModelWeights {
   starPenalty1: number // default 0.08
   starPenalty2: number // default 0.05
   starPenalty3: number // default 0.03
+  // Aan/uit-schakelaars voor venue-gebonden factoren
+  altitudeEnabled: boolean // default true
+  travelEnabled: boolean   // default true
 }
 
 export const DEFAULT_WEIGHTS: ModelWeights = {
@@ -34,6 +37,8 @@ export const DEFAULT_WEIGHTS: ModelWeights = {
   starPenalty1: 0.08,
   starPenalty2: 0.05,
   starPenalty3: 0.03,
+  altitudeEnabled: true,
+  travelEnabled: true,
 }
 
 // Som van de basisfactoren die rond 1.00 hoort te liggen (configurator-waarschuwing)
