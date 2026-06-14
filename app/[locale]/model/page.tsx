@@ -53,10 +53,38 @@ export default function ModelPage() {
 
         {/* Hoe het model werkt */}
         <div className="section-title" style={{ marginTop: 24 }}>{t('howTitle')}</div>
-        <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 8 }}>
+        <div style={{ fontSize: 10, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 16 }}>
           {t('howIntro')}
         </div>
-        <Link href="/about" style={{ fontSize: 9, color: 'var(--color-b)' }}>{t('paperLink')} →</Link>
+
+        {/* Oorspronkelijk Klement-model — formule, herkomst en quote
+            (samengevoegd vanuit /about, sessie 15 stap 5). */}
+        <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2.2, marginBottom: 20 }}>
+          {t('paperRef')}<br />
+          {t('variance')}
+        </div>
+
+        <div className="about-formula">
+          <div style={{ fontSize: 10, color: 'var(--color-b)', marginBottom: 16, letterSpacing: 1 }}>{t('formulaLabel')}</div>
+          <div style={{ fontSize: 11, color: 'var(--color-txt)', lineHeight: 2.6 }}>
+            S = 0.45·FIFA<br />
+            &nbsp;&nbsp;&nbsp;+ 0.20·GDP<br />
+            &nbsp;&nbsp;&nbsp;+ 0.15·TEMP<br />
+            &nbsp;&nbsp;&nbsp;+ 0.15·POP<br />
+            &nbsp;&nbsp;&nbsp;+ 0.05·HOST
+          </div>
+          <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 12, lineHeight: 2.2 }}>
+            P(WIN) = Φ((S_A − S_B) / 0.28) × (1 − DRAW)
+          </div>
+        </div>
+
+        <div className="about-quote" style={{ marginTop: 20 }}>
+          <div style={{ fontSize: 10, color: 'var(--color-r)', lineHeight: 2.6 }}>
+            {t('quoteLine1')}<br />
+            {t('quoteLine2')}<br /><br />
+            — JOACHIM KLEMENT, PANMURE LIBERUM
+          </div>
+        </div>
 
         {/* Factoren */}
         <div className="section-title" style={{ marginTop: 32 }}>{t('factorsTitle')}</div>

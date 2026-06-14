@@ -46,7 +46,7 @@ export default function LandingPage() {
                 backgroundColor: 'var(--color-r)', color: '#fff', border: 'none',
                 boxShadow: '4px 4px 0 var(--color-r-sh)', textDecoration: 'none', display: 'inline-block',
               }}>{t('ctaPredict')}</Link>
-              <Link href="/about" className="px-btn" style={{
+              <Link href="/model" className="px-btn" style={{
                 fontFamily: 'inherit', fontSize: 10, padding: '12px 22px',
                 backgroundColor: 'var(--color-bg)', color: 'var(--color-b)',
                 border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)',

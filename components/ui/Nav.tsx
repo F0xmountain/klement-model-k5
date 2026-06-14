@@ -31,8 +31,6 @@ const GROUPS = [
       { href: '/model', key: 'model' },
       { href: '/stats', key: 'stats' },
       { href: '/impact', key: 'impact' },
-      { href: '/mc', key: 'mc' },
-      { href: '/about', key: 'about' },
     ],
   },
 ] as const
