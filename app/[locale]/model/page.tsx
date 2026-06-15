@@ -127,6 +127,12 @@ export default function ModelPage() {
             boxShadow: '4px 4px 0 var(--color-b-sh)', textDecoration: 'none', display: 'inline-block',
           }}>{t('configCta')} →</Link>
         </div>
+
+        {/* Inspiratie-credit — oorspronkelijke maker van de open-source fork */}
+        <div style={{ fontSize: 8, color: 'var(--color-muted)', lineHeight: 2, marginTop: 32 }}>
+          {t('attribution')}<br />
+          {t('attributionFork')}
+        </div>
       </div>
     </div>
   )

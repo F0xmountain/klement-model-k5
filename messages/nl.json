@@ -81,8 +81,6 @@
     "more": "MEER",
     "switchToEnglish": "Naar Engels",
     "switchToDutch": "Naar Nederlands",
-    "followX": "Volg op X",
-    "viewGithub": "Bekijk op GitHub",
     "openMenu": "Menu openen",
     "closeMenu": "Menu sluiten",
     "tournament": "TOERNOOI",
@@ -491,6 +489,8 @@
   },
   "model": {
     "title": "HET MODEL",
+    "attribution": "Geïnspireerd op het oorspronkelijke Klement-model en de open-source fork door x-cookie.",
+    "attributionFork": "Reynards Den is een onafhankelijke doorontwikkeling.",
     "howTitle": "HOE HET MODEL WERKT",
     "howIntro": "Gebaseerd op Joachim Klements econometrische WK-model (Panmure Liberum, april 2026), uitgebreid met Elo-ratings, recente vorm, competitieniveau en blessuredata van de sterspelers.",
     "paperLink": "Lees over het oorspronkelijke model",

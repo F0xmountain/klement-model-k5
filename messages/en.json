@@ -81,8 +81,6 @@
     "more": "MORE",
     "switchToEnglish": "Switch to English",
     "switchToDutch": "Switch to Dutch",
-    "followX": "Follow on X",
-    "viewGithub": "View on GitHub",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "tournament": "TOURNAMENT",
@@ -491,6 +489,8 @@
   },
   "model": {
     "title": "THE MODEL",
+    "attribution": "Inspired by the original Klement model and the open-source fork by x-cookie.",
+    "attributionFork": "Reynards Den is an independent evolution.",
     "howTitle": "HOW THE MODEL WORKS",
     "howIntro": "Based on Joachim Klement's econometric World Cup model (Panmure Liberum, April 2026), extended with Elo ratings, recent form, league quality and injury data for the top players.",
     "paperLink": "Read about the original model",
