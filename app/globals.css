@@ -1,25 +1,31 @@
 @import "tailwindcss";
 
+/* Reynards Den — retro-pixel-broadcast palet (vossen-thema, scorebord-energie).
+   Donkere, warme basis (stadion-bij-avond / arcade-cabinet). Alleen de tokens
+   zijn aangepast; de hele CSS is token-gedreven, dus de look flipt consistent
+   zonder layout-wijzigingen. Rollen ongewijzigd:
+   r = primair vossen-accent (logo/knoppen/team A/verlies),
+   g = winst/kwalificatie, b = team B/links/info, o = goud/amber (Klement-keuze). */
 @theme {
-  --color-r:     #A32D2D;
-  --color-r-bg:  #FCEBEB;
-  --color-r-sh:  #F7C1C1;
-  --color-g:     #3B6D11;
-  --color-g-mid: #639922;
-  --color-g-bg:  #EAF3DE;
-  --color-g-sh:  #C0DD97;
-  --color-b:     #185FA5;
-  --color-b-bg:  #E6F1FB;
-  --color-b-sh:  #B5D4F4;
-  --color-bg:    #FFFFFF;
-  --color-surf:  #F5F5F0;
-  --color-brd:   #D0D0C8;
-  --color-brd2:  #B0B0A8;
-  --color-txt:   #1A1A1A;
-  --color-muted: #888880;
-  --color-o:     #B5651D;
-  --color-o-bg:  #FDF1E0;
-  --color-o-sh:  #F5D2A0;
+  --color-r:     #E8590C;   /* vossen-oranje/roest — hoofdaccent */
+  --color-r-bg:  #3A1D10;   /* donkere warme vulling achter oranje */
+  --color-r-sh:  #7A2E08;   /* diepe roest offset-schaduw */
+  --color-g:     #54B33A;   /* winst-groen, opgehelderd voor donkere bg */
+  --color-g-mid: #6FBF3A;
+  --color-g-bg:  #15280D;   /* donkergroene vulling */
+  --color-g-sh:  #2E5E15;
+  --color-b:     #3E8FD8;   /* team B / links, helder blauw op donker */
+  --color-b-bg:  #102438;   /* donker marineblauw vulling */
+  --color-b-sh:  #1C4B78;
+  --color-bg:    #16130F;   /* diep warm houtskool — stadion bij avond */
+  --color-surf:  #221D17;   /* warme donkere kaart/nav/footer */
+  --color-brd:   #3A322A;   /* warme donkere rand */
+  --color-brd2:  #50463A;   /* sterkere rand */
+  --color-txt:   #F5EDE4;   /* warm crème */
+  --color-muted: #A89A88;   /* warm gedempt */
+  --color-o:     #FFB454;   /* goud/amber — secundair accent (Klement-keuze) */
+  --color-o-bg:  #332515;   /* donkere amber vulling */
+  --color-o-sh:  #8A6320;   /* diepe amber schaduw */
 }
 
 *, *::before, *::after { box-sizing: border-box; border-radius: 0 !important; }
