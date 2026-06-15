@@ -27,9 +27,12 @@ export default function LandingPage() {
         <div className="dot-grid" style={{ position: 'absolute', inset: 0 }} />
 
         {/* Hero-banner — afgekaderd broadcast-still (ESPN-avond): vos-mascotte
-            + WK-trofee in het stadion. Tekst staat eronder en blijft leesbaar. */}
+            + WK-trofee in het stadion. Tekst staat eronder en blijft leesbaar.
+            aspect-ratio halveert de natuurlijke 16:9-hoogte (1672/941) bij elke
+            breedte; object-fit cover cropt netjes rond het midden i.p.v. uitrekken. */}
         <div style={{
           position: 'relative', zIndex: 1, marginBottom: 32, lineHeight: 0, overflow: 'hidden',
+          aspectRatio: '1672 / 470',
           border: '1px solid var(--color-brd2)', borderTop: '3px solid var(--color-r)',
         }}>
           <Image
@@ -39,7 +42,7 @@ export default function LandingPage() {
             height={941}
             priority
             sizes="(max-width: 768px) 100vw, 900px"
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center' }}
           />
         </div>
 
