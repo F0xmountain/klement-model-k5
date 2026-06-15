@@ -60,9 +60,22 @@ export default async function LocaleLayout({
   setRequestLocale(locale)
   const t = await getTranslations('footer')
 
+  // Zet het opgeslagen thema vóór de eerste paint (geen flash-of-wrong-theme).
+  // Default = dark (SSR rendert data-theme="dark"); alleen naar light flippen als
+  // localStorage dat zegt. suppressHydrationWarning omdat dit script het attribuut
+  // op <html> kan wijzigen vóórdat React hydrateert.
+  const themeInit =
+    "(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"
+
   return (
-    <html lang={locale} className={`${pixelFont.variable} ${displayFont.variable} ${bodyFont.variable}`}>
+    <html
+      lang={locale}
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${pixelFont.variable} ${displayFont.variable} ${bodyFont.variable}`}
+    >
       <body>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <NextIntlClientProvider>
           <div className="page-wrap">
             <Nav />

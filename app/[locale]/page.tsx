@@ -27,6 +27,7 @@ export default function LandingPage() {
           bestaande hero-tekst links eroverheen. Op mobiel stapelt de banner met
           de tekst eronder (zie .hero-bc media-query in globals.css). */}
       <div className="hero-bc">
+        {/* Nacht-banner (dark) en dag-banner (light) — getoond/verborgen per data-theme. */}
         <Image
           src="/Banner_night2.png"
           alt={t('bannerAlt')}
@@ -34,7 +35,15 @@ export default function LandingPage() {
           height={809}
           priority
           sizes="100vw"
-          className="hero-bc-img"
+          className="hero-bc-img hero-bc-img-dark"
+        />
+        <Image
+          src="/Banner_day2.png"
+          alt={t('bannerAlt')}
+          width={1774}
+          height={887}
+          sizes="100vw"
+          className="hero-bc-img hero-bc-img-light"
         />
         <div className="hero-bc-overlay" />
 

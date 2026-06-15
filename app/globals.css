@@ -29,6 +29,34 @@
   --color-o-sh:  #8A6320;   /* diepe amber schaduw */
 }
 
+/* ── Light-modus (☀) — overschrijft elk token; dark blijft de :root-default ──
+   Strak, ESPN-broadcast-overdag (FiveThirtyEight-achtig): warm wit, witte kaarten,
+   donkere tekst. Vossen-oranje blijft de knalkleur, iets dieper (#E8590C) zodat het
+   leesbaar is als tekst-op-licht. Randen/offset-schaduwen krijgen lichte equivalenten
+   die nog zichtbaar zijn, zodat de scherpe-randen-stijl ook overdag werkt.
+   html[data-theme="light"] (specificiteit 0,1,1) wint van de @theme :root. */
+html[data-theme="light"] {
+  --color-r:     #E8590C;   /* vossen-oranje, dieper voor contrast op licht — knalt nog steeds */
+  --color-r-bg:  #FCE7D8;   /* lichte oranje vulling */
+  --color-r-sh:  #B8460A;   /* diepe oranje offset */
+  --color-g:     #3E8B4F;   /* winst-groen, dieper voor contrast op licht */
+  --color-g-mid: #4CA05E;
+  --color-g-bg:  #E3F2E7;   /* lichte groene vulling */
+  --color-g-sh:  #2E6B3B;
+  --color-b:     #2E6CA0;   /* team B / links — dieper blauw voor licht */
+  --color-b-bg:  #E3EDF6;   /* lichte blauwe vulling */
+  --color-b-sh:  #21527A;
+  --color-bg:    #F5F4F2;   /* warm wit (niet hard wit) */
+  --color-surf:  #FFFFFF;   /* witte kaarten */
+  --color-brd:   #DAD7D0;   /* lichte rand, nog zichtbaar als offset-schaduw */
+  --color-brd2:  #BFBBB2;   /* sterkere rand */
+  --color-txt:   #1A1815;   /* donkere tekst */
+  --color-muted: #6E6A63;   /* gedempt grijs (ook gelijkspel) */
+  --color-o:     #B26B12;   /* amber dieper voor licht */
+  --color-o-bg:  #F7EBD6;   /* lichte amber vulling */
+  --color-o-sh:  #8A6320;
+}
+
 *, *::before, *::after { box-sizing: border-box; border-radius: 0 !important; }
 
 html { height: 100%; }
@@ -359,6 +387,19 @@ main { flex: 1; }
   z-index: 2;
   max-width: 600px;
   padding: 40px 28px;
+}
+
+/* Banner per modus: nacht in dark, dag in light (toon/verberg via data-theme). */
+.hero-bc-img-light { display: none; }
+html[data-theme="light"] .hero-bc-img-dark  { display: none; }
+html[data-theme="light"] .hero-bc-img-light { display: block; }
+
+/* Light-modus: lichte overlay-gradient op de dag-banner zodat de donkere tekst
+   (var(--color-txt) flipt al naar donker) links leesbaar blijft. */
+html[data-theme="light"] .hero-bc-overlay {
+  background: linear-gradient(90deg,
+    rgba(245,244,242,0.94) 0%, rgba(245,244,242,0.82) 32%,
+    rgba(245,244,242,0.32) 62%, rgba(245,244,242,0) 100%);
 }
 
 @media (max-width: 768px) {

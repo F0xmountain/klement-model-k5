@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { liveMatchNow } from '@/lib/today-schedule'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
 // Vier hubs in de hoofdnav: twee directe kernacties (Versus, My Bracket) en twee
 // gegroepeerde dropdowns (Tournament, Insights). Op desktop klappen de groepen uit
@@ -157,6 +158,7 @@ export default function Nav() {
               {loc.toUpperCase()}
             </button>
           ))}
+          <ThemeToggle />
           <Link
             href="/admin"
             className="nav-link"
