@@ -328,9 +328,10 @@ main { flex: 1; }
   overflow: hidden;
   display: flex;
   align-items: center;
-  /* Hogere strip → bij gelijke breedte minder verticale crop → vos completer in beeld.
-     Beperkt hoger (middenweg): toont meer van de scène zonder een overdreven hero. */
-  min-height: clamp(260px, 40vw, 440px);
+  /* Vaste hoogte (geen min-height) → hero + banner-crop zijn IDENTIEK in NL en EN,
+     ongeacht de lengte van de kop; de tekst centreert verticaal binnen dezelfde box.
+     Eén stap ruimer dan voorheen zodat de vos/scène nog iets completer in beeld komt. */
+  height: clamp(280px, 43vw, 470px);
   border-top: 3px solid var(--color-r);
   border-bottom: 2px solid var(--color-brd);
 }
@@ -361,7 +362,7 @@ main { flex: 1; }
 }
 
 @media (max-width: 768px) {
-  .hero-bc { display: block; min-height: 0; }
+  .hero-bc { display: block; height: auto; }
   /* Volledige scène in beeld op mobiel: natuurlijke verhouding, geen crop → de
      vos staat compleet, geen horizontale overflow. */
   .hero-bc-img {

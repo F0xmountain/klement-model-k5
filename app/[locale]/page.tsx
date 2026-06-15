@@ -47,7 +47,7 @@ export default function LandingPage() {
 
           {/* Headline */}
           <h1 className="font-display" style={{
-            fontSize: 'clamp(32px, 7.5vw, 62px)', margin: 0, color: 'var(--color-txt)',
+            fontSize: 'clamp(30px, 6vw, 52px)', margin: 0, color: 'var(--color-txt)',
           }}>
             {t('heroLine1')}<br />
             <span style={{ color: 'var(--color-r)' }}>{t('heroLine2')}</span>
