@@ -2,7 +2,12 @@ name: Ingest Match Results
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # Every 6 hours during the tournament
+    # Wedstrijddag-venster: elke 30 min van 16:00 tot 04:30 UTC
+    # (= 18:00-06:30 CEST), dekt de WK-avond/nacht-wedstrijden incl. naspeeltijd.
+    # Twee regels omdat het UTC-venster over middernacht heen loopt.
+    # NB: na de groepsfase terug te zetten naar minder frequent (bv. '0 */6 * * *').
+    - cron: '0,30 16-23 * * *'
+    - cron: '0,30 0-4 * * *'
   workflow_dispatch:          # Allow manual trigger
 
 jobs:
