@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import PixelBar from '@/components/ui/PixelBar'
 import FlagImg from '@/components/ui/FlagImg'
@@ -24,6 +25,23 @@ export default function LandingPage() {
       {/* ── HERO — broadcast scorebug (statisch) ── */}
       <div className="sec" style={{ position: 'relative', overflow: 'hidden', paddingTop: 44, paddingBottom: 52 }}>
         <div className="dot-grid" style={{ position: 'absolute', inset: 0 }} />
+
+        {/* Hero-banner — afgekaderd broadcast-still (ESPN-avond): vos-mascotte
+            + WK-trofee in het stadion. Tekst staat eronder en blijft leesbaar. */}
+        <div style={{
+          position: 'relative', zIndex: 1, marginBottom: 32, lineHeight: 0, overflow: 'hidden',
+          border: '1px solid var(--color-brd2)', borderTop: '3px solid var(--color-r)',
+        }}>
+          <Image
+            src="/Banner_night.png"
+            alt={t('bannerAlt')}
+            width={1672}
+            height={941}
+            priority
+            sizes="(max-width: 768px) 100vw, 900px"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
 
         {/* Broadcast top-strip: LIVE-tag + kicker */}
         <div style={{
