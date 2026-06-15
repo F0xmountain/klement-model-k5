@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import PixelParticles from '@/components/ui/PixelParticles'
 import TimeAgo from '@/components/ui/TimeAgo'
@@ -78,11 +79,31 @@ export default function ModelPage() {
           </div>
         </div>
 
-        <div className="about-quote" style={{ marginTop: 20 }}>
-          <div style={{ fontSize: 10, color: 'var(--color-r)', lineHeight: 2.6 }}>
-            {t('quoteLine1')}<br />
-            {t('quoteLine2')}<br /><br />
-            — JOACHIM KLEMENT, PANMURE LIBERUM
+        {/* Klement-portret naast zijn quote (pixel-art, verplaatst vanaf de homepage). */}
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginTop: 20 }}>
+          <div style={{ flex: '0 0 auto', textAlign: 'center' }}>
+            <div style={{
+              display: 'inline-block', padding: 14, background: 'var(--color-surf)',
+              border: '1px solid var(--color-brd2)', borderTop: '3px solid var(--color-r)',
+            }}>
+              <Image
+                src="/mascot.jpeg"
+                alt={t('klementCaption')}
+                width={160}
+                height={176}
+                style={{ display: 'block', imageRendering: 'pixelated', border: '1px solid var(--color-brd2)' }}
+              />
+              <div className="font-pixel" style={{ fontSize: 7, color: 'var(--color-r)', marginTop: 10, letterSpacing: 1 }}>JOACHIM KLEMENT</div>
+              <div className="font-pixel" style={{ fontSize: 6, color: 'var(--color-muted)', marginTop: 3 }}>PANMURE LIBERUM</div>
+            </div>
+            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 8, maxWidth: 188, lineHeight: 1.6 }}>{t('klementCaption')}</div>
+          </div>
+          <div className="about-quote" style={{ flex: '1 1 260px' }}>
+            <div style={{ fontSize: 10, color: 'var(--color-r)', lineHeight: 2.6 }}>
+              {t('quoteLine1')}<br />
+              {t('quoteLine2')}<br /><br />
+              — JOACHIM KLEMENT, PANMURE LIBERUM
+            </div>
           </div>
         </div>
 

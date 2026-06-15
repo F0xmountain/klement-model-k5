@@ -6,7 +6,6 @@ import { teamData } from '@/lib/klement'
 import { formatKickoff } from '@/lib/venue-timezones'
 import { matchesOnUtcDay, nextMatchAfter, type TodayScheduleMatch } from '@/lib/today-schedule'
 import { Link } from '@/i18n/navigation'
-import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import AltitudeBadge from '@/components/match/AltitudeBadge'
 import { useViewerTimeZone } from '@/components/match/ViewerKickoff'
@@ -130,7 +129,6 @@ export default function TodayMatches() {
 
   return (
     <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
-      <PixelParticles variant="red" />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div className="section-title">{t('title')}</div>
         {state.today.length > 0 ? (

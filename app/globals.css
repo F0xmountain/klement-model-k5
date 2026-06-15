@@ -309,7 +309,8 @@ main { flex: 1; }
   padding: 5px 9px;
   display: inline-flex; align-items: center; gap: 7px;
 }
-.bc-live-dot { width: 6px; height: 6px; background: var(--color-r); display: inline-block; animation: blink 1s step-end infinite; }
+/* Statische indicator — bewust geen knipper-animatie (strakke TV-look). */
+.bc-live-dot { width: 6px; height: 6px; background: var(--color-r); display: inline-block; }
 
 /* ── Broadcast hero scorebug-frame ── */
 .bc-scorebug {
