@@ -358,8 +358,10 @@ main { flex: 1; }
   align-items: center;
   /* Vaste hoogte (geen min-height) → hero + banner-crop zijn IDENTIEK in NL en EN,
      ongeacht de lengte van de kop; de tekst centreert verticaal binnen dezelfde box.
-     Eén stap ruimer dan voorheen zodat de vos/scène nog iets completer in beeld komt. */
-  height: clamp(280px, 43vw, 470px);
+     Iets hogere strip = minder verticale crop op de breed-vullende banners = "uitgezoomd"
+     (de dag-banner, die strakker gecropt was, wint hier het meest bij). Geldt voor beide
+     modi, zodat de hero niet verspringt bij het togglen. */
+  height: clamp(300px, 46vw, 510px);
   border-top: 3px solid var(--color-r);
   border-bottom: 2px solid var(--color-brd);
 }
