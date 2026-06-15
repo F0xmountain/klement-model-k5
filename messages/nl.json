@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "name": "Reynards Den"
+  },
   "today": {
     "title": "Vandaag",
     "next": "Volgende wedstrijd: {date} — {teams}",
@@ -60,7 +63,7 @@
     "totalVolatility": "Totale volatiliteit"
   },
   "meta": {
-    "title": "WC26 Klement — WK 2026 Voorspeller",
+    "title": "Reynards Den — WK 2026 Voorspeller",
     "description": "Een econometrisch model dat 2014, 2018 en 2022 correct voorspelde — nu toegepast op alle 48 landen."
   },
   "nav": {
@@ -87,7 +90,7 @@
     "insights": "INSIGHTS"
   },
   "footer": {
-    "copyright": "© 2026 KLEMENT MODEL · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
+    "copyright": "© 2026 REYNARDS DEN · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
     "source": "PANMURE LIBERUM ▲"
   },
   "common": {

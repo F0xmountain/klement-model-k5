@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "name": "Reynards Den"
+  },
   "today": {
     "title": "Today",
     "next": "Next match: {date} — {teams}",
@@ -60,7 +63,7 @@
     "totalVolatility": "Total volatility"
   },
   "meta": {
-    "title": "WC26 Klement — World Cup 2026 Predictor",
+    "title": "Reynards Den — World Cup 2026 Predictor",
     "description": "An econometric model that called 2014, 2018 and 2022 correctly — now running on all 48 teams."
   },
   "nav": {
@@ -87,7 +90,7 @@
     "insights": "INSIGHTS"
   },
   "footer": {
-    "copyright": "© 2026 KLEMENT MODEL · ALL SIMULATIONS RUN IN-BROWSER",
+    "copyright": "© 2026 REYNARDS DEN · ALL SIMULATIONS RUN IN-BROWSER",
     "source": "PANMURE LIBERUM ▲"
   },
   "common": {

@@ -37,6 +37,7 @@ const GROUPS = [
 
 export default function Nav() {
   const t = useTranslations('nav')
+  const tBrand = useTranslations('brand')
   const pathname = usePathname()
   const router = useRouter()
   const locale = useLocale()
@@ -73,7 +74,7 @@ export default function Nav() {
   return (
     <nav className="nav">
       <Link href="/" className="nav-logo">
-        <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>Klement
+        <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>{tBrand('name')}
       </Link>
       {live && (
         <Link
