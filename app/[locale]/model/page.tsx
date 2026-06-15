@@ -38,7 +38,6 @@ function buildFactors(): FactorRow[] {
 
 export default function ModelPage() {
   const t = useTranslations('model')
-  const tBrand = useTranslations('brand')
   const factors = buildFactors()
   const resultsLastUpdated = getResultsLastUpdated()
 
@@ -80,8 +79,8 @@ export default function ModelPage() {
           </div>
         </div>
 
-        {/* Reynaerd-mascotte naast Klements quote (pixel-art). De afbeelding is de
-            mascotte, niet Klement — de quote-toeschrijving aan Klement blijft intact. */}
+        {/* Klement-portret naast zijn quote (pixel-art). De afbeelding toont
+            Joachim Klement zelf — passend bij zijn citaat en naam hieronder. */}
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginTop: 20 }}>
           <div style={{ flex: '0 0 auto', textAlign: 'center' }}>
             <div style={{
@@ -89,15 +88,16 @@ export default function ModelPage() {
               border: '1px solid var(--color-brd2)', borderTop: '3px solid var(--color-r)',
             }}>
               <Image
-                src="/Suit_fox.png"
-                alt={t('mascotCaption')}
+                src="/mascot.jpeg"
+                alt={t('klementCaption')}
                 width={160}
-                height={160}
+                height={176}
                 style={{ display: 'block', imageRendering: 'pixelated', border: '1px solid var(--color-brd2)' }}
               />
-              <div className="font-pixel" style={{ fontSize: 7, color: 'var(--color-r)', marginTop: 10, letterSpacing: 1, textTransform: 'uppercase' }}>{tBrand('mascotName')}</div>
+              <div className="font-pixel" style={{ fontSize: 7, color: 'var(--color-r)', marginTop: 10, letterSpacing: 1 }}>JOACHIM KLEMENT</div>
+              <div className="font-pixel" style={{ fontSize: 6, color: 'var(--color-muted)', marginTop: 3 }}>PANMURE LIBERUM</div>
             </div>
-            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 8, maxWidth: 188, lineHeight: 1.6 }}>{t('mascotCaption')}</div>
+            <div style={{ fontSize: 8, color: 'var(--color-muted)', marginTop: 8, maxWidth: 188, lineHeight: 1.6 }}>{t('klementCaption')}</div>
           </div>
           <div className="about-quote" style={{ flex: '1 1 260px' }}>
             <div style={{ fontSize: 10, color: 'var(--color-r)', lineHeight: 2.6 }}>
