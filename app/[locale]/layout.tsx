@@ -1,34 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Press_Start_2P, Archivo, Inter } from 'next/font/google'
 import { hasLocale } from 'next-intl'
 import { NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
-import '../globals.css'
-import '@tabler/icons-webfont/dist/tabler-icons.min.css'
 import Nav from '@/components/ui/Nav'
-
-const pixelFont = Press_Start_2P({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-pixel',
-})
-
-// Broadcast-sans voor koppen/cijfers/scoreborden — breed en vet, ESPN-avondgevoel.
-const displayFont = Archivo({
-  weight: ['600', '700', '800', '900'],
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-})
-
-// Rustige sans voor lopende tekst.
-const bodyFont = Inter({
-  subsets: ['latin'],
-  variable: '--font-body',
-  display: 'swap',
-})
+import HtmlLang from '@/components/ui/HtmlLang'
 
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
@@ -60,36 +37,22 @@ export default async function LocaleLayout({
   setRequestLocale(locale)
   const t = await getTranslations('footer')
 
-  // Zet het opgeslagen thema vóór de eerste paint (geen flash, geen terugval naar
-  // dark bij taalwissel). data-theme staat BEWUST niet in de JSX: zo beheert React
-  // het attribuut niet en wordt het bij een soft-navigatie (locale-switch) niet
-  // teruggezet op de default. Het script zet het altijd (default 'dark') uit
-  // localStorage. suppressHydrationWarning omdat het script <html> aanpast vóór
-  // React hydrateert.
-  const themeInit =
-    "(function(){try{var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();"
-
+  // <html>/<body> + het thema-script leven in de root-layout (app/layout.tsx),
+  // locale-onafhankelijk, zodat een taalwissel het thema-attribuut niet reset.
+  // Deze layout rendert alleen de locale-afhankelijke inhoud.
   return (
-    <html
-      lang={locale}
-      suppressHydrationWarning
-      className={`${pixelFont.variable} ${displayFont.variable} ${bodyFont.variable}`}
-    >
-      <body>
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
-        <NextIntlClientProvider>
-          <div className="page-wrap">
-            <Nav />
-            <main>{children}</main>
-            <footer className="footer">
-              <span style={{ fontSize: 6, color: 'var(--color-muted)' }}>
-                {t('copyright')}
-              </span>
-              <span style={{ fontSize: 6, color: 'var(--color-r)' }}>{t('source')}</span>
-            </footer>
-          </div>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider>
+      <HtmlLang locale={locale} />
+      <div className="page-wrap">
+        <Nav />
+        <main>{children}</main>
+        <footer className="footer">
+          <span style={{ fontSize: 6, color: 'var(--color-muted)' }}>
+            {t('copyright')}
+          </span>
+          <span style={{ fontSize: 6, color: 'var(--color-r)' }}>{t('source')}</span>
+        </footer>
+      </div>
+    </NextIntlClientProvider>
   )
 }
