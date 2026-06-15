@@ -279,35 +279,6 @@
       "tooltip": "After {match}: chance {dir, select, up {rose} down {fell} other {held}} from {from}% → {to}%"
     }
   },
-  "about": {
-    "title": "ABOUT THE MODEL",
-    "introLine1": "BUILT BY JOACHIM KLEMENT OF PANMURE LIBERUM.",
-    "introLine2": "BASED ON HOFFMANN, GING & RAMASAMY (2002).",
-    "introLine3": "THE MODEL EXPLAINS 55% OF VARIANCE BETWEEN TEAMS.",
-    "introLine4": "THE REMAINING 45% IS NOISE — ENCODED IN σ=0.28.",
-    "formulaLabel": "FORMULA",
-    "factorWeightsTitle": "FACTOR WEIGHTS",
-    "quoteLine1": "“I BUILT THIS MODEL TO PROVE ECONOMETRICS",
-    "quoteLine2": "CAN'T PREDICT FOOTBALL. THEN IT DID.”",
-    "ctaPredictor": "▶ TRY THE PREDICTOR",
-    "ctaSimulations": "RUN SIMULATIONS"
-  },
-  "mc": {
-    "title": "MONTE CARLO SIMULATOR",
-    "description": "EACH SIMULATION RUNS THE FULL BRACKET WITH W/D/L PROBABILITIES FROM THE MODEL.",
-    "simulationsLabel": "SIMULATIONS",
-    "runBtn": "▶ RUN SIMULATIONS",
-    "running": "⏳ RUNNING...",
-    "phaseLoading": "LOADING BRACKET DATA...",
-    "phaseSeeding": "SEEDING ROUND OF 32...",
-    "phaseSimulating": "SIMULATING KNOCKOUT ROUNDS...",
-    "phaseEngine": "RUNNING MONTE CARLO ENGINE...",
-    "phaseAggregating": "AGGREGATING RESULTS...",
-    "phaseSorting": "SORTING CHAMPION TABLE...",
-    "championDistribution": "CHAMPION DISTRIBUTION",
-    "simulationsCompleteNote": "SIMULATIONS COMPLETE. 45% VARIANCE IS UNMODELLED NOISE.",
-    "idleMessage": "PRESS RUN TO SIMULATE THE TOURNAMENT..."
-  },
   "myBracket": {
     "title": "MY BRACKET",
     "description": "PICK A WINNER FOR EVERY KNOCKOUT MATCH. YOUR PICKS ARE SAVED IN THIS BROWSER.",

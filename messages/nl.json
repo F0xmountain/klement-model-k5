@@ -279,35 +279,6 @@
       "tooltip": "Na {match}: kans {dir, select, up {steeg} down {daalde} other {bleef gelijk}} van {from}% → {to}%"
     }
   },
-  "about": {
-    "title": "OVER HET MODEL",
-    "introLine1": "GEBOUWD DOOR JOACHIM KLEMENT VAN PANMURE LIBERUM.",
-    "introLine2": "GEBASEERD OP HOFFMANN, GING & RAMASAMY (2002).",
-    "introLine3": "HET MODEL VERKLAART 55% VAN DE VARIANTIE TUSSEN TEAMS.",
-    "introLine4": "DE OVERIGE 45% IS RUIS — VASTGELEGD IN σ=0.28.",
-    "formulaLabel": "FORMULE",
-    "factorWeightsTitle": "FACTORGEWICHTEN",
-    "quoteLine1": "“IK BOUWDE DIT MODEL OM TE BEWIJZEN DAT ECONOMETRIE",
-    "quoteLine2": "VOETBAL NIET KAN VOORSPELLEN. TOEN DEED HET TOCH.”",
-    "ctaPredictor": "▶ PROBEER DE VOORSPELLER",
-    "ctaSimulations": "START SIMULATIES"
-  },
-  "mc": {
-    "title": "MONTE CARLO SIMULATOR",
-    "description": "ELKE SIMULATIE DOORLOOPT HET VOLLEDIGE SCHEMA MET W/D/L-KANSEN UIT HET MODEL.",
-    "simulationsLabel": "SIMULATIES",
-    "runBtn": "▶ START SIMULATIES",
-    "running": "⏳ BEZIG...",
-    "phaseLoading": "BRACKETDATA LADEN...",
-    "phaseSeeding": "RONDE VAN 32 INDELEN...",
-    "phaseSimulating": "KNOCKOUTRONDES SIMULEREN...",
-    "phaseEngine": "MONTE CARLO ENGINE DRAAIEN...",
-    "phaseAggregating": "RESULTATEN VERZAMELEN...",
-    "phaseSorting": "KAMPIOENSTABEL SORTEREN...",
-    "championDistribution": "KAMPIOENSVERDELING",
-    "simulationsCompleteNote": "SIMULATIES VOLTOOID. 45% VARIANTIE IS NIET-GEMODELLEERDE RUIS.",
-    "idleMessage": "DRUK OP START OM HET TOERNOOI TE SIMULEREN..."
-  },
   "myBracket": {
     "title": "MIJN BRACKET",
     "description": "KIES EEN WINNAAR VOOR ELKE KNOCKOUTWEDSTRIJD. JE PICKS WORDEN OPGESLAGEN IN DEZE BROWSER.",
