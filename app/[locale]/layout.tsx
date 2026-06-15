@@ -60,17 +60,18 @@ export default async function LocaleLayout({
   setRequestLocale(locale)
   const t = await getTranslations('footer')
 
-  // Zet het opgeslagen thema vóór de eerste paint (geen flash-of-wrong-theme).
-  // Default = dark (SSR rendert data-theme="dark"); alleen naar light flippen als
-  // localStorage dat zegt. suppressHydrationWarning omdat dit script het attribuut
-  // op <html> kan wijzigen vóórdat React hydrateert.
+  // Zet het opgeslagen thema vóór de eerste paint (geen flash, geen terugval naar
+  // dark bij taalwissel). data-theme staat BEWUST niet in de JSX: zo beheert React
+  // het attribuut niet en wordt het bij een soft-navigatie (locale-switch) niet
+  // teruggezet op de default. Het script zet het altijd (default 'dark') uit
+  // localStorage. suppressHydrationWarning omdat het script <html> aanpast vóór
+  // React hydrateert.
   const themeInit =
-    "(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"
+    "(function(){try{var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();"
 
   return (
     <html
       lang={locale}
-      data-theme="dark"
       suppressHydrationWarning
       className={`${pixelFont.variable} ${displayFont.variable} ${bodyFont.variable}`}
     >
