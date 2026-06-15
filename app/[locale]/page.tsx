@@ -22,41 +22,30 @@ export default function LandingPage() {
   return (
     <div>
 
-      {/* ── HERO — broadcast scorebug (statisch) ── */}
-      <div className="sec" style={{ position: 'relative', overflow: 'hidden', paddingTop: 44, paddingBottom: 52 }}>
-        <div className="dot-grid" style={{ position: 'absolute', inset: 0 }} />
+      {/* ── HERO — broadcast banner met tekst-overlay (statisch) ──
+          Banner als achtergrond (ESPN-avond: vos + WK-trofee + scorebord), de
+          bestaande hero-tekst links eroverheen. Op mobiel stapelt de banner met
+          de tekst eronder (zie .hero-bc media-query in globals.css). */}
+      <div className="hero-bc">
+        <Image
+          src="/Banner_night2.png"
+          alt={t('bannerAlt')}
+          width={1942}
+          height={809}
+          priority
+          sizes="100vw"
+          className="hero-bc-img"
+        />
+        <div className="hero-bc-overlay" />
 
-        {/* Hero-banner — afgekaderd broadcast-still (ESPN-avond): vos-mascotte
-            + WK-trofee in het stadion. Tekst staat eronder en blijft leesbaar.
-            aspect-ratio halveert de natuurlijke 16:9-hoogte (1672/941) bij elke
-            breedte; object-fit cover cropt netjes rond het midden i.p.v. uitrekken. */}
-        <div style={{
-          position: 'relative', zIndex: 1, marginBottom: 32, lineHeight: 0, overflow: 'hidden',
-          aspectRatio: '1672 / 470',
-          border: '1px solid var(--color-brd2)', borderTop: '3px solid var(--color-r)',
-        }}>
-          <Image
-            src="/Banner_night.png"
-            alt={t('bannerAlt')}
-            width={1672}
-            height={941}
-            priority
-            sizes="(max-width: 768px) 100vw, 900px"
-            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center' }}
-          />
-        </div>
+        <div className="hero-bc-content">
+          {/* Broadcast top-strip: LIVE-tag + kicker */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+            <span className="bc-live"><span className="bc-live-dot" />{t('liveLabel')}</span>
+            <span className="eyebrow" style={{ marginBottom: 0 }}>{t('eyebrow')}</span>
+          </div>
 
-        {/* Broadcast top-strip: LIVE-tag + kicker */}
-        <div style={{
-          position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 28,
-        }}>
-          <span className="bc-live"><span className="bc-live-dot" />{t('liveLabel')}</span>
-          <span className="eyebrow" style={{ marginBottom: 0 }}>{t('eyebrow')}</span>
-        </div>
-
-        {/* Headline */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Headline */}
           <h1 className="font-display" style={{
             fontSize: 'clamp(32px, 7.5vw, 62px)', margin: 0, color: 'var(--color-txt)',
           }}>
@@ -65,8 +54,8 @@ export default function LandingPage() {
           </h1>
 
           <p className="font-body" style={{
-            fontSize: 13, lineHeight: 1.7, color: 'var(--color-muted)',
-            maxWidth: 460, margin: '20px 0 30px',
+            fontSize: 13, lineHeight: 1.7, color: 'var(--color-txt)', opacity: 0.85,
+            maxWidth: 440, margin: '18px 0 28px',
           }}>
             {t('heroSubtitle')}
           </p>
@@ -79,7 +68,7 @@ export default function LandingPage() {
             }}>{t('ctaPredict')}</Link>
             <Link href="/model" className="px-btn font-display" style={{
               fontSize: 13, padding: '14px 26px',
-              backgroundColor: 'transparent', color: 'var(--color-txt)',
+              backgroundColor: 'var(--color-bg)', color: 'var(--color-txt)',
               border: '1px solid var(--color-brd2)',
               textDecoration: 'none', display: 'inline-block',
             }}>{t('ctaHowItWorks')}</Link>

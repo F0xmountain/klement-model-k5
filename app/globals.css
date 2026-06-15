@@ -319,6 +319,56 @@ main { flex: 1; }
   padding: 28px 26px;
 }
 
+/* ── Homepage broadcast hero — banner met tekst-overlay ──
+   Desktop: banner vult de strip als achtergrond (object-fit cover, lucht boven
+   weggecropt), donkere gradient links voor contrast, tekst eroverheen links.
+   Mobiel: banner wordt een platte strip mét de tekst eronder (geen krappe overlap). */
+.hero-bc {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(180px, 28vw, 320px);
+  border-top: 3px solid var(--color-r);
+  border-bottom: 2px solid var(--color-brd);
+}
+.hero-bc-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;   /* lege lucht bovenaan weg; vos + trofee + scorebord blijven */
+  z-index: 0;
+}
+.hero-bc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* donker links voor leesbaarheid crème-tekst, transparant naar rechts (vos vrij) */
+  background: linear-gradient(90deg,
+    rgba(14,13,12,0.92) 0%, rgba(14,13,12,0.80) 32%,
+    rgba(14,13,12,0.30) 62%, rgba(14,13,12,0) 100%);
+}
+.hero-bc-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  padding: 40px 28px;
+}
+
+@media (max-width: 768px) {
+  .hero-bc { display: block; min-height: 0; }
+  .hero-bc-img {
+    position: static;
+    height: clamp(150px, 46vw, 230px);
+    object-position: center 58%;
+  }
+  .hero-bc-overlay { display: none; }
+  .hero-bc-content { max-width: none; padding: 24px 16px; }
+}
+
 /* ── Score card ── */
 .score-card {
   background: var(--color-bg);
