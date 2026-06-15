@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Reynards Den — "ESPN-avond" broadcast palet (vossen-thema, scorebord-energie).
+/* Reynaerds Den — "ESPN-avond" broadcast palet (vossen-thema, scorebord-energie).
    Diep neutraal-donkere basis met een vleugje warmte; vossen-oranje is de ENIGE
    knalkleur en wordt spaarzaam ingezet zodat het knalt. De hele CSS is token-
    gedreven, dus de look flipt app-breed zonder layout-wijzigingen. Rollen:

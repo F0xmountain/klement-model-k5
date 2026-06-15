@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "Reynards Den"
+    "name": "Reynaerds Den"
   },
   "today": {
     "title": "Vandaag",
@@ -63,7 +63,7 @@
     "totalVolatility": "Totale volatiliteit"
   },
   "meta": {
-    "title": "Reynards Den — WK 2026 Voorspeller",
+    "title": "Reynaerds Den — WK 2026 Voorspeller",
     "description": "Een econometrisch model dat 2014, 2018 en 2022 correct voorspelde — nu toegepast op alle 48 landen."
   },
   "nav": {
@@ -90,7 +90,7 @@
     "insights": "INSIGHTS"
   },
   "footer": {
-    "copyright": "© 2026 REYNARDS DEN · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
+    "copyright": "© 2026 REYNAERDS DEN · ALLE SIMULATIES DRAAIEN IN DE BROWSER",
     "source": "PANMURE LIBERUM ▲"
   },
   "common": {
@@ -494,7 +494,7 @@
   "model": {
     "title": "HET MODEL",
     "attribution": "Geïnspireerd op het oorspronkelijke Klement-model en de open-source fork door x-cookie.",
-    "attributionFork": "Reynards Den is een onafhankelijke doorontwikkeling.",
+    "attributionFork": "Reynaerds Den is een onafhankelijke doorontwikkeling.",
     "howTitle": "HOE HET MODEL WERKT",
     "howIntro": "Gebaseerd op Joachim Klements econometrische WK-model (Panmure Liberum, april 2026), uitgebreid met Elo-ratings, recente vorm, competitieniveau en blessuredata van de sterspelers.",
     "paperLink": "Lees over het oorspronkelijke model",

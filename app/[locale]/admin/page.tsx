@@ -85,7 +85,7 @@ export default async function AdminDashboardPage() {
     <div className="sec page-enter">
       <div className="section-title">ADMIN DASHBOARD</div>
       <div style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2, marginBottom: 8 }}>
-        Reynards Den · Klement-model
+        Reynaerds Den · Klement-model
         {file.meta.lastUpdated && (
           <> — last results update <TimeAgo iso={file.meta.lastUpdated} /></>
         )}

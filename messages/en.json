@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "Reynards Den"
+    "name": "Reynaerds Den"
   },
   "today": {
     "title": "Today",
@@ -63,7 +63,7 @@
     "totalVolatility": "Total volatility"
   },
   "meta": {
-    "title": "Reynards Den — World Cup 2026 Predictor",
+    "title": "Reynaerds Den — World Cup 2026 Predictor",
     "description": "An econometric model that called 2014, 2018 and 2022 correctly — now running on all 48 teams."
   },
   "nav": {
@@ -90,7 +90,7 @@
     "insights": "INSIGHTS"
   },
   "footer": {
-    "copyright": "© 2026 REYNARDS DEN · ALL SIMULATIONS RUN IN-BROWSER",
+    "copyright": "© 2026 REYNAERDS DEN · ALL SIMULATIONS RUN IN-BROWSER",
     "source": "PANMURE LIBERUM ▲"
   },
   "common": {
@@ -494,7 +494,7 @@
   "model": {
     "title": "THE MODEL",
     "attribution": "Inspired by the original Klement model and the open-source fork by x-cookie.",
-    "attributionFork": "Reynards Den is an independent evolution.",
+    "attributionFork": "Reynaerds Den is an independent evolution.",
     "howTitle": "HOW THE MODEL WORKS",
     "howIntro": "Based on Joachim Klement's econometric World Cup model (Panmure Liberum, April 2026), extended with Elo ratings, recent form, league quality and injury data for the top players.",
     "paperLink": "Read about the original model",
