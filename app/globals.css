@@ -394,6 +394,14 @@ main { flex: 1; }
 html[data-theme="light"] .hero-bc-img-dark  { display: none; }
 html[data-theme="light"] .hero-bc-img-light { display: block; }
 
+/* Per-banner crop: de twee beelden hebben een andere compositie/ratio (nacht
+   2.40:1, dag 2.00:1). De dag-banner heeft meer lucht bovenaan; door die crop
+   verder naar beneden te pannen (hogere Y) zakt de vos naar dezelfde kadrering
+   als de nacht-versie → de hero verspringt niet bij het wisselen van modus.
+   (Op mobiel toont de strip de volledige scène, dus object-position telt daar niet.) */
+.hero-bc-img-dark  { object-position: center 50%; }
+.hero-bc-img-light { object-position: center 64%; }
+
 /* Light-modus: lichte overlay-gradient op de dag-banner zodat de donkere tekst
    (var(--color-txt) flipt al naar donker) links leesbaar blijft. */
 html[data-theme="light"] .hero-bc-overlay {
