@@ -434,6 +434,8 @@ main { flex: 1; }
 
 @media (max-width: 768px) {
   .nav-hamburger { display: flex; }
+  /* Logo + langere merknaam ("Reynaerds Den") + pixel-vossenkop samen passend op 380px. */
+  .nav-logo { padding: 12px 12px; font-size: 9px; }
   .nav-menu { display: none; }
   .nav-menu.open {
     display: flex;

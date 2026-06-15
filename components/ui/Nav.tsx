@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
@@ -74,7 +75,15 @@ export default function Nav() {
   return (
     <nav className="nav">
       <Link href="/" className="nav-logo">
-        <span style={{ color: 'var(--color-b)', marginRight: 6 }}>⌂</span>{tBrand('name')}
+        <Image
+          src="/head_pixel.png"
+          alt=""
+          width={26}
+          height={26}
+          aria-hidden
+          style={{ imageRendering: 'pixelated', marginRight: 9, display: 'block', flexShrink: 0 }}
+        />
+        {tBrand('name')}
       </Link>
       {live && (
         <Link
