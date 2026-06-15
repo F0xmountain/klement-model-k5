@@ -110,5 +110,47 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "netherlands-vs-japan": {
+    "date": "2026-06-14T20:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "ivory-coast-vs-ecuador": {
+    "date": "2026-06-14T23:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "sweden-vs-tunisia": {
+    "date": "2026-06-15T02:00:00Z",
+    "score": {
+      "home": 5,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

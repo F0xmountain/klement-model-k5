@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-14T22:01:10.458Z"
+    "lastUpdated": "2026-06-15T06:48:51.396Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -65,6 +65,27 @@
       "scoreA": 7,
       "scoreB": 1,
       "playedAt": "2026-06-14T17:00:00Z"
+    },
+    "netherlands-vs-japan": {
+      "teamA": "Netherlands",
+      "teamB": "Japan",
+      "scoreA": 2,
+      "scoreB": 2,
+      "playedAt": "2026-06-14T20:00:00Z"
+    },
+    "ivory-coast-vs-ecuador": {
+      "teamA": "Ivory Coast",
+      "teamB": "Ecuador",
+      "scoreA": 1,
+      "scoreB": 0,
+      "playedAt": "2026-06-14T23:00:00Z"
+    },
+    "sweden-vs-tunisia": {
+      "teamA": "Sweden",
+      "teamB": "Tunisia",
+      "scoreA": 5,
+      "scoreB": 1,
+      "playedAt": "2026-06-15T02:00:00Z"
     }
   }
 }
