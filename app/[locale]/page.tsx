@@ -23,60 +23,68 @@ export default function LandingPage() {
   return (
     <div className="page-enter">
 
-      {/* ── HERO ── */}
-      <div className="sec" style={{ position: 'relative', overflow: 'hidden', paddingTop: 48, paddingBottom: 48 }}>
+      {/* ── HERO — broadcast scorebug ── */}
+      <div className="sec" style={{ position: 'relative', overflow: 'hidden', paddingTop: 44, paddingBottom: 52 }}>
         <div className="dot-grid" style={{ position: 'absolute', inset: 0 }} />
         <div className="scanline" />
         <PixelParticles variant="mix" />
 
+        {/* Broadcast top-strip: LIVE-tag + kicker */}
+        <div className="fade-in" style={{
+          position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 28,
+        }}>
+          <span className="bc-live"><span className="bc-live-dot" />{t('liveLabel')}</span>
+          <span className="eyebrow" style={{ marginBottom: 0 }}>{t('eyebrow')}</span>
+        </div>
+
         <div className="hero-grid" style={{ position: 'relative', zIndex: 1 }}>
-          {/* Left — text */}
+          {/* Left — headline */}
           <div>
-            <div className="eyebrow fade-in">{t('eyebrow')}</div>
-            <div className="txt-shadow-r fade-in delay-1" style={{ fontSize: 22, color: 'var(--color-r)', lineHeight: 1.5, marginBottom: 16 }}>
+            <h1 className="font-display fade-in delay-1" style={{
+              fontSize: 'clamp(32px, 7.5vw, 62px)', margin: 0, color: 'var(--color-txt)',
+            }}>
               {t('heroLine1')}<br />
-              <span style={{ color: 'var(--color-g)', textShadow: '3px 3px 0 var(--color-g-sh)' }}>{t('heroLine2')}</span>
-            </div>
-            <div className="fade-in delay-2" style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2.2, maxWidth: 480, marginBottom: 28 }}>
+              <span style={{ color: 'var(--color-r)' }}>{t('heroLine2')}</span>
+            </h1>
+
+            <p className="font-body fade-in delay-2" style={{
+              fontSize: 13, lineHeight: 1.7, color: 'var(--color-muted)',
+              maxWidth: 460, margin: '20px 0 30px',
+            }}>
               {t('heroSubtitle')}
-            </div>
-            <div className="fade-in delay-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-              <Link href="/versus" className="px-btn" style={{
-                fontFamily: 'inherit', fontSize: 10, padding: '12px 22px',
-                backgroundColor: 'var(--color-r)', color: '#fff', border: 'none',
+            </p>
+
+            <div className="fade-in delay-3" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Link href="/versus" className="px-btn font-display" style={{
+                fontSize: 13, padding: '14px 26px',
+                backgroundColor: 'var(--color-r)', color: '#0E0D0C', border: 'none',
                 boxShadow: '4px 4px 0 var(--color-r-sh)', textDecoration: 'none', display: 'inline-block',
               }}>{t('ctaPredict')}</Link>
-              <Link href="/model" className="px-btn" style={{
-                fontFamily: 'inherit', fontSize: 10, padding: '12px 22px',
-                backgroundColor: 'var(--color-bg)', color: 'var(--color-b)',
-                border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)',
+              <Link href="/model" className="px-btn font-display" style={{
+                fontSize: 13, padding: '14px 26px',
+                backgroundColor: 'transparent', color: 'var(--color-txt)',
+                border: '1px solid var(--color-brd2)',
                 textDecoration: 'none', display: 'inline-block',
               }}>{t('ctaHowItWorks')}</Link>
-              <span className="football-bounce" style={{ fontSize: 28, marginLeft: 8 }}>⚽</span>
             </div>
           </div>
 
-          {/* Right — Klement mascot */}
-          <div style={{ textAlign: 'center', flexShrink: 0 }}>
-            <div className="mascot-float">
-              <div style={{
-                border: '3px solid var(--color-brd2)',
-                boxShadow: '5px 5px 0 var(--color-brd)',
-                display: 'inline-block',
-                backgroundColor: 'var(--color-bg)',
-              }}>
-                <Image
-                  src="/mascot.jpeg"
-                  alt="Joachim Klement — Panmure Liberum"
-                  width={200}
-                  height={220}
-                  priority
-                  style={{ display: 'block', imageRendering: 'pixelated' }}
-                />
-              </div>
+          {/* Right — Klement mascot in scorebug frame */}
+          <div className="fade-in delay-1" style={{ textAlign: 'center', flexShrink: 0 }}>
+            <div className="mascot-float bc-scorebug" style={{ display: 'inline-block' }}>
+              <div className="bc-rail" style={{ marginBottom: 14, marginLeft: -26, marginRight: -26, marginTop: -28 }} />
+              <Image
+                src="/mascot.jpeg"
+                alt="Joachim Klement — Panmure Liberum"
+                width={200}
+                height={220}
+                priority
+                style={{ display: 'block', imageRendering: 'pixelated', border: '1px solid var(--color-brd2)' }}
+              />
+              <div className="font-pixel" style={{ fontSize: 8, color: 'var(--color-r)', marginTop: 12, letterSpacing: 1 }}>JOACHIM KLEMENT</div>
+              <div className="font-pixel" style={{ fontSize: 7, color: 'var(--color-muted)', marginTop: 4 }}>PANMURE LIBERUM</div>
             </div>
-            <div style={{ fontSize: 8, color: 'var(--color-b)', marginTop: 10, letterSpacing: 1 }}>JOACHIM KLEMENT</div>
-            <div style={{ fontSize: 7, color: 'var(--color-muted)', marginTop: 2 }}>PANMURE LIBERUM</div>
           </div>
         </div>
       </div>
@@ -87,16 +95,16 @@ export default function LandingPage() {
       {/* ── TODAY'S MATCHES ── */}
       <TodayMatches />
 
-      {/* ── STATS BAR ── */}
+      {/* ── STATS BAR — broadcast stat-ribbon ── */}
       <div className="stats-bar">
         {[
-          { num: '48',   label: t('statsQualified'), color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
-          { num: '3',    label: t('statsCorrect'),  color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: '0.55', label: t('statsR2'),         color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
-        ].map(({ num, label, color, sh }) => (
+          { num: '48',   label: t('statsQualified'), color: 'var(--color-r)' },
+          { num: '3',    label: t('statsCorrect'),   color: 'var(--color-g)' },
+          { num: '0.55', label: t('statsR2'),        color: 'var(--color-b)' },
+        ].map(({ num, label, color }) => (
           <div key={label} className="stat-cell">
-            <span style={{ fontSize: 22, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>
-            <span style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1 }}>{label}</span>
+            <span className="font-display" style={{ fontSize: 'clamp(28px, 6vw, 40px)', color, display: 'block', marginBottom: 8 }}>{num}</span>
+            <span className="font-pixel" style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1 }}>{label}</span>
           </div>
         ))}
       </div>
@@ -114,18 +122,18 @@ export default function LandingPage() {
             ].map(({ year, team, name, emoji }) => (
               <div key={year} className="record-card">
                 <div className="record-badge">{t('recordBadge')}</div>
-                <div style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 10 }}>{year}</div>
-                <div style={{ marginBottom: 8 }}>
+                <div className="font-pixel" style={{ fontSize: 8, color: 'var(--color-muted)', marginBottom: 12 }}>{year}</div>
+                <div style={{ marginBottom: 10 }}>
                   <FlagImg name={team} h={36} emoji={emoji} />
                 </div>
-                <div style={{ fontSize: 9, color: 'var(--color-g)' }}>{name}</div>
+                <div className="font-display" style={{ fontSize: 14, color: 'var(--color-txt)' }}>{name}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── PREDICTION BANNER ── */}
+      {/* ── PREDICTION BANNER — marquee call ── */}
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="green" />
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -133,25 +141,17 @@ export default function LandingPage() {
           <div className="pred-banner">
             <div className="dot-grid" style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
             <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{
-                marginBottom: 18,
-                border: '3px solid var(--color-g)',
-                boxShadow: '6px 6px 0 var(--color-g-sh), 0 0 0 1px var(--color-g)',
-                lineHeight: 0,
-              }}>
-                <FlagImg name="Netherlands" h={90} emoji="🇳🇱" />
+              <div style={{ marginBottom: 18, border: '1px solid var(--color-brd2)', lineHeight: 0 }}>
+                <FlagImg name="Netherlands" h={84} emoji="🇳🇱" />
               </div>
-              <div className="txt-shadow-g" style={{ fontSize: 18, color: 'var(--color-g)', marginBottom: 12 }}>
-                NETHERLANDS<span className="blink">_</span>
+              <div className="font-display" style={{ fontSize: 'clamp(26px, 6vw, 38px)', color: 'var(--color-r)', marginBottom: 14 }}>
+                NETHERLANDS
               </div>
-              <div style={{ fontSize: 8, color: 'var(--color-g)', opacity: 0.75, lineHeight: 2.2 }}>
+              <div className="font-body" style={{ fontSize: 11, color: 'var(--color-muted)', lineHeight: 1.9, maxWidth: 520 }}>
                 {t('predictionLine1')}<br />
-                {t('predictionPathLabel')} MOROCCO → CANADA → FRANCE → ARGENTINA → PORTUGAL
+                <span style={{ color: 'var(--color-txt)' }}>{t('predictionPathLabel')}</span> MOROCCO → CANADA → FRANCE → ARGENTINA → PORTUGAL
               </div>
-              <PolymarketBtn
-                teamName="Netherlands"
-                variant="champion"
-              />
+              <PolymarketBtn teamName="Netherlands" variant="champion" />
             </div>
           </div>
         </div>
@@ -164,10 +164,10 @@ export default function LandingPage() {
           <div className="section-title">{t('modelVariablesTitle')}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {factors.map(({ key, pct, color }) => (
-              <div key={key} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 42px', alignItems: 'center', gap: 14 }}>
-                <div style={{ fontSize: 9, color: 'var(--color-muted)' }}>{tf(key)}</div>
+              <div key={key} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 48px', alignItems: 'center', gap: 14 }}>
+                <div className="font-pixel" style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 0.5 }}>{tf(key)}</div>
                 <PixelBar value={pct} color={color} />
-                <div style={{ fontSize: 9, color, textAlign: 'right', fontWeight: 'bold' }}>{pct}%</div>
+                <div className="font-display" style={{ fontSize: 16, color, textAlign: 'right' }}>{pct}%</div>
               </div>
             ))}
           </div>

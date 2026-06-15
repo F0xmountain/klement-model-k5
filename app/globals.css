@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
-/* Reynards Den — retro-pixel-broadcast palet (vossen-thema, scorebord-energie).
-   Donkere, warme basis (stadion-bij-avond / arcade-cabinet). Alleen de tokens
-   zijn aangepast; de hele CSS is token-gedreven, dus de look flipt consistent
-   zonder layout-wijzigingen. Rollen ongewijzigd:
-   r = primair vossen-accent (logo/knoppen/team A/verlies),
-   g = winst/kwalificatie, b = team B/links/info, o = goud/amber (Klement-keuze). */
+/* Reynards Den — "ESPN-avond" broadcast palet (vossen-thema, scorebord-energie).
+   Diep neutraal-donkere basis met een vleugje warmte; vossen-oranje is de ENIGE
+   knalkleur en wordt spaarzaam ingezet zodat het knalt. De hele CSS is token-
+   gedreven, dus de look flipt app-breed zonder layout-wijzigingen. Rollen:
+   r = primair vossen-oranje (logo/knoppen/team A/verlies/kerncijfers),
+   g = winst/kwalificatie (gedempt groen), b = team B/links/info (gedempt staal-
+   blauw, poppt bewust niet), o = goud/amber (Klement-keuze). Gelijkspel = grijs. */
 @theme {
-  --color-r:     #E8590C;   /* vossen-oranje/roest — hoofdaccent */
-  --color-r-bg:  #3A1D10;   /* donkere warme vulling achter oranje */
-  --color-r-sh:  #7A2E08;   /* diepe roest offset-schaduw */
-  --color-g:     #54B33A;   /* winst-groen, opgehelderd voor donkere bg */
-  --color-g-mid: #6FBF3A;
-  --color-g-bg:  #15280D;   /* donkergroene vulling */
-  --color-g-sh:  #2E5E15;
-  --color-b:     #3E8FD8;   /* team B / links, helder blauw op donker */
-  --color-b-bg:  #102438;   /* donker marineblauw vulling */
-  --color-b-sh:  #1C4B78;
-  --color-bg:    #16130F;   /* diep warm houtskool — stadion bij avond */
-  --color-surf:  #221D17;   /* warme donkere kaart/nav/footer */
-  --color-brd:   #3A322A;   /* warme donkere rand */
-  --color-brd2:  #50463A;   /* sterkere rand */
-  --color-txt:   #F5EDE4;   /* warm crème */
-  --color-muted: #A89A88;   /* warm gedempt */
-  --color-o:     #FFB454;   /* goud/amber — secundair accent (Klement-keuze) */
-  --color-o-bg:  #332515;   /* donkere amber vulling */
+  --color-r:     #FF6A1F;   /* vossen-oranje — DE knalkleur, spaarzaam inzetten */
+  --color-r-bg:  #2A1710;   /* donkere warme vulling achter oranje */
+  --color-r-sh:  #E8590C;   /* dieper oranje — hover/offset-accent */
+  --color-g:     #4A9D5B;   /* winst-groen, gedempt (schreeuwt niet naast oranje) */
+  --color-g-mid: #5BB06C;
+  --color-g-bg:  #122016;   /* donkergroene vulling */
+  --color-g-sh:  #2C5E38;
+  --color-b:     #5B89B3;   /* team B / links — gedempt staal-blauw, cool */
+  --color-b-bg:  #14202C;   /* donker staal-blauw vulling */
+  --color-b-sh:  #2E4D6B;
+  --color-bg:    #0E0D0C;   /* diep neutraal-donker met vleugje warmte */
+  --color-surf:  #1A1917;   /* surface/kaarten */
+  --color-brd:   #2C2A27;   /* scherpe 1px rand */
+  --color-brd2:  #3A3733;   /* sterkere rand */
+  --color-txt:   #F2F2F0;   /* helder wit-grijs */
+  --color-muted: #9A9A95;   /* gedempt grijs (ook gelijkspel-semantiek) */
+  --color-o:     #E5A33D;   /* goud/amber — secundair accent (Klement-keuze) */
+  --color-o-bg:  #2A2012;   /* donkere amber vulling */
   --color-o-sh:  #8A6320;   /* diepe amber schaduw */
 }
 
@@ -32,15 +33,24 @@
 
 html { height: 100%; }
 body {
-  font-family: var(--font-pixel), monospace;
-  font-size: 10px;
-  line-height: 1.8;
+  /* Broadcast-basis: rustige sans (Inter) voor lopende tekst. De pixelfont blijft
+     bestaan maar wordt expliciet gepind op kleine labels, chrome en koppen-accenten
+     (zie .font-pixel, .nav, .footer, .eyebrow, .section-title). Koppen/cijfers
+     gebruiken de brede broadcast-sans via .font-display. */
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
   background-color: var(--color-bg);
   color: var(--color-txt);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
+/* ── Broadcast font-rollen ── */
+.font-display { font-family: var(--font-display), system-ui, sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.02; }
+.font-body    { font-family: var(--font-body), system-ui, sans-serif; }
+.font-pixel   { font-family: var(--font-pixel), monospace; }
 
 .page-wrap {
   width: 100%;
@@ -92,6 +102,7 @@ main { flex: 1; }
 
 /* ── Section title (► prefix) ── */
 .section-title {
+  font-family: var(--font-pixel), monospace;
   font-size: 9px;
   color: var(--color-b);
   letter-spacing: 2px;
@@ -105,6 +116,7 @@ main { flex: 1; }
 
 /* ── Eyebrow tag ── */
 .eyebrow {
+  font-family: var(--font-pixel), monospace;
   color: var(--color-b);
   font-size: 8px;
   letter-spacing: 2px;
@@ -136,30 +148,35 @@ main { flex: 1; }
 /* ── Section wrapper ── */
 .sec { padding: 32px 28px; border-bottom: 2px solid var(--color-brd); }
 
-/* ── Stats bar ── */
+/* ── Stats bar (broadcast stat-ribbon) ──
+   Strakke horizontale stat-blokken met harde scheidingsranden en een dunne
+   oranje scorebug-accentlijn bovenaan. */
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-bottom: 2px solid var(--color-brd);
+  border-top: 3px solid var(--color-r);
+  border-bottom: 1px solid var(--color-brd);
   background: var(--color-surf);
 }
-.stat-cell { padding: 22px 16px; border-right: 1px solid var(--color-brd); text-align: center; min-width: 0; overflow-wrap: break-word; }
+.stat-cell { padding: 26px 16px; border-right: 1px solid var(--color-brd); text-align: center; min-width: 0; overflow-wrap: break-word; }
 .stat-cell:last-child { border-right: none; }
 
-/* ── Track record cards ── */
-.record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+/* ── Track record cards (broadcast stat-blok) ──
+   Vlak, harde 1px rand, dunne accent-lijn bovenaan i.p.v. zachte schaduw. */
+.record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .record-card {
-  background: var(--color-bg);
-  padding: 22px 16px;
+  background: var(--color-surf);
+  padding: 24px 16px 20px;
   text-align: center;
-  border: 2px solid var(--color-brd2);
-  box-shadow: 4px 4px 0 var(--color-brd);
+  border: 1px solid var(--color-brd);
+  border-top: 2px solid var(--color-brd2);
   position: relative;
 }
 .record-badge {
-  position: absolute; top: 7px; right: 7px;
-  font-size: 7px; color: var(--color-g);
-  background: var(--color-g-bg); padding: 2px 5px;
+  position: absolute; top: 8px; right: 8px;
+  font-family: var(--font-pixel), monospace;
+  font-size: 6px; letter-spacing: 1px; color: var(--color-g);
+  background: var(--color-g-bg); padding: 3px 5px;
   border: 1px solid var(--color-g-sh);
 }
 
@@ -268,15 +285,37 @@ main { flex: 1; }
 }
 .ko-mini-bar { display: flex; height: 26px; overflow: hidden; border: 1px solid var(--color-brd2); }
 
-/* ── Prediction banner ── */
+/* ── Prediction banner (broadcast feature-panel) ──
+   Donker surface-paneel met één scherpe oranje scorebug-rail bovenaan — de
+   marquee-voorspelling is het kernmoment, dus hier mag het oranje knallen. */
 .pred-banner {
-  background: var(--color-g-bg);
-  border: 2px solid var(--color-g);
-  box-shadow: 4px 4px 0 var(--color-g-sh);
-  padding: 36px 28px;
+  background: var(--color-surf);
+  border: 1px solid var(--color-brd2);
+  border-top: 3px solid var(--color-r);
+  padding: 44px 28px;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+/* ── Broadcast scorebug-rail + LIVE-tag (pixel-accent) ── */
+.bc-rail { height: 3px; background: var(--color-r); }
+.bc-live {
+  font-family: var(--font-pixel), monospace;
+  font-size: 7px; letter-spacing: 2px;
+  color: var(--color-r);
+  background: var(--color-r-bg);
+  border: 1px solid var(--color-r);
+  padding: 5px 9px;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.bc-live-dot { width: 6px; height: 6px; background: var(--color-r); display: inline-block; animation: blink 1s step-end infinite; }
+
+/* ── Broadcast hero scorebug-frame ── */
+.bc-scorebug {
+  border: 1px solid var(--color-brd2);
+  background: linear-gradient(180deg, var(--color-surf), var(--color-bg));
+  padding: 28px 26px;
 }
 
 /* ── Score card ── */
@@ -310,6 +349,7 @@ main { flex: 1; }
 
 /* ── Nav ── */
 .nav {
+  font-family: var(--font-pixel), monospace;
   display: flex;
   align-items: stretch;
   border-bottom: 2px solid var(--color-brd2);
@@ -417,6 +457,7 @@ main { flex: 1; }
 
 /* ── Footer ── */
 .footer {
+  font-family: var(--font-pixel), monospace;
   padding: 14px 28px;
   border-top: 2px solid var(--color-brd);
   background: var(--color-surf);
