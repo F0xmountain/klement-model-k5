@@ -350,5 +350,27 @@
       "South Korea": 0.0105,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-16T19:00:00Z",
+    "matchLabel": "GRP: FRA vs SEN",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.1715,
+      "France": 0.1075,
+      "Brazil": 0.099,
+      "Japan": 0.0705,
+      "England": 0.0605,
+      "Portugal": 0.058,
+      "Germany": 0.0425,
+      "Mexico": 0.039,
+      "Netherlands": 0.0355,
+      "Uruguay": 0.034,
+      "Belgium": 0.026,
+      "Colombia": 0.0165,
+      "Canada": 0.013,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
   }
 ]
