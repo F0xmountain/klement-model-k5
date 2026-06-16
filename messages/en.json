@@ -247,7 +247,8 @@
     "formLabel": "RECENT FORM",
     "starPlayersLabel": "KEY PLAYERS",
     "squadCompleteness": "Squad completeness: {pct}%",
-    "tabs": { "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule", "path": "Path" },
+    "tabs": { "profile": "Profile", "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule", "path": "Path" },
+    "switcher": { "prev": "Previous team", "next": "Next team" },
     "path": {
       "title": "Predicted tournament path",
       "current": "You are here",

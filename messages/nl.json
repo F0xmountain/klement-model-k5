@@ -247,7 +247,8 @@
     "formLabel": "RECENTE VORM",
     "starPlayersLabel": "STERSPELERS",
     "squadCompleteness": "Selectievolledigheid: {pct}%",
-    "tabs": { "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema", "path": "Pad" },
+    "tabs": { "profile": "Profiel", "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema", "path": "Pad" },
+    "switcher": { "prev": "Vorig team", "next": "Volgend team" },
     "path": {
       "title": "Voorspeld toernooipad",
       "current": "Nu hier",

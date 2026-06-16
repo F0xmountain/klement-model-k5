@@ -4,10 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { teamNames, teamData, sc } from '@/lib/klement'
 import { teamSlug } from '@/lib/team-slug'
-import FactorBreakdown from '@/components/team/FactorBreakdown'
-import H2HList from '@/components/team/H2HList'
-import StarPlayersCard from '@/components/team/StarPlayersCard'
-import FormBar from '@/components/stats/FormBar'
+import ProfileTab from '@/components/team/ProfileTab'
 import FlagImg from '@/components/ui/FlagImg'
 import TeamSelect from '@/components/ui/TeamSelect'
 import PixelParticles from '@/components/ui/PixelParticles'
@@ -19,7 +16,7 @@ export default function TeamProfile({ initialTeam }: { initialTeam: string }) {
   const tt = useTranslations('teams')
   const router = useRouter()
   const [selected, setSelected] = useState(initialTeam)
-  const [tab, setTab] = useState<'profile' | 'ranking'>('profile')
+  const [tab, setTab] = useState<'profile' | 'ranking'>('ranking')
   const team = teamData(selected)
   const score = sc(selected)
 
@@ -108,33 +105,7 @@ export default function TeamProfile({ initialTeam }: { initialTeam: string }) {
         </div>
       </div>
 
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1, marginBottom: 8 }}>
-          {tt('formLabel')}
-        </div>
-        <FormBar team={selected} />
-      </div>
-
-      <StarPlayersCard name={selected} />
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
-        {[
-          { num: score.toFixed(3), label: tt('scoreModelScore'), color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: team?.fifa ?? '',  label: tt('scoreFifaPts'),    color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
-          { num: `$${team?.gdp}k`, label: tt('scoreGdpCapita'),  color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
-        ].map(({ num, label, color, sh }) => (
-          <div key={label} className="score-card">
-            <span style={{ fontSize: 18, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>
-            <span style={{ fontSize: 9, color: 'var(--color-muted)' }}>{label}</span>
-          </div>
-        ))}
-      </div>
-
-      <FactorBreakdown name={selected} />
-
-      <div style={{ marginTop: 32 }}>
-        <H2HList name={selected} />
-      </div>
+      <ProfileTab team={selected} />
       </>}
 
       </div>
