@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-15T23:11:29.667Z"
+    "lastUpdated": "2026-06-16T08:44:10.651Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -93,6 +93,20 @@
       "scoreA": 1,
       "scoreB": 1,
       "playedAt": "2026-06-15T19:00:00Z"
+    },
+    "saudi-arabia-vs-uruguay": {
+      "teamA": "Saudi Arabia",
+      "teamB": "Uruguay",
+      "scoreA": 1,
+      "scoreB": 1,
+      "playedAt": "2026-06-15T22:00:00Z"
+    },
+    "iran-vs-new-zealand": {
+      "teamA": "Iran",
+      "teamB": "New Zealand",
+      "scoreA": 2,
+      "scoreB": 2,
+      "playedAt": "2026-06-16T01:00:00Z"
     }
   }
 }

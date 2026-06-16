@@ -306,5 +306,49 @@
       "South Korea": 0.0105,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-15T22:00:00Z",
+    "matchLabel": "GRP: KSA vs URU",
+    "snapshots": {
+      "Argentina": 0.183,
+      "Spain": 0.172,
+      "France": 0.107,
+      "Brazil": 0.099,
+      "Japan": 0.071,
+      "England": 0.0605,
+      "Portugal": 0.058,
+      "Germany": 0.0425,
+      "Mexico": 0.039,
+      "Netherlands": 0.0355,
+      "Uruguay": 0.034,
+      "Belgium": 0.026,
+      "Colombia": 0.0165,
+      "Canada": 0.013,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
+  },
+  {
+    "timestamp": "2026-06-16T01:00:00Z",
+    "matchLabel": "GRP: IRN vs NZL",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.1715,
+      "France": 0.107,
+      "Brazil": 0.099,
+      "Japan": 0.071,
+      "England": 0.0605,
+      "Portugal": 0.058,
+      "Germany": 0.0425,
+      "Mexico": 0.039,
+      "Netherlands": 0.0355,
+      "Uruguay": 0.034,
+      "Belgium": 0.026,
+      "Colombia": 0.0165,
+      "Canada": 0.013,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
   }
 ]

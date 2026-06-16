@@ -166,5 +166,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "saudi-arabia-vs-uruguay": {
+    "date": "2026-06-15T22:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "iran-vs-new-zealand": {
+    "date": "2026-06-16T01:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
