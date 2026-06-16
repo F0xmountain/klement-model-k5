@@ -246,6 +246,7 @@
     "scoreGdpCapita": "BBP/INWONER",
     "formLabel": "RECENTE VORM",
     "starPlayersLabel": "STERSPELERS",
+    "emptySquad": "Geen selectiegegevens beschikbaar voor dit team",
     "squadCompleteness": "Selectievolledigheid: {pct}%",
     "tabs": { "profile": "Profiel", "squad": "Selectie", "scorers": "Topscorers", "schedule": "Schema", "path": "Pad" },
     "switcher": { "prev": "Vorig team", "next": "Volgend team" },

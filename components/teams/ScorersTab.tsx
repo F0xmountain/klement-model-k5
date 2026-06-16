@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { getSquadTeam, starRankOf, type Category } from '@/lib/squad-utils'
 import { calcExpectedPoints, calcExpectedGoals } from '@/lib/fantasy-points'
+import EmptyState from '@/components/ui/EmptyState'
 
 interface ScorerRow {
   name: string
@@ -43,7 +44,7 @@ export default function ScorersTab({ teamName }: { teamName: string }) {
   }, [team, teamName])
 
   if (!team) {
-    return <div style={{ fontSize: 10, color: 'var(--color-muted)', padding: 12 }}>—</div>
+    return <EmptyState message={t('emptySquad')} />
   }
 
   const shown = filter === 'all' ? rows : rows.filter(r => r.category === filter)

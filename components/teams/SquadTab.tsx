@@ -5,6 +5,7 @@ import {
   type Category, type PlayerStatus, type SquadPlayer, type SquadTeam,
 } from '@/lib/squad-utils'
 import { getRatingsForPlayer, getPlayerAvgRating } from '@/lib/player-ratings'
+import EmptyState from '@/components/ui/EmptyState'
 
 const STATUS_DOT: Record<PlayerStatus, string> = { fit: '🟢', doubtful: '🟡', out: '🔴' }
 
@@ -64,7 +65,7 @@ export default function SquadTab({ teamName }: { teamName: string }) {
   const team = getSquadTeam(teamName)
 
   if (!team) {
-    return <div style={{ fontSize: 10, color: 'var(--color-muted)', padding: 12 }}>—</div>
+    return <EmptyState message={t('emptySquad')} />
   }
 
   return (

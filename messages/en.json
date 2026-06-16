@@ -246,6 +246,7 @@
     "scoreGdpCapita": "GDP/CAPITA",
     "formLabel": "RECENT FORM",
     "starPlayersLabel": "KEY PLAYERS",
+    "emptySquad": "No squad data available for this team",
     "squadCompleteness": "Squad completeness: {pct}%",
     "tabs": { "profile": "Profile", "squad": "Squad", "scorers": "Top scorers", "schedule": "Schedule", "path": "Path" },
     "switcher": { "prev": "Previous team", "next": "Next team" },
