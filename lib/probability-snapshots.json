@@ -67,13 +67,13 @@
   },
   {
     "timestamp": "2026-06-12T19:00:00Z",
-    "matchLabel": "GRP: CAN vs BOS",
+    "matchLabel": "GRP: CAN vs BIH",
     "snapshots": {
       "Argentina": 0.183,
-      "Spain": 0.1725,
+      "Spain": 0.172,
       "France": 0.106,
       "Brazil": 0.0985,
-      "Japan": 0.072,
+      "Japan": 0.0725,
       "England": 0.06,
       "Portugal": 0.059,
       "Germany": 0.0425,
@@ -92,10 +92,10 @@
     "matchLabel": "GRP: USA vs PAR",
     "snapshots": {
       "Argentina": 0.182,
-      "Spain": 0.1725,
+      "Spain": 0.172,
       "France": 0.1065,
       "Brazil": 0.0985,
-      "Japan": 0.072,
+      "Japan": 0.0725,
       "England": 0.06,
       "Portugal": 0.059,
       "Germany": 0.0425,
@@ -435,6 +435,28 @@
       "Belgium": 0.026,
       "Colombia": 0.0165,
       "Canada": 0.013,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
+  },
+  {
+    "timestamp": "2026-06-15T16:00:00Z",
+    "matchLabel": "GRP: ESP vs CPV",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.1725,
+      "France": 0.1075,
+      "Brazil": 0.098,
+      "Japan": 0.071,
+      "England": 0.0605,
+      "Portugal": 0.059,
+      "Germany": 0.0425,
+      "Mexico": 0.039,
+      "Netherlands": 0.035,
+      "Uruguay": 0.034,
+      "Belgium": 0.026,
+      "Colombia": 0.016,
+      "Canada": 0.0125,
       "South Korea": 0.0105,
       "Croatia": 0.01
     }

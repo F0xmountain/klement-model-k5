@@ -250,5 +250,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "spain-vs-cape-verde": {
+    "date": "2026-06-15T16:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
