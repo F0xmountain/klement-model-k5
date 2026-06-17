@@ -34,7 +34,9 @@ const RATE_LIMIT_MS = 6500 // free tier ≈ 10 requests/minute
 // breid uit zodra een wedstrijd wordt overgeslagen als "unknown team".
 const FD_NAME_MAP = {
   'Bosnia and Herzegovina': 'Bosnia-Herz',
+  'Bosnia-Herzegovina': 'Bosnia-Herz',
   'Cabo Verde': 'Cape Verde',
+  'Cape Verde Islands': 'Cape Verde',
   'Curaçao': 'Curacao',
   'DR Congo': 'Congo DR',
   'Côte d’Ivoire': 'Ivory Coast',
