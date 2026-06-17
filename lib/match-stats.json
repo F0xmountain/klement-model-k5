@@ -208,5 +208,47 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "iraq-vs-norway": {
+    "date": "2026-06-16T22:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 4
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "argentina-vs-algeria": {
+    "date": "2026-06-17T01:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "austria-vs-jordan": {
+    "date": "2026-06-17T04:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

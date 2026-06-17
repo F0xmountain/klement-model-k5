@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-16T23:55:47.093Z"
+    "lastUpdated": "2026-06-17T09:21:45.506Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -114,6 +114,27 @@
       "scoreA": 3,
       "scoreB": 1,
       "playedAt": "2026-06-16T19:00:00Z"
+    },
+    "iraq-vs-norway": {
+      "teamA": "Iraq",
+      "teamB": "Norway",
+      "scoreA": 1,
+      "scoreB": 4,
+      "playedAt": "2026-06-16T22:00:00Z"
+    },
+    "argentina-vs-algeria": {
+      "teamA": "Argentina",
+      "teamB": "Algeria",
+      "scoreA": 3,
+      "scoreB": 0,
+      "playedAt": "2026-06-17T01:00:00Z"
+    },
+    "austria-vs-jordan": {
+      "teamA": "Austria",
+      "teamB": "Jordan",
+      "scoreA": 3,
+      "scoreB": 1,
+      "playedAt": "2026-06-17T04:00:00Z"
     }
   }
 }
