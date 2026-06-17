@@ -264,5 +264,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "portugal-vs-congo-dr": {
+    "date": "2026-06-17T17:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "england-vs-croatia": {
+    "date": "2026-06-17T20:00:00Z",
+    "score": {
+      "home": 4,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
