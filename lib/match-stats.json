@@ -292,5 +292,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "ghana-vs-panama": {
+    "date": "2026-06-17T23:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "uzbekistan-vs-colombia": {
+    "date": "2026-06-18T02:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
