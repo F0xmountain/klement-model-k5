@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-18T23:04:56.973Z"
+    "lastUpdated": "2026-06-19T13:00:00.491Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -184,6 +184,20 @@
       "scoreA": 4,
       "scoreB": 1,
       "playedAt": "2026-06-18T19:00:00Z"
+    },
+    "canada-vs-qatar": {
+      "teamA": "Canada",
+      "teamB": "Qatar",
+      "scoreA": 6,
+      "scoreB": 0,
+      "playedAt": "2026-06-18T22:00:00Z"
+    },
+    "mexico-vs-south-korea": {
+      "teamA": "Mexico",
+      "teamB": "South Korea",
+      "scoreA": 1,
+      "scoreB": 0,
+      "playedAt": "2026-06-19T01:00:00Z"
     }
   }
 }

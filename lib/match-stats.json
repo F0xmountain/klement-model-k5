@@ -348,5 +348,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "canada-vs-qatar": {
+    "date": "2026-06-18T22:00:00Z",
+    "score": {
+      "home": 6,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 3,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "mexico-vs-south-korea": {
+    "date": "2026-06-19T01:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
