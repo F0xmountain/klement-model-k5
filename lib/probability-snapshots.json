@@ -636,5 +636,93 @@
       "South Korea": 0.0105,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-19T19:00:00Z",
+    "matchLabel": "GRP: USA vs AUS",
+    "snapshots": {
+      "Argentina": 0.183,
+      "Spain": 0.174,
+      "France": 0.1085,
+      "Brazil": 0.098,
+      "Japan": 0.071,
+      "England": 0.062,
+      "Portugal": 0.0575,
+      "Germany": 0.042,
+      "Mexico": 0.038,
+      "Netherlands": 0.035,
+      "Uruguay": 0.034,
+      "Belgium": 0.026,
+      "Colombia": 0.0155,
+      "Canada": 0.0125,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
+  },
+  {
+    "timestamp": "2026-06-19T22:00:00Z",
+    "matchLabel": "GRP: SCO vs MAR",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.1745,
+      "France": 0.1085,
+      "Brazil": 0.098,
+      "Japan": 0.071,
+      "England": 0.062,
+      "Portugal": 0.0575,
+      "Germany": 0.042,
+      "Mexico": 0.038,
+      "Netherlands": 0.035,
+      "Uruguay": 0.0335,
+      "Belgium": 0.0255,
+      "Colombia": 0.0155,
+      "Canada": 0.0125,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
+  },
+  {
+    "timestamp": "2026-06-20T00:30:00Z",
+    "matchLabel": "GRP: BRA vs HAI",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.1745,
+      "France": 0.1085,
+      "Brazil": 0.098,
+      "Japan": 0.071,
+      "England": 0.062,
+      "Portugal": 0.0575,
+      "Germany": 0.042,
+      "Mexico": 0.038,
+      "Netherlands": 0.035,
+      "Uruguay": 0.0335,
+      "Belgium": 0.0255,
+      "Colombia": 0.0155,
+      "Canada": 0.0125,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
+  },
+  {
+    "timestamp": "2026-06-20T03:00:00Z",
+    "matchLabel": "GRP: TUR vs PAR",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.175,
+      "France": 0.1085,
+      "Brazil": 0.097,
+      "Japan": 0.07,
+      "England": 0.063,
+      "Portugal": 0.0575,
+      "Germany": 0.0425,
+      "Mexico": 0.0385,
+      "Netherlands": 0.0345,
+      "Uruguay": 0.0335,
+      "Belgium": 0.0255,
+      "Colombia": 0.016,
+      "Canada": 0.0125,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
   }
 ]

@@ -376,5 +376,61 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "usa-vs-australia": {
+    "date": "2026-06-19T19:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "scotland-vs-morocco": {
+    "date": "2026-06-19T22:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "brazil-vs-haiti": {
+    "date": "2026-06-20T00:30:00Z",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 3,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "turkey-vs-paraguay": {
+    "date": "2026-06-20T03:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
