@@ -724,5 +724,27 @@
       "South Korea": 0.0105,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-20T17:00:00Z",
+    "matchLabel": "GRP: NED vs SWE",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.174,
+      "France": 0.109,
+      "Brazil": 0.097,
+      "Japan": 0.0705,
+      "England": 0.063,
+      "Portugal": 0.0575,
+      "Germany": 0.0425,
+      "Mexico": 0.0385,
+      "Netherlands": 0.0345,
+      "Uruguay": 0.0335,
+      "Belgium": 0.025,
+      "Colombia": 0.016,
+      "Canada": 0.013,
+      "South Korea": 0.0105,
+      "Croatia": 0.01
+    }
   }
 ]
