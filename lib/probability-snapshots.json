@@ -812,5 +812,27 @@
       "South Korea": 0.011,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-21T16:00:00Z",
+    "matchLabel": "GRP: ESP vs KSA",
+    "snapshots": {
+      "Argentina": 0.1835,
+      "Spain": 0.173,
+      "France": 0.108,
+      "Brazil": 0.0965,
+      "Japan": 0.071,
+      "England": 0.063,
+      "Portugal": 0.058,
+      "Germany": 0.0425,
+      "Mexico": 0.039,
+      "Netherlands": 0.0345,
+      "Uruguay": 0.0335,
+      "Belgium": 0.025,
+      "Colombia": 0.0165,
+      "Canada": 0.013,
+      "South Korea": 0.011,
+      "Croatia": 0.01
+    }
   }
 ]
