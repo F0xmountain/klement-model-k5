@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-22T15:59:04.057Z"
+    "lastUpdated": "2026-06-22T22:26:41.799Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -282,6 +282,13 @@
       "scoreA": 1,
       "scoreB": 3,
       "playedAt": "2026-06-22T01:00:00Z"
+    },
+    "argentina-vs-austria": {
+      "teamA": "Argentina",
+      "teamB": "Austria",
+      "scoreA": 2,
+      "scoreB": 0,
+      "playedAt": "2026-06-22T17:00:00Z"
     }
   }
 }
