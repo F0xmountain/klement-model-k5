@@ -558,5 +558,47 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "france-vs-iraq": {
+    "date": "2026-06-22T21:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "norway-vs-senegal": {
+    "date": "2026-06-23T00:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "jordan-vs-algeria": {
+    "date": "2026-06-23T03:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
