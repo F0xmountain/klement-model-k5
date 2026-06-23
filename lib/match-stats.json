@@ -600,5 +600,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "portugal-vs-uzbekistan": {
+    "date": "2026-06-23T17:00:00Z",
+    "score": {
+      "home": 5,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 3,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
