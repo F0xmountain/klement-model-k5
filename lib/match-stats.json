@@ -656,5 +656,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "switzerland-vs-canada": {
+    "date": "2026-06-24T19:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "bosnia-herz-vs-qatar": {
+    "date": "2026-06-24T19:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

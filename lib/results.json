@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-24T10:28:18.320Z"
+    "lastUpdated": "2026-06-24T21:13:45.598Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -338,6 +338,20 @@
       "scoreA": 1,
       "scoreB": 0,
       "playedAt": "2026-06-24T02:00:00Z"
+    },
+    "switzerland-vs-canada": {
+      "teamA": "Switzerland",
+      "teamB": "Canada",
+      "scoreA": 2,
+      "scoreB": 1,
+      "playedAt": "2026-06-24T19:00:00Z"
+    },
+    "bosnia-herz-vs-qatar": {
+      "teamA": "Bosnia-Herz",
+      "teamB": "Qatar",
+      "scoreA": 3,
+      "scoreB": 1,
+      "playedAt": "2026-06-24T19:00:00Z"
     }
   }
 }
