@@ -614,5 +614,47 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "england-vs-ghana": {
+    "date": "2026-06-23T20:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "panama-vs-croatia": {
+    "date": "2026-06-23T23:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "colombia-vs-congo-dr": {
+    "date": "2026-06-24T02:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
