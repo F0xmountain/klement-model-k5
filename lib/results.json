@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-24T21:13:45.598Z"
+    "lastUpdated": "2026-06-25T08:39:39.862Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -352,6 +352,34 @@
       "scoreA": 3,
       "scoreB": 1,
       "playedAt": "2026-06-24T19:00:00Z"
+    },
+    "morocco-vs-haiti": {
+      "teamA": "Morocco",
+      "teamB": "Haiti",
+      "scoreA": 4,
+      "scoreB": 2,
+      "playedAt": "2026-06-24T22:00:00Z"
+    },
+    "scotland-vs-brazil": {
+      "teamA": "Scotland",
+      "teamB": "Brazil",
+      "scoreA": 0,
+      "scoreB": 3,
+      "playedAt": "2026-06-24T22:00:00Z"
+    },
+    "czechia-vs-mexico": {
+      "teamA": "Czechia",
+      "teamB": "Mexico",
+      "scoreA": 0,
+      "scoreB": 3,
+      "playedAt": "2026-06-25T01:00:00Z"
+    },
+    "south-africa-vs-south-korea": {
+      "teamA": "South Africa",
+      "teamB": "South Korea",
+      "scoreA": 1,
+      "scoreB": 0,
+      "playedAt": "2026-06-25T01:00:00Z"
     }
   }
 }
