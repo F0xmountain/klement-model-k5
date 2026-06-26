@@ -740,5 +740,89 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "ecuador-vs-germany": {
+    "date": "2026-06-25T20:00:00Z",
+    "score": {
+      "home": null,
+      "away": null
+    },
+    "halfTime": {
+      "home": null,
+      "away": null
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "curacao-vs-ivory-coast": {
+    "date": "2026-06-25T20:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "tunisia-vs-netherlands": {
+    "date": "2026-06-25T23:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "japan-vs-sweden": {
+    "date": "2026-06-25T23:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "turkey-vs-usa": {
+    "date": "2026-06-26T02:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "paraguay-vs-australia": {
+    "date": "2026-06-26T02:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

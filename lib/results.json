@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-25T08:39:39.862Z"
+    "lastUpdated": "2026-06-26T08:42:06.782Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -380,6 +380,48 @@
       "scoreA": 1,
       "scoreB": 0,
       "playedAt": "2026-06-25T01:00:00Z"
+    },
+    "ecuador-vs-germany": {
+      "teamA": "Ecuador",
+      "teamB": "Germany",
+      "scoreA": 2,
+      "scoreB": 1,
+      "playedAt": "2026-06-25T20:00:00Z"
+    },
+    "curacao-vs-ivory-coast": {
+      "teamA": "Curacao",
+      "teamB": "Ivory Coast",
+      "scoreA": 0,
+      "scoreB": 2,
+      "playedAt": "2026-06-25T20:00:00Z"
+    },
+    "tunisia-vs-netherlands": {
+      "teamA": "Tunisia",
+      "teamB": "Netherlands",
+      "scoreA": 1,
+      "scoreB": 3,
+      "playedAt": "2026-06-25T23:00:00Z"
+    },
+    "japan-vs-sweden": {
+      "teamA": "Japan",
+      "teamB": "Sweden",
+      "scoreA": 1,
+      "scoreB": 1,
+      "playedAt": "2026-06-25T23:00:00Z"
+    },
+    "turkey-vs-usa": {
+      "teamA": "Turkey",
+      "teamB": "USA",
+      "scoreA": 3,
+      "scoreB": 2,
+      "playedAt": "2026-06-26T02:00:00Z"
+    },
+    "paraguay-vs-australia": {
+      "teamA": "Paraguay",
+      "teamB": "Australia",
+      "scoreA": 0,
+      "scoreB": 0,
+      "playedAt": "2026-06-26T02:00:00Z"
     }
   }
 }
