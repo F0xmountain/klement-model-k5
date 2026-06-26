@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-26T08:42:06.782Z"
+    "lastUpdated": "2026-06-26T21:10:05.799Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -422,6 +422,20 @@
       "scoreA": 0,
       "scoreB": 0,
       "playedAt": "2026-06-26T02:00:00Z"
+    },
+    "norway-vs-france": {
+      "teamA": "Norway",
+      "teamB": "France",
+      "scoreA": 1,
+      "scoreB": 4,
+      "playedAt": "2026-06-26T19:00:00Z"
+    },
+    "senegal-vs-iraq": {
+      "teamA": "Senegal",
+      "teamB": "Iraq",
+      "scoreA": 5,
+      "scoreB": 0,
+      "playedAt": "2026-06-26T19:00:00Z"
     }
   }
 }
