@@ -852,5 +852,61 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "uruguay-vs-spain": {
+    "date": "2026-06-27T00:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "cape-verde-vs-saudi-arabia": {
+    "date": "2026-06-27T00:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "new-zealand-vs-belgium": {
+    "date": "2026-06-27T03:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 5
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "egypt-vs-iran": {
+    "date": "2026-06-27T03:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

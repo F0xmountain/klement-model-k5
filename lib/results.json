@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-26T21:10:05.799Z"
+    "lastUpdated": "2026-06-27T08:07:23.293Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -436,6 +436,34 @@
       "scoreA": 5,
       "scoreB": 0,
       "playedAt": "2026-06-26T19:00:00Z"
+    },
+    "uruguay-vs-spain": {
+      "teamA": "Uruguay",
+      "teamB": "Spain",
+      "scoreA": 0,
+      "scoreB": 1,
+      "playedAt": "2026-06-27T00:00:00Z"
+    },
+    "cape-verde-vs-saudi-arabia": {
+      "teamA": "Cape Verde",
+      "teamB": "Saudi Arabia",
+      "scoreA": 0,
+      "scoreB": 0,
+      "playedAt": "2026-06-27T00:00:00Z"
+    },
+    "new-zealand-vs-belgium": {
+      "teamA": "New Zealand",
+      "teamB": "Belgium",
+      "scoreA": 1,
+      "scoreB": 5,
+      "playedAt": "2026-06-27T03:00:00Z"
+    },
+    "egypt-vs-iran": {
+      "teamA": "Egypt",
+      "teamB": "Iran",
+      "scoreA": 1,
+      "scoreB": 1,
+      "playedAt": "2026-06-27T03:00:00Z"
     }
   }
 }
