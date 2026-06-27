@@ -908,5 +908,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "panama-vs-england": {
+    "date": "2026-06-27T21:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "croatia-vs-ghana": {
+    "date": "2026-06-27T21:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

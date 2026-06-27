@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-27T08:07:23.293Z"
+    "lastUpdated": "2026-06-27T23:46:30.796Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -464,6 +464,20 @@
       "scoreA": 1,
       "scoreB": 1,
       "playedAt": "2026-06-27T03:00:00Z"
+    },
+    "panama-vs-england": {
+      "teamA": "Panama",
+      "teamB": "England",
+      "scoreA": 0,
+      "scoreB": 2,
+      "playedAt": "2026-06-27T21:00:00Z"
+    },
+    "croatia-vs-ghana": {
+      "teamA": "Croatia",
+      "teamB": "Ghana",
+      "scoreA": 2,
+      "scoreB": 1,
+      "playedAt": "2026-06-27T21:00:00Z"
     }
   }
 }
