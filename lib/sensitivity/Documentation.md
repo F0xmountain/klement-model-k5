@@ -168,6 +168,28 @@ the live sources, so the exact decimals move as the datasets update.
 |---|---|---|
 | `runOptimize` | `runOptimize(): Promise<OptimalResult>` | Live-fetches results.csv and the backward-only World Bank lookup, calls `buildSamples` once on full history, and returns `selectOptimal(samples)`. The backward lookup keeps gdp/pop point-in-time per spec section 3. |
 
+### optimal-model.ts - committed-snapshot inference
+
+This is the only file in the module that scores a match without rerunning the
+pipeline. It imports the committed `optimal-weights.json` artifact, types it back
+to `OptimalModel`, and exposes a single scoring entry point. The production pages
+do not use it; it is the explorer's committed snapshot, separate from
+`lib/klement.ts` and `lib/model/weights.json`.
+
+| Symbol | Signature | Behaviour |
+|---|---|---|
+| `optimalModel` | `const optimalModel: OptimalModel` | The committed `optimal-weights.json` artifact, typed as `OptimalModel` so a schema drift in the JSON surfaces as a compile error rather than a silent runtime mismatch. |
+| `scoreMatch` | `scoreMatch(rawA: SideFactors, rawB: SideFactors): Record<Label, number>` | Standardizes each raw factor with the saved per-feature mean/std, multiplies by the saved beta, sums the home-minus-away difference, scales by `calibration.scale`, and returns the home/draw/away probabilities via engine `predict`. Dropped features carry beta 0, so they contribute nothing. The three probabilities sum to 1. |
+
+The scoring formula (verbatim in `optimalModel.formula`):
+
+```
+eta      = scale * sum_k beta_k * ((rawA_k - mean_k)/std_k - (rawB_k - mean_k)/std_k)
+P(A win) = sigmoid(eta) * (1 - draw)
+draw     = clip(dmax * exp(-ddecay * |eta|), 0.05, 0.34)
+P(B win) = (1 - sigmoid(eta)) * (1 - draw)
+```
+
 ## Internal Structure
 
 | File | Responsibility |
@@ -180,6 +202,8 @@ the live sources, so the exact decimals move as the datasets update.
 | `select.ts` | The optimal-weight protocol: train<=2014 / holdout {2018,2022,2026} split, forward-backward feature subset, regularization path scored masked to that subset on the pooled holdout, pooled-holdout argmin, refit of the chosen (penalty, subset), per-tournament reporting, baselines. |
 | `run.ts` | Stage sequencing, train/validate split, baseline fit-and-freeze, per-feature wide-then-fine sweep, result assembly. |
 | `optimize-run.ts` | Optimal-weight orchestrator: live-fetch (backward-only World Bank), single `buildSamples`, `selectOptimal`. |
+| `optimal-model.ts` | Committed-snapshot inference: imports `optimal-weights.json`, exposes `optimalModel` and `scoreMatch`. No fetch, no fit. |
+| `optimal-weights.json` | The committed inference artifact written by `scripts/export-optimal-weights.js`. Source of truth at inference time. Schema in Data Models. |
 | `engine.test.ts` | Vitest unit tests for the engine math. |
 | `regfit.test.ts` | Vitest unit tests for the ridge/lasso/elastic-net penalty behaviour. |
 | `select.test.ts` | Vitest unit tests for the train/holdout split, leak guards, per-tournament reporting, feature attribution, baselines, and the lasso path on the training deltas. |
@@ -219,6 +243,28 @@ Owned by this module (defined in `types.ts` unless noted):
 - `SensitivityResult` - the streamed payload; see its signature above.
 - `Match` (sources.ts) - one played result with `hs`/`as` integer scores and the
   venue `country`.
+- `OptimalModel` - the self-contained inference artifact serialized to
+  `optimal-weights.json`: `model: string`, `protocol: string`,
+  `trainYears: number[]`, `holdoutYears: number[]`, `dataSource: string`,
+  `formula: string`, `config: OptimalConfig`,
+  `features: OptimalModelFeature[]`, `calibration: Calibration`,
+  `oos: OptimalModelOos`, `baselines: OptimalModelBaselines`,
+  `caveats: string`. Each `OptimalModelFeature` is
+  `{ key: FeatureKey; label: string; beta: number; mean: number; std: number }`
+  with `mean`/`std` the `<= 2014` training standardizer and `beta` the final
+  refit coefficient (0 for a dropped feature). `OptimalModelOos` is
+  `{ pooledLogLoss: number; perTournament: Record<string, { logLoss; n: number }> }`.
+  `OptimalModelBaselines` is `{ eloOnly; equal; mle; uniform: number }`.
+
+`optimal-weights.json` file schema. The serialized file is `OptimalModel` plus
+three fields the exporter adds: `schemaVersion: number` (currently 1),
+`generatedAt: string` (ISO timestamp), and `regenerate: string` (the regenerate
+command). Snapshot caveat: the file is a point-in-time snapshot. The 2026 holdout
+fold is partial and live (few or zero played matches at capture time), so its `n`
+and per-tournament log-loss move as matches finish. Regenerate the file as
+results land via `npm run dev` then `npm run export:weights` (see
+`scripts/Documentation.md`). Selection on the same 2018-2026 holdout that the
+file reports makes the headline mildly optimistic, as `caveats` states.
 
 Consumed reference data (not owned here): `lib/model/wc-nations.json`, shape
 `{ nations: Record<string, { iso3; latam; temp; conf; continent; gdp?; pop? }>,

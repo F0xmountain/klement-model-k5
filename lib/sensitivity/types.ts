@@ -157,6 +157,47 @@ export interface BaselineMetrics {
   holdout: HoldoutMetrics
 }
 
+// One feature in the serialized optimal model: its standardized coefficient plus
+// the <=2014 training mean/std needed to standardize a fresh raw row at inference.
+// A dropped feature keeps its mean/std for shape but carries beta 0.
+export interface OptimalModelFeature {
+  key: FeatureKey
+  label: string
+  beta: number
+  mean: number
+  std: number
+}
+
+export interface OptimalModelOos {
+  pooledLogLoss: number
+  perTournament: Record<string, { logLoss: number; n: number }>
+}
+
+export interface OptimalModelBaselines {
+  eloOnly: number
+  equal: number
+  mle: number
+  uniform: number
+}
+
+// The self-contained inference artifact: everything needed to score a match
+// without rerunning the pipeline. mean/std are the standardizer fit on the
+// <=2014 training raw rows; calibration and beta come from the final refit.
+export interface OptimalModel {
+  model: string
+  protocol: string
+  trainYears: number[]
+  holdoutYears: number[]
+  dataSource: string
+  formula: string
+  config: OptimalConfig
+  features: OptimalModelFeature[]
+  calibration: Calibration
+  oos: OptimalModelOos
+  baselines: OptimalModelBaselines
+  caveats: string
+}
+
 export interface OptimalResult {
   config: OptimalConfig
   weights: { key: FeatureKey; label: string; beta: number; importancePct: number }[]
@@ -165,6 +206,7 @@ export interface OptimalResult {
   featureSelection: FeatureSelectionStep[]
   headline: HoldoutMetrics
   baselines: BaselineMetrics[]
+  optimalModel: OptimalModel
   trainYears: number[]
   holdoutYears: number[]
   caveat: string

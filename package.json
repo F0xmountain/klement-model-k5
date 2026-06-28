@@ -10,7 +10,8 @@
     "test": "vitest run",
     "fit": "node scripts/fit-model.js",
     "update:live": "node scripts/update-live.js",
-    "backtest": "node scripts/backtest.js"
+    "backtest": "node scripts/backtest.js",
+    "export:weights": "node scripts/export-optimal-weights.js"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",

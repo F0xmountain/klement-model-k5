@@ -6,6 +6,10 @@ import type {
   FeatureKey,
   FeatureSelectionStep,
   OptimalConfig,
+  OptimalModel,
+  OptimalModelBaselines,
+  OptimalModelFeature,
+  OptimalModelOos,
   OptimalResult,
   RegFamily,
   RegPathPoint,
@@ -29,6 +33,19 @@ const CAVEAT =
   '2018-2026 block that is then reported, so the headline out-of-sample number is ' +
   'mildly optimistic. This matches the train<=2014 / evaluate>2014 design the ' +
   'owner specified: betas, standardizer and calibration are fit on <=2014 only.'
+const MODEL_NAME = 'klement-sensitivity-optimal'
+const PROTOCOL =
+  'train<=2014 / evaluate>2014: betas, standardizer and calibration fit on <=2014 ' +
+  'rows only; forward-then-backward subset and regularization config chosen by ' +
+  'pooled 2018-2026 holdout log-loss; final refit reported out-of-sample.'
+const FORMULA =
+  'eta = scale * sum_k beta_k * ((rawA_k - mean_k)/std_k - (rawB_k - mean_k)/std_k); ' +
+  'P(Awin) = sigmoid(eta) * (1 - draw); draw = clip(dmax*exp(-ddecay*abs(eta)), 0.05, 0.34); ' +
+  'P(Bwin) = (1 - sigmoid(eta)) * (1 - draw).'
+const MODEL_CAVEATS =
+  'Selection on the same 2018-2026 holdout makes the headline mildly optimistic. ' +
+  'The 2026 fold is partial (live, few or zero played matches). The edge over the ' +
+  'elo-only baseline is thin: treat the extra features as marginal refinements.'
 
 export class LeakageError extends Error {
   constructor(message: string) {
@@ -321,6 +338,7 @@ function assemble(
   featureSelection: FeatureSelectionStep[],
   split: Split,
 ): OptimalResult {
+  const baselines = computeBaselines(split)
   return {
     config,
     weights: importanceRows(refit.weights),
@@ -328,13 +346,75 @@ function assemble(
     regPath,
     featureSelection,
     headline: { pooledLogLoss: refit.pooledHoldoutLogLoss, perTournament: refit.perTournamentLogLoss },
-    baselines: computeBaselines(split),
+    baselines,
+    optimalModel: buildOptimalModel(config, refit, split, baselines),
     trainYears: split.trainYears,
     holdoutYears: HOLDOUT_YEARS,
     caveat: CAVEAT,
     dataSource: DATA_SOURCE,
     fetchedAt: new Date().toISOString(),
   }
+}
+
+// The serializable inference artifact. Reuses the already-computed refit weights,
+// calibration, holdout losses and the <=2014 standardizer (split.stats); nothing
+// is recomputed differently from what the rest of the result reports.
+function buildOptimalModel(
+  config: OptimalConfig,
+  refit: Refit,
+  split: Split,
+  baselines: BaselineMetrics[],
+): OptimalModel {
+  return {
+    model: MODEL_NAME,
+    protocol: PROTOCOL,
+    trainYears: split.trainYears,
+    holdoutYears: HOLDOUT_YEARS,
+    dataSource: DATA_SOURCE,
+    formula: FORMULA,
+    config,
+    features: modelFeatures(refit.weights, split.stats),
+    calibration: refit.calibration,
+    oos: modelOos(refit),
+    baselines: modelBaselines(baselines),
+    caveats: MODEL_CAVEATS,
+  }
+}
+
+function modelFeatures(weights: number[], stats: StandardizerStats): OptimalModelFeature[] {
+  return FEATURES.map((key, i) => ({
+    key,
+    label: FEATURE_LABELS[key],
+    beta: weights[i],
+    mean: stats[key].mean,
+    std: stats[key].std,
+  }))
+}
+
+function modelOos(refit: Refit): OptimalModelOos {
+  const perTournament: OptimalModelOos['perTournament'] = {}
+  for (const fold of refit.perTournamentLogLoss) {
+    perTournament[String(fold.year)] = { logLoss: fold.logLoss, n: fold.n }
+  }
+  return { pooledLogLoss: refit.pooledHoldoutLogLoss, perTournament }
+}
+
+function modelBaselines(baselines: BaselineMetrics[]): OptimalModelBaselines {
+  const byKey = new Map(baselines.map((b) => [b.key, b.holdout.pooledLogLoss]))
+  return {
+    eloOnly: pooledFor(byKey, 'eloOnly'),
+    equal: pooledFor(byKey, 'equal'),
+    mle: pooledFor(byKey, 'mle'),
+    uniform: pooledFor(byKey, 'uniform'),
+  }
+}
+
+function pooledFor(byKey: Map<string, number>, key: string): number {
+  const value = byKey.get(key)
+  if (value === undefined) {
+    throw new LeakageError(`baseline ${key} missing from computed baselines`)
+  }
+  return value
 }
 
 function computeBaselines(split: Split): BaselineMetrics[] {

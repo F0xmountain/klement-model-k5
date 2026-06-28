@@ -62,6 +62,50 @@ The current fit puts FIFA ranking and Elo form well ahead of the socio-economic 
 
 ---
 
+## Optimal-weights snapshot (explorer-only)
+
+`lib/sensitivity/optimal-weights.json` is the committed output of the sensitivity explorer's optimal-weight selector. It is a self-contained inference artifact: the chosen feature subset, the standardized coefficients, the train-fit standardizer (mean and std per feature), the calibration, and the out-of-sample metrics. It is separate from the production model in `lib/klement.ts` and `lib/model/weights.json`, and the production pages never read it.
+
+What the file contains:
+
+- `config` - the winning regularization family, lambda, alpha, and `featureSubset` (the kept features; dropped features carry beta 0).
+- `features` - one entry per candidate feature with `key`, `label`, `beta`, and the `<= 2014` training `mean` and `std`.
+- `calibration` - `scale`, `dmax`, `ddecay`.
+- `oos` - pooled and per-tournament (2018, 2022, 2026) out-of-sample log-loss with match counts.
+- `baselines` - elo-only, equal-weight, MLE, and uniform log-loss on the same holdout.
+- `protocol`, `formula`, `caveats`, `trainYears`, `holdoutYears`, `dataSource`, plus `schemaVersion`, `generatedAt`, and `regenerate`.
+
+How to load it:
+
+```ts
+import { scoreMatch } from '@/lib/sensitivity/optimal-model'
+
+// rawA and rawB are SideFactors (10 raw per-side values).
+const probabilities = scoreMatch(rawA, rawB)
+// { A, D, B } probabilities that sum to 1.
+```
+
+`scoreMatch` standardizes each raw factor with the saved mean and std, multiplies by the saved beta, sums the home-minus-away difference, scales by calibration, and returns the home/draw/away probabilities. The formula:
+
+```
+eta      = scale * sum_k beta_k * ((rawA_k - mean_k)/std_k - (rawB_k - mean_k)/std_k)
+P(A win) = sigmoid(eta) * (1 - draw)
+draw     = clip(dmax * exp(-ddecay * |eta|), 0.05, 0.34)
+P(B win) = (1 - sigmoid(eta)) * (1 - draw)
+```
+
+How to regenerate (the 2026 fold is partial and live, so regenerate as results land):
+
+```bash
+# From kalsh-main/, in one shell:
+npm run dev            # starts the server on http://localhost:3000
+
+# In a second shell:
+npm run export:weights # GET /api/optimize, write lib/sensitivity/optimal-weights.json
+```
+
+---
+
 ## Model pipeline
 
 ### 1 — Scoring (sc function)
