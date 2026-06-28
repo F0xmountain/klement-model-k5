@@ -1,0 +1,630 @@
+{
+  "generatedAt": "2026-06-28T12:25:31.007Z",
+  "standings": {
+    "A": [
+      {
+        "team": "Mexico",
+        "xpts": 6.573311186849449,
+        "group": "A"
+      },
+      {
+        "team": "South Korea",
+        "xpts": 4.433049277891368,
+        "group": "A"
+      },
+      {
+        "team": "Czechia",
+        "xpts": 2.8262194887804215,
+        "group": "A"
+      },
+      {
+        "team": "South Africa",
+        "xpts": 2.6401946931867015,
+        "group": "A"
+      }
+    ],
+    "B": [
+      {
+        "team": "Canada",
+        "xpts": 6.206243087683114,
+        "group": "B"
+      },
+      {
+        "team": "Switzerland",
+        "xpts": 4.965765588431278,
+        "group": "B"
+      },
+      {
+        "team": "Bosnia-Herz",
+        "xpts": 2.897771353860751,
+        "group": "B"
+      },
+      {
+        "team": "Qatar",
+        "xpts": 2.405112549570256,
+        "group": "B"
+      }
+    ],
+    "C": [
+      {
+        "team": "Brazil",
+        "xpts": 6.930063590183924,
+        "group": "C"
+      },
+      {
+        "team": "Morocco",
+        "xpts": 4.93190236597968,
+        "group": "C"
+      },
+      {
+        "team": "Scotland",
+        "xpts": 3.1154086255939806,
+        "group": "C"
+      },
+      {
+        "team": "Haiti",
+        "xpts": 1.6592051553101728,
+        "group": "C"
+      }
+    ],
+    "D": [
+      {
+        "team": "USA",
+        "xpts": 5.8813634403865205,
+        "group": "D"
+      },
+      {
+        "team": "Australia",
+        "xpts": 3.8264589242442177,
+        "group": "D"
+      },
+      {
+        "team": "Turkey",
+        "xpts": 3.626224720704237,
+        "group": "D"
+      },
+      {
+        "team": "Paraguay",
+        "xpts": 2.998165785875568,
+        "group": "D"
+      }
+    ],
+    "E": [
+      {
+        "team": "Germany",
+        "xpts": 5.986279358973842,
+        "group": "E"
+      },
+      {
+        "team": "Ecuador",
+        "xpts": 4.987509564260008,
+        "group": "E"
+      },
+      {
+        "team": "Ivory Coast",
+        "xpts": 3.8774113427358667,
+        "group": "E"
+      },
+      {
+        "team": "Curacao",
+        "xpts": 1.6570382507840127,
+        "group": "E"
+      }
+    ],
+    "F": [
+      {
+        "team": "Netherlands",
+        "xpts": 5.790769094225732,
+        "group": "F"
+      },
+      {
+        "team": "Japan",
+        "xpts": 5.488404503235682,
+        "group": "F"
+      },
+      {
+        "team": "Sweden",
+        "xpts": 3.0049755693514504,
+        "group": "F"
+      },
+      {
+        "team": "Tunisia",
+        "xpts": 2.1868106519913395,
+        "group": "F"
+      }
+    ],
+    "G": [
+      {
+        "team": "Belgium",
+        "xpts": 5.740401105475042,
+        "group": "G"
+      },
+      {
+        "team": "Iran",
+        "xpts": 4.531383428052073,
+        "group": "G"
+      },
+      {
+        "team": "Egypt",
+        "xpts": 3.9964249808833143,
+        "group": "G"
+      },
+      {
+        "team": "New Zealand",
+        "xpts": 2.144878194245703,
+        "group": "G"
+      }
+    ],
+    "H": [
+      {
+        "team": "Spain",
+        "xpts": 6.491130756413832,
+        "group": "H"
+      },
+      {
+        "team": "Uruguay",
+        "xpts": 5.236616945892919,
+        "group": "H"
+      },
+      {
+        "team": "Saudi Arabia",
+        "xpts": 3.1094532716931673,
+        "group": "H"
+      },
+      {
+        "team": "Cape Verde",
+        "xpts": 1.7469008489380018,
+        "group": "H"
+      }
+    ],
+    "I": [
+      {
+        "team": "France",
+        "xpts": 7.011602746244074,
+        "group": "I"
+      },
+      {
+        "team": "Senegal",
+        "xpts": 3.8999840627358595,
+        "group": "I"
+      },
+      {
+        "team": "Norway",
+        "xpts": 3.548192197715229,
+        "group": "I"
+      },
+      {
+        "team": "Iraq",
+        "xpts": 2.0828237480421157,
+        "group": "I"
+      }
+    ],
+    "J": [
+      {
+        "team": "Argentina",
+        "xpts": 7.498901247057222,
+        "group": "J"
+      },
+      {
+        "team": "Austria",
+        "xpts": 3.547815046741051,
+        "group": "J"
+      },
+      {
+        "team": "Algeria",
+        "xpts": 3.131569173793986,
+        "group": "J"
+      },
+      {
+        "team": "Jordan",
+        "xpts": 2.399870002920255,
+        "group": "J"
+      }
+    ],
+    "K": [
+      {
+        "team": "Colombia",
+        "xpts": 5.949710337231789,
+        "group": "K"
+      },
+      {
+        "team": "Portugal",
+        "xpts": 5.8386573115039955,
+        "group": "K"
+      },
+      {
+        "team": "Uzbekistan",
+        "xpts": 2.504912942701912,
+        "group": "K"
+      },
+      {
+        "team": "Congo DR",
+        "xpts": 2.216991710388959,
+        "group": "K"
+      }
+    ],
+    "L": [
+      {
+        "team": "England",
+        "xpts": 6.355992545092974,
+        "group": "L"
+      },
+      {
+        "team": "Croatia",
+        "xpts": 4.975640592554723,
+        "group": "L"
+      },
+      {
+        "team": "Panama",
+        "xpts": 2.824279493808292,
+        "group": "L"
+      },
+      {
+        "team": "Ghana",
+        "xpts": 2.3433015981608496,
+        "group": "L"
+      }
+    ]
+  },
+  "qualifiers": [
+    {
+      "team": "Mexico",
+      "xpts": 6.573311186849449,
+      "group": "A",
+      "slot": "A1"
+    },
+    {
+      "team": "Canada",
+      "xpts": 6.206243087683114,
+      "group": "B",
+      "slot": "B1"
+    },
+    {
+      "team": "Brazil",
+      "xpts": 6.930063590183924,
+      "group": "C",
+      "slot": "C1"
+    },
+    {
+      "team": "USA",
+      "xpts": 5.8813634403865205,
+      "group": "D",
+      "slot": "D1"
+    },
+    {
+      "team": "Germany",
+      "xpts": 5.986279358973842,
+      "group": "E",
+      "slot": "E1"
+    },
+    {
+      "team": "Netherlands",
+      "xpts": 5.790769094225732,
+      "group": "F",
+      "slot": "F1"
+    },
+    {
+      "team": "Belgium",
+      "xpts": 5.740401105475042,
+      "group": "G",
+      "slot": "G1"
+    },
+    {
+      "team": "Spain",
+      "xpts": 6.491130756413832,
+      "group": "H",
+      "slot": "H1"
+    },
+    {
+      "team": "France",
+      "xpts": 7.011602746244074,
+      "group": "I",
+      "slot": "I1"
+    },
+    {
+      "team": "Argentina",
+      "xpts": 7.498901247057222,
+      "group": "J",
+      "slot": "J1"
+    },
+    {
+      "team": "Colombia",
+      "xpts": 5.949710337231789,
+      "group": "K",
+      "slot": "K1"
+    },
+    {
+      "team": "England",
+      "xpts": 6.355992545092974,
+      "group": "L",
+      "slot": "L1"
+    },
+    {
+      "team": "South Korea",
+      "xpts": 4.433049277891368,
+      "group": "A",
+      "slot": "A2"
+    },
+    {
+      "team": "Switzerland",
+      "xpts": 4.965765588431278,
+      "group": "B",
+      "slot": "B2"
+    },
+    {
+      "team": "Morocco",
+      "xpts": 4.93190236597968,
+      "group": "C",
+      "slot": "C2"
+    },
+    {
+      "team": "Australia",
+      "xpts": 3.8264589242442177,
+      "group": "D",
+      "slot": "D2"
+    },
+    {
+      "team": "Ecuador",
+      "xpts": 4.987509564260008,
+      "group": "E",
+      "slot": "E2"
+    },
+    {
+      "team": "Japan",
+      "xpts": 5.488404503235682,
+      "group": "F",
+      "slot": "F2"
+    },
+    {
+      "team": "Iran",
+      "xpts": 4.531383428052073,
+      "group": "G",
+      "slot": "G2"
+    },
+    {
+      "team": "Uruguay",
+      "xpts": 5.236616945892919,
+      "group": "H",
+      "slot": "H2"
+    },
+    {
+      "team": "Senegal",
+      "xpts": 3.8999840627358595,
+      "group": "I",
+      "slot": "I2"
+    },
+    {
+      "team": "Austria",
+      "xpts": 3.547815046741051,
+      "group": "J",
+      "slot": "J2"
+    },
+    {
+      "team": "Portugal",
+      "xpts": 5.8386573115039955,
+      "group": "K",
+      "slot": "K2"
+    },
+    {
+      "team": "Croatia",
+      "xpts": 4.975640592554723,
+      "group": "L",
+      "slot": "L2"
+    },
+    {
+      "team": "Egypt",
+      "xpts": 3.9964249808833143,
+      "group": "G",
+      "slot": "G3"
+    },
+    {
+      "team": "Ivory Coast",
+      "xpts": 3.8774113427358667,
+      "group": "E",
+      "slot": "E3"
+    },
+    {
+      "team": "Turkey",
+      "xpts": 3.626224720704237,
+      "group": "D",
+      "slot": "D3"
+    },
+    {
+      "team": "Norway",
+      "xpts": 3.548192197715229,
+      "group": "I",
+      "slot": "I3"
+    },
+    {
+      "team": "Algeria",
+      "xpts": 3.131569173793986,
+      "group": "J",
+      "slot": "J3"
+    },
+    {
+      "team": "Scotland",
+      "xpts": 3.1154086255939806,
+      "group": "C",
+      "slot": "C3"
+    },
+    {
+      "team": "Saudi Arabia",
+      "xpts": 3.1094532716931673,
+      "group": "H",
+      "slot": "H3"
+    },
+    {
+      "team": "Sweden",
+      "xpts": 3.0049755693514504,
+      "group": "F",
+      "slot": "F3"
+    }
+  ],
+  "rounds": {
+    "r32": [
+      {
+        "teamA": "Argentina",
+        "teamB": "Saudi Arabia",
+        "k": "Argentina"
+      },
+      {
+        "teamA": "Brazil",
+        "teamB": "Algeria",
+        "k": "Brazil"
+      },
+      {
+        "teamA": "France",
+        "teamB": "Scotland",
+        "k": "France"
+      },
+      {
+        "teamA": "Mexico",
+        "teamB": "Sweden",
+        "k": "Mexico"
+      },
+      {
+        "teamA": "Spain",
+        "teamB": "Ivory Coast",
+        "k": "Spain"
+      },
+      {
+        "teamA": "England",
+        "teamB": "Norway",
+        "k": "England"
+      },
+      {
+        "teamA": "Colombia",
+        "teamB": "Austria",
+        "k": "Colombia"
+      },
+      {
+        "teamA": "Netherlands",
+        "teamB": "Egypt",
+        "k": "Netherlands"
+      },
+      {
+        "teamA": "Portugal",
+        "teamB": "Senegal",
+        "k": "Portugal"
+      },
+      {
+        "teamA": "USA",
+        "teamB": "Turkey",
+        "k": "USA"
+      },
+      {
+        "teamA": "Japan",
+        "teamB": "Switzerland",
+        "k": "Japan"
+      },
+      {
+        "teamA": "Germany",
+        "teamB": "Australia",
+        "k": "Germany"
+      },
+      {
+        "teamA": "Canada",
+        "teamB": "Iran",
+        "k": "Canada"
+      },
+      {
+        "teamA": "Belgium",
+        "teamB": "Ecuador",
+        "k": "Belgium"
+      },
+      {
+        "teamA": "Uruguay",
+        "teamB": "South Korea",
+        "k": "Uruguay"
+      },
+      {
+        "teamA": "Morocco",
+        "teamB": "Croatia",
+        "k": "Morocco"
+      }
+    ],
+    "r16": [
+      {
+        "teamA": "Argentina",
+        "teamB": "Brazil",
+        "k": "Argentina"
+      },
+      {
+        "teamA": "France",
+        "teamB": "Mexico",
+        "k": "France"
+      },
+      {
+        "teamA": "Spain",
+        "teamB": "England",
+        "k": "Spain"
+      },
+      {
+        "teamA": "Colombia",
+        "teamB": "Netherlands",
+        "k": "Colombia"
+      },
+      {
+        "teamA": "Portugal",
+        "teamB": "USA",
+        "k": "Portugal"
+      },
+      {
+        "teamA": "Japan",
+        "teamB": "Germany",
+        "k": "Japan"
+      },
+      {
+        "teamA": "Canada",
+        "teamB": "Belgium",
+        "k": "Canada"
+      },
+      {
+        "teamA": "Uruguay",
+        "teamB": "Morocco",
+        "k": "Uruguay"
+      }
+    ],
+    "qf": [
+      {
+        "teamA": "Argentina",
+        "teamB": "France",
+        "k": "Argentina"
+      },
+      {
+        "teamA": "Spain",
+        "teamB": "Colombia",
+        "k": "Spain"
+      },
+      {
+        "teamA": "Portugal",
+        "teamB": "Japan",
+        "k": "Portugal"
+      },
+      {
+        "teamA": "Canada",
+        "teamB": "Uruguay",
+        "k": "Canada"
+      }
+    ],
+    "sf": [
+      {
+        "teamA": "Argentina",
+        "teamB": "Spain",
+        "k": "Argentina"
+      },
+      {
+        "teamA": "Portugal",
+        "teamB": "Canada",
+        "k": "Portugal"
+      }
+    ],
+    "final": [
+      {
+        "teamA": "Argentina",
+        "teamB": "Portugal",
+        "k": "Argentina"
+      }
+    ]
+  }
+}

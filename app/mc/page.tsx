@@ -160,7 +160,7 @@ export default function MCPage() {
               )
             })}
             <div style={{ fontSize: 9, color: 'var(--color-muted)', marginTop: 20, lineHeight: 2.2 }}>
-              {n.toLocaleString()} SIMULATIONS COMPLETE. 45% VARIANCE IS UNMODELLED NOISE.
+              {n.toLocaleString()} SIMULATIONS COMPLETE. OUTCOMES SAMPLED FROM FITTED MATCH PROBABILITIES.
             </div>
           </>
         )}

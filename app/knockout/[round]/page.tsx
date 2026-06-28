@@ -36,7 +36,7 @@ export default async function KnockoutPage({ params }: { params: Promise<{ round
         <div style={{ fontSize: 10, color: 'var(--color-muted)', marginBottom: 24, letterSpacing: 1 }}>
           {isFinal && <span className="trophy-pulse" style={{ marginRight: 8 }}>🏆</span>}
           {ROUND_LABELS[round].toUpperCase()}
-          {isFinal && <span style={{ color: 'var(--color-g)', marginLeft: 12 }}>KLEMENT&apos;S HEADLINE CALL</span>}
+          {isFinal && <span style={{ color: 'var(--color-g)', marginLeft: 12 }}>MODEL FINAL PICK</span>}
         </div>
 
         {matches.map((m, i) => {

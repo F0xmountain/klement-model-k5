@@ -1,0 +1,128 @@
+{
+  "generatedAt": "2026-06-28T15:27:08.748Z",
+  "method": "walk-forward expanding window over World Cups",
+  "firstTrainYear": 1994,
+  "testTournaments": [
+    2002,
+    2006,
+    2010,
+    2014,
+    2018,
+    2022,
+    2026
+  ],
+  "pooledTestMatches": 456,
+  "features": [
+    "gdp",
+    "pop",
+    "temp",
+    "elo",
+    "host"
+  ],
+  "fittedWeights": [
+    {
+      "key": "gdp",
+      "beta": 0.0546,
+      "importancePct": 4.8
+    },
+    {
+      "key": "pop",
+      "beta": 0.0967,
+      "importancePct": 8.5
+    },
+    {
+      "key": "temp",
+      "beta": 0.0806,
+      "importancePct": 7.1
+    },
+    {
+      "key": "elo",
+      "beta": 0.7959,
+      "importancePct": 70
+    },
+    {
+      "key": "host",
+      "beta": 0.1088,
+      "importancePct": 9.6
+    }
+  ],
+  "results": {
+    "fitted": {
+      "logLoss": 0.9851065843548559,
+      "accuracy": 0.5548245614035088,
+      "brier": 0.5819187643951172,
+      "n": 456
+    },
+    "equal": {
+      "logLoss": 0.9974093154132506,
+      "accuracy": 0.5394736842105263,
+      "brier": 0.5932262692708767,
+      "n": 456
+    },
+    "eloOnly": {
+      "logLoss": 0.9817986650335789,
+      "accuracy": 0.5504385964912281,
+      "brier": 0.579732474607762,
+      "n": 456
+    }
+  },
+  "perTournament": [
+    {
+      "year": 2002,
+      "n": 64,
+      "fitted": 1.0831,
+      "equal": 1.0599,
+      "eloOnly": 1.0605
+    },
+    {
+      "year": 2006,
+      "n": 64,
+      "fitted": 0.8988,
+      "equal": 0.906,
+      "eloOnly": 0.9047
+    },
+    {
+      "year": 2010,
+      "n": 64,
+      "fitted": 0.9887,
+      "equal": 1.0158,
+      "eloOnly": 0.9954
+    },
+    {
+      "year": 2014,
+      "n": 64,
+      "fitted": 0.9411,
+      "equal": 0.9914,
+      "eloOnly": 0.9305
+    },
+    {
+      "year": 2018,
+      "n": 64,
+      "fitted": 0.9901,
+      "equal": 0.9958,
+      "eloOnly": 0.9989
+    },
+    {
+      "year": 2022,
+      "n": 64,
+      "fitted": 1.0713,
+      "equal": 1.024,
+      "eloOnly": 1.0638
+    },
+    {
+      "year": 2026,
+      "n": 72,
+      "fitted": 0.9295,
+      "equal": 0.9899,
+      "eloOnly": 0.9257
+    }
+  ],
+  "uniformLogLoss": 1.0986,
+  "winner": "eloOnly",
+  "notes": [
+    "Walk-forward: each tournament is predicted by weights fit only on prior World Cups (strictly out-of-sample).",
+    "All out-of-sample predictions are pooled into one set for the metrics below.",
+    "Elo is point-in-time; GDP/population are the tournament-year World Bank values; FIFA points omitted (Elo carries strength).",
+    "Each model is independently calibrated (scale + draw) on each fold, so the comparison isolates the weight vector."
+  ]
+}

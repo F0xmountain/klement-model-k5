@@ -31,10 +31,10 @@ export default function BracketPage() {
         <div style={{ padding: '16px 12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 10, color: 'var(--color-muted)', letterSpacing: 1 }}>
-              FULL BRACKET — KLEMENT&apos;S PREDICTIONS
+              FULL BRACKET - MODEL PREDICTIONS
             </span>
             <span style={{ fontSize: 8, color: 'var(--color-muted)' }}>
-              <span style={{ color: 'var(--color-g)', marginRight: 4 }}>█</span>GREEN = KLEMENT PICK
+              <span style={{ color: 'var(--color-g)', marginRight: 4 }}>█</span>GREEN = MODEL PICK
               · CLICK ANY MATCH FOR DETAIL
             </span>
           </div>

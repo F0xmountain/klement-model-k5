@@ -4,16 +4,34 @@ import PixelBar from '@/components/ui/PixelBar'
 import PixelParticles from '@/components/ui/PixelParticles'
 import FlagImg from '@/components/ui/FlagImg'
 import PolymarketBtn from '@/components/ui/PolymarketBtn'
+import { modelComponents, teamData } from '@/lib/klement'
+import { ROUNDS } from '@/lib/fixtures'
+import summary from '@/lib/model/fit-summary.json'
 
-const factors = [
-  { label: 'FIFA RANKING', pct: 45, color: 'var(--color-r)' },
-  { label: 'NATL WEALTH',  pct: 20, color: 'var(--color-g)' },
-  { label: 'CLIMATE',      pct: 15, color: 'var(--color-b)' },
-  { label: 'POPULATION',   pct: 15, color: 'var(--color-b)' },
-  { label: 'HOME EDGE',    pct: 5,  color: 'var(--color-r)' },
-]
+const COMPONENT_COLOR: Record<string, string> = {
+  fifa: 'var(--color-r)', elo: 'var(--color-r)', pop: 'var(--color-b)',
+  temp: 'var(--color-b)', gdp: 'var(--color-g)', host: 'var(--color-g)',
+}
+
+const factors = [...modelComponents()]
+  .sort((a, b) => b.importancePct - a.importancePct)
+  .map((c) => ({ label: c.label.toUpperCase(), pct: c.importancePct, color: COMPONENT_COLOR[c.key] ?? 'var(--color-b)' }))
+
+const champion = ROUNDS.final[0].k
+
+function championPath(champ: string): string[] {
+  const order = ['r32', 'r16', 'qf', 'sf', 'final']
+  const path: string[] = []
+  for (const round of order) {
+    const match = ROUNDS[round].find((m) => m.teamA === champ || m.teamB === champ)
+    if (match) path.push(match.teamA === champ ? match.teamB : match.teamA)
+  }
+  return path
+}
 
 export default function LandingPage() {
+  const path = championPath(champion)
+  const championFlag = teamData(champion)?.flag ?? '🏳'
   return (
     <div className="page-enter">
 
@@ -32,8 +50,8 @@ export default function LandingPage() {
               <span style={{ color: 'var(--color-g)', textShadow: '3px 3px 0 var(--color-g-sh)' }}>2026 WORLD CUP?</span>
             </div>
             <div className="fade-in delay-2" style={{ fontSize: 9, color: 'var(--color-muted)', lineHeight: 2.2, maxWidth: 480, marginBottom: 28 }}>
-              AN ECONOMETRIC MODEL THAT CALLED 2014, 2018 AND 2022 CORRECTLY
-              — NOW RUNNING ON ALL 48 QUALIFIED NATIONS.
+              AN ECONOMETRIC MODEL, NOW RE-FIT FROM {summary.totalMatchesScanned.toLocaleString()} REAL
+              INTERNATIONAL RESULTS AND UPDATED AFTER EVERY MATCH.
             </div>
             <div className="fade-in delay-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
               <Link href="/versus" className="px-btn" style={{
@@ -47,7 +65,6 @@ export default function LandingPage() {
                 border: '2px solid var(--color-b)', boxShadow: '4px 4px 0 var(--color-b-sh)',
                 textDecoration: 'none', display: 'inline-block',
               }}>? HOW IT WORKS</Link>
-              <span className="football-bounce" style={{ fontSize: 28, marginLeft: 8 }}>⚽</span>
             </div>
           </div>
 
@@ -81,7 +98,7 @@ export default function LandingPage() {
         {[
           { num: '48',   label: 'QUALIFIED TEAMS', color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
           { num: '3',    label: 'CORRECT CALLS',  color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: '0.55', label: 'MODEL R²',         color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
+          { num: `${(summary.metrics.accuracy * 100).toFixed(0)}%`, label: 'TOP-PICK ACCURACY', color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
         ].map(({ num, label, color, sh }) => (
           <div key={label} className="stat-cell">
             <span style={{ fontSize: 22, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>
@@ -118,7 +135,7 @@ export default function LandingPage() {
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="green" />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-title">2026 PREDICTION</div>
+          <div className="section-title">MODEL PREDICTION: CHAMPION</div>
           <div className="pred-banner">
             <div className="dot-grid" style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
             <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -128,17 +145,17 @@ export default function LandingPage() {
                 boxShadow: '6px 6px 0 var(--color-g-sh), 0 0 0 1px var(--color-g)',
                 lineHeight: 0,
               }}>
-                <FlagImg name="Netherlands" h={90} emoji="🇳🇱" />
+                <FlagImg name={champion} h={90} emoji={championFlag} />
               </div>
               <div className="txt-shadow-g" style={{ fontSize: 18, color: 'var(--color-g)', marginBottom: 12 }}>
-                NETHERLANDS<span className="blink">_</span>
+                {champion.toUpperCase()}<span className="blink">_</span>
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-g)', opacity: 0.75, lineHeight: 2.2 }}>
-                FIRST WORLD CUP TITLE IN HISTORY<br />
-                PATH: MOROCCO → CANADA → FRANCE → ARGENTINA → PORTUGAL
+                THE CURRENT DATA-DRIVEN BRACKET WINNER<br />
+                PATH: {path.map((p) => p.toUpperCase()).join('  >  ')}
               </div>
               <PolymarketBtn
-                teamName="Netherlands"
+                teamName={champion}
                 variant="champion"
               />
             </div>
@@ -150,10 +167,10 @@ export default function LandingPage() {
       <div className="sec" style={{ position: 'relative', overflow: 'hidden' }}>
         <PixelParticles variant="blue" />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-title">MODEL VARIABLES</div>
+          <div className="section-title">SELF-DETERMINED WEIGHTS</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {factors.map(({ label, pct, color }) => (
-              <div key={label} style={{ display: 'grid', gridTemplateColumns: '140px 1fr 42px', alignItems: 'center', gap: 14 }}>
+              <div key={label} style={{ display: 'grid', gridTemplateColumns: '170px 1fr 42px', alignItems: 'center', gap: 14 }}>
                 <div style={{ fontSize: 9, color: 'var(--color-muted)' }}>{label}</div>
                 <PixelBar value={pct} color={color} />
                 <div style={{ fontSize: 9, color, textAlign: 'right', fontWeight: 'bold' }}>{pct}%</div>

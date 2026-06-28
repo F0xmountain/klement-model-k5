@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# model fitting cache (large historical CSVs re-downloaded on demand)
+/scripts/.cache
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

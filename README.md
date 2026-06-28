@@ -4,29 +4,31 @@
 # WC26 Klement
 <img src="public/banner.jpeg" alt="WC26 Klement" style="margin-bottom:16px" />
 
-**An econometric model that called 2014, 2018 and 2022 correctly — now running on all 48 teams.**
+**A self-fitting World Cup forecast: model weights are re-fit from real match results and refresh after every game.**
 
 [![Follow on X](https://img.shields.io/badge/Follow-%40klementworldcup-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/klementworldcup)
 ![version](https://img.shields.io/badge/version-1.0.0-black?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![teams](https://img.shields.io/badge/teams-48-1A5FE8?style=flat-square)
-![model](https://img.shields.io/badge/R²-0.55-18A84A?style=flat-square)
 
 </div>
 
-WC26 Klement is a Next.js app that surfaces Joachim Klement's econometric World Cup forecast (Panmure Liberum, April 2026) as an interactive match predictor. Enter any two of the 48 qualified teams, get W/D/L probabilities from the model, explore each team's factor breakdown, simulate the full bracket with Monte Carlo, and see Klement's headline prediction — Netherlands win their first ever World Cup.
+WC26 Klement started as a surface for Joachim Klement's econometric World Cup forecast and is now a data-driven predictor whose weights are fit from history. It learns the factor weights by logistic regression over tens of thousands of real international results, layers an Elo rating built point-by-point from those results, predicts scorelines with a Poisson goals model, and projects the Golden Boot from real per-player international scoring. The whole model refits after each finished World Cup match.
 
 ---
 
 ## What it does
 
-- **Match Lookup** — Select any two of 48 teams to get win/draw/loss probabilities from the econometric model, plus side-by-side factor breakdowns
-- **Team Profiles** — Explore each team's GDP, population, climate, FIFA ranking, and home advantage score; head-to-head probability vs top opponents
-- **Group Stage** — All 12 groups simulated client-side on load with round-robin W/D/L standings
-- **Knockout Bracket** — Klement's predicted bracket from R32 to the Final, with his picks highlighted
-- **Monte Carlo** — Run 100–5,000 full tournament simulations in the browser; see the champion distribution sorted by frequency
-- **Model Explainer** — Formula, factor weights, the luck component (σ = 0.28), and Klement's sources
-- **Live Rankings** — GitHub Actions fetches the FIFA API every Thursday and patches `teams.json`, then triggers ISR revalidation
+- **Match Lookup (Versus)** — Select any two teams for win/draw/loss probabilities plus side-by-side factor breakdowns
+- **Score Prediction** — Poisson goals model gives the most-likely scoreline, a full scoreline heatmap, expected goals, BTTS and over/under 2.5
+- **Topscorers (Golden Boot)** — Projected tournament goals per player from real recent international scoring, weighted by the team's expected run; live leaders when an API key is set
+- **Team Profiles** — Each team's Elo rating, 0-100 strength index, FIFA points, GDP, and the fitted factor breakdown; head-to-head vs top opponents
+- **Group Stage** — Deterministic expected standings per group, with a one-click random simulation
+- **Knockout Bracket** — A model-generated bracket from R32 to the Final, derived from the real group draw
+- **Monte Carlo** — Run full-tournament simulations in the browser; champion distribution sorted by frequency
+- **Model Explainer (About)** — The self-determined weights, the proof (accuracy, log-loss, Brier, calibration), and top Elo ratings
+- **Sensitivity Explorer (Sweep)** — A live, point-in-time out-of-sample experiment: fetch the real sources, fit weights on World Cups up to 2014, then sweep each of 10 candidate features one at a time and chart how training and out-of-sample (2018/2022/2026) log-loss respond; streamed over NDJSON. Explorer-only, it does not change the production model
+- **Event-driven refit** — A GitHub Action pulls finished match results from API-Football, refits the model, commits the new weights, and triggers ISR revalidation
 
 ---
 
@@ -34,11 +36,11 @@ WC26 Klement is a Next.js app that surfaces Joachim Klement's econometric World 
 
 | Feature | Description |
 |---|---|
-| Klement Model | W/D/L only — no score prediction. R² ≈ 0.55, σ = 0.28 noise. |
-| 48 Teams | All qualified teams with GDP, pop, temp, FIFA pts, LatAm and host flags |
-| Pure model functions | `sc`, `matchP`, `simResult`, `simKO`, `calcStandings` — no side effects, no API calls |
+| Data-driven model | Weights fit from results; W/D/L, scorelines (Poisson), and topscorers. Metrics shown on About. |
+| 48 participants, 58-nation pool | The 12 groups hold the 48 participants; `teams.json` keeps a wider nation pool for any-vs-any lookups |
+| Pure model functions | `sc`, `matchP`, `predictScore`, `simResult`, `simKO`, `calcStandings` read committed JSON; no API calls |
 | Client-side simulation | All randomness runs in the browser. No data sent to any server. |
-| Weekly rankings update | GitHub Actions cron patches `teams.json` every Thursday from the FIFA API |
+| Event-driven refit | GitHub Actions polls API-Football, refits the model after each finished match, commits, and revalidates |
 | Trionda Light design | Color system inspired by the Adidas Trionda FIFA WC 2026 ball |
 | Glass aesthetic | Subtle `backdrop-filter` glass cards + color panel strips (blue/red/green) |
 | Plus Jakarta Sans | Geometric sans heading font paired with Inter for body copy |
@@ -48,19 +50,15 @@ WC26 Klement is a Next.js app that surfaces Joachim Klement's econometric World 
 ## The model
 
 ```
-S_i = 0.20·fG(gdp) + 0.15·fP(pop, latam) + 0.15·fT(temp) + 0.45·fF(fifa) + 0.05·host
-
-P(A wins) = Φ((S_A − S_B) / 0.28) × (1 − draw)
-draw      = clip(0.20 × (1 − 0.3 × |z|), 0.05, 0.24)
+S       = sum( beta_k * standardized_factor_k )   factors: gdp, pop, temp, fifa, elo, host
+P(A win) = sigmoid(S_A - S_B) * (1 - draw)
+draw     = clip(draw_max * exp(-decay * |S_A - S_B|), 0.05, 0.34)
+goals    ~ Poisson( exp(mu +/- gamma * (S_A - S_B)) )
 ```
 
-where Φ is the standard normal CDF and σ = 0.28 encodes the 45% unexplained variance as built-in luck.
+The `beta_k` weights are fit by logistic regression over real international results. Elo is a point-in-time rating built from every result (no lookahead). The fitted weights, the data range, and the fit metrics are written to `lib/model/` by the fitting pipeline and shown on the About page. Every artifact regenerates on each refit, so the model and the site stay in sync.
 
-### Klement's 2026 prediction
-
-🇳🇱 **Netherlands** win their first ever World Cup — path through Morocco (R32), Canada (R16), France (QF), Argentina (SF), and Portugal in the Final.
-
-⚡ **Biggest upset:** Japan defeat Brazil in the Round of 32.
+The current fit puts FIFA ranking and Elo form well ahead of the socio-economic factors the model started with, and the calibration table on About shows predicted vs observed home-win rate tracking closely.
 
 ---
 
@@ -159,8 +157,18 @@ npm run dev
 
 | Variable | Required | Description |
 |---|---|---|
-| `REVALIDATE_TOKEN` | No | Secret for `/api/revalidate` endpoint (used by GitHub Actions) |
+| `API_FOOTBALL_KEY` | No | API-Football key. Enables the event-driven refit on finished WC matches and live topscorer standings. Without it, the model still fits fully from the historical dataset. |
+| `REVALIDATE_TOKEN` | No | Secret for `/api/revalidate` and `/api/recompute` (used by GitHub Actions) |
 | `NEXT_PUBLIC_APP_URL` | No | Production URL for on-demand ISR trigger |
+| `GH_DISPATCH_TOKEN` / `GH_REPO` | No | Optional. Let `/api/recompute` dispatch the refit GitHub Action from an external webhook. |
+
+Run the fitting pipeline locally:
+
+```bash
+npm run fit          # download results, fit weights/Elo/Poisson/scorers, write lib/model/*.json
+npm run update:live  # sync finished WC matches (needs key) then refit
+npm run backtest     # walk-forward WC backtest 1994-2026 (pooled out-of-sample): fitted vs equal vs Elo-only
+```
 
 ---
 
@@ -178,6 +186,8 @@ klement-model/
 │   ├── groups/page.tsx          ← 12 group-stage cards with simulated standings
 │   ├── knockout/[round]/        ← r32 | r16 | qf | sf | final
 │   ├── about/page.tsx           ← Model explainer, formula, references
+│   ├── sensitivity/page.tsx     ← Sensitivity explorer (Start → live sweep → 10 curves)
+│   ├── api/sensitivity/route.ts ← Live NDJSON sweep stream (fetch sources, fit, sweep)
 │   └── api/revalidate/route.ts  ← ISR revalidation endpoint
 │
 ├── components/
@@ -197,18 +207,22 @@ klement-model/
 │   │   ├── TeamHeroCard.tsx     ← Flag, model score, FIFA pts, GDP
 │   │   ├── FactorBreakdown.tsx  ← 5-factor weighted bar chart
 │   │   └── H2HList.tsx          ← Head-to-head vs top 6 opponents
-│   └── landing/
-│       ├── HeroSection.tsx      ← Above-the-fold, CTA, trust bar
-│       ├── TrackRecordSection.tsx ← 2014/2018/2022 prediction cards
-│       ├── HowItWorksSection.tsx  ← 5 factor rows
-│       ├── LivePreviewSection.tsx ← Interactive mini-predictor
-│       ├── KlementCallSection.tsx ← Netherlands prediction + upset callout
-│       └── FooterCTA.tsx          ← Final conversion CTA
+│   ├── landing/
+│   │   ├── HeroSection.tsx      ← Above-the-fold, CTA, trust bar
+│   │   ├── TrackRecordSection.tsx ← 2014/2018/2022 prediction cards
+│   │   ├── HowItWorksSection.tsx  ← 5 factor rows
+│   │   ├── LivePreviewSection.tsx ← Interactive mini-predictor
+│   │   ├── KlementCallSection.tsx ← Netherlands prediction + upset callout
+│   │   └── FooterCTA.tsx          ← Final conversion CTA
+│   └── sensitivity/
+│       ├── SensitivityChart.tsx ← Inline-SVG train-vs-OOS curve per feature
+│       └── ProgressTrace.tsx    ← Staged + per-feature progress UI
 │
 ├── lib/
 │   ├── klement.ts               ← Pure model: sc, matchP, simResult, simKO, calcStandings
 │   ├── teams.json               ← 48 teams — frozen at Klement's April 2026 values
-│   └── fixtures.ts              ← GROUPS (12×4) + ROUNDS (r32→final) + Klement picks
+│   ├── fixtures.ts              ← GROUPS (12×4) + ROUNDS (r32→final) + Klement picks
+│   └── sensitivity/             ← Explorer: types, sources, features, engine, run (live fetch + sweep)
 │
 ├── types/index.ts               ← TeamData, WDL, MatchResult, SimResult, Standing
 ├── scripts/fetch-rankings.js    ← FIFA API → teams.json patcher (run by CI)
@@ -218,15 +232,15 @@ klement-model/
 
 ---
 
-## Hard rules (do not violate)
+## Design rules
 
-1. **No score prediction.** W/D/L only. Poisson was tried and removed.
-2. **No dark mode.** Light only.
-3. **`teams.json` is the single source of truth.** Never hardcode team values inline.
-4. **Klement picks are hardcoded in `fixtures.ts`** — not auto-generated from model scores.
-5. **All model functions are pure.** No API calls inside `lib/klement.ts`.
-6. **Simulation is client-side only.** `'use client'` on any component calling `simResult`/`simKO`.
-7. **Group standings come from simulated W/D/L**, not sorted by model score.
+1. **Score prediction is a first-class feature.** Poisson goals model on the `/score` page. (This reverses the original "W/D/L only" rule.)
+2. **Weights are data-driven, not hardcoded.** `scripts/fit-model.js` fits them from results into `lib/model/weights.json`. (This reverses the original "frozen weights" rule.)
+3. **No dark mode.** Light only.
+4. **`teams.json` holds team attributes; `lib/model/*.json` holds the fitted model.** Never inline either; both are single sources of truth.
+5. **The bracket is generated from the model**, written to `lib/model/bracket.json`, never hand-authored.
+6. **`lib/klement.ts` stays pure.** It reads the committed JSON artifacts; it never makes API calls. Live fetching lives in `scripts/` and `lib/api-football.ts`.
+7. **Randomness is client-side only.** `'use client'` on any component calling `simResult`/`simKO`. Server-rendered tables use deterministic expected values to avoid hydration mismatch.
 
 ---
 

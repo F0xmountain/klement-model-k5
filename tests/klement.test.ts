@@ -1,14 +1,21 @@
 import { describe, it, expect } from 'vitest'
-import { sc, matchP, simKO, calcStandings } from '../lib/klement'
+import {
+  sc,
+  matchP,
+  simKO,
+  calcStandings,
+  predictScore,
+  expectedGoals,
+  teamElo,
+  modelComponents,
+} from '../lib/klement'
 import type { MatchResult } from '../types'
 
 describe('sc()', () => {
-  it('returns a value between 0 and 1 for all teams', () => {
+  it('returns a finite number for all teams', () => {
     const teams = ['Netherlands', 'France', 'Argentina', 'Japan', 'Morocco', 'New Zealand']
     for (const t of teams) {
-      const s = sc(t)
-      expect(s).toBeGreaterThanOrEqual(0)
-      expect(s).toBeLessThanOrEqual(1)
+      expect(Number.isFinite(sc(t))).toBe(true)
     }
   })
 
@@ -16,11 +23,8 @@ describe('sc()', () => {
     expect(sc('Atlantis FC')).toBe(0)
   })
 
-  it('host bonus is applied', () => {
-    const usa = sc('USA')
-    const netherlands = sc('Netherlands')
-    expect(usa).toBeGreaterThan(0)
-    expect(netherlands).toBeGreaterThan(0)
+  it('ranks a strong side above a weak side', () => {
+    expect(sc('Argentina')).toBeGreaterThan(sc('New Zealand'))
   })
 })
 
@@ -30,12 +34,12 @@ describe('matchP()', () => {
     expect(pA + dr + pB).toBeCloseTo(1, 5)
   })
 
-  it('all values are between 0 and 1', () => {
+  it('all values are in range', () => {
     const { pA, dr, pB } = matchP('Argentina', 'Japan')
     expect(pA).toBeGreaterThanOrEqual(0)
     expect(pA).toBeLessThanOrEqual(1)
     expect(dr).toBeGreaterThanOrEqual(0.05)
-    expect(dr).toBeLessThanOrEqual(0.24)
+    expect(dr).toBeLessThanOrEqual(0.34)
     expect(pB).toBeGreaterThanOrEqual(0)
     expect(pB).toBeLessThanOrEqual(1)
   })
@@ -43,6 +47,59 @@ describe('matchP()', () => {
   it('equal teams produce ~50/50 win chances', () => {
     const { pA, pB } = matchP('France', 'France')
     expect(pA).toBeCloseTo(pB, 3)
+  })
+
+  it('favours the stronger side', () => {
+    const { pA, pB } = matchP('Argentina', 'New Zealand')
+    expect(pA).toBeGreaterThan(pB)
+  })
+})
+
+describe('predictScore()', () => {
+  it('outcome probabilities cover ~100% of the grid', () => {
+    const s = predictScore('Argentina', 'New Zealand')
+    expect(s.pHome + s.pDraw + s.pAway).toBeGreaterThan(0.98)
+    expect(s.pHome + s.pDraw + s.pAway).toBeLessThanOrEqual(1.0001)
+  })
+
+  it('returns positive expected goals and a most-likely scoreline', () => {
+    const s = predictScore('Netherlands', 'Morocco')
+    expect(s.lambdaA).toBeGreaterThan(0)
+    expect(s.lambdaB).toBeGreaterThan(0)
+    expect(s.likely.a).toBeGreaterThanOrEqual(0)
+    expect(s.likely.b).toBeGreaterThanOrEqual(0)
+    expect(s.topScorelines).toHaveLength(6)
+  })
+
+  it('btts and over2.5 are valid probabilities', () => {
+    const s = predictScore('Brazil', 'Japan')
+    for (const v of [s.btts, s.over25]) {
+      expect(v).toBeGreaterThanOrEqual(0)
+      expect(v).toBeLessThanOrEqual(1)
+    }
+  })
+})
+
+describe('expectedGoals()', () => {
+  it('gives the stronger side a higher xG', () => {
+    const { lambdaA, lambdaB } = expectedGoals('Argentina', 'New Zealand')
+    expect(lambdaA).toBeGreaterThan(lambdaB)
+  })
+})
+
+describe('teamElo()', () => {
+  it('returns a rating and ranks strong over weak', () => {
+    expect(teamElo('Argentina')).toBeGreaterThan(1000)
+    expect(teamElo('Argentina')).toBeGreaterThan(teamElo('New Zealand'))
+  })
+})
+
+describe('modelComponents()', () => {
+  it('exposes weights whose importance sums to ~100%', () => {
+    const comps = modelComponents()
+    expect(comps.length).toBeGreaterThanOrEqual(5)
+    const total = comps.reduce((s, c) => s + c.importancePct, 0)
+    expect(total).toBeCloseTo(100, 0)
   })
 })
 

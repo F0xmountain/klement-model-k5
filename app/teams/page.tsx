@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { teamNames, teamData, sc } from '@/lib/klement'
+import { teamNames, teamData, sc, strengthIndex, teamElo } from '@/lib/klement'
 import FactorBreakdown from '@/components/team/FactorBreakdown'
 import H2HList from '@/components/team/H2HList'
 import FlagImg from '@/components/ui/FlagImg'
@@ -14,7 +14,7 @@ export default function TeamsPage() {
   const [selected, setSelected] = useState('Netherlands')
   const [tab, setTab] = useState<'profile' | 'ranking'>('profile')
   const team = teamData(selected)
-  const score = sc(selected)
+  const strength = strengthIndex(selected)
 
   return (
     <div className="sec page-enter" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -36,15 +36,14 @@ export default function TeamsPage() {
               <tr>
                 <th style={{ textAlign: 'left' }}>#</th>
                 <th style={{ textAlign: 'left' }}>TEAM</th>
-                <th>SCORE</th>
+                <th>STR</th>
+                <th>ELO</th>
                 <th>FIFA</th>
-                <th>CONF</th>
               </tr>
             </thead>
             <tbody>
               {ranked.map((name, i) => {
                 const t = teamData(name)
-                const s = sc(name)
                 return (
                   <tr key={name} style={{ cursor: 'pointer' }} onClick={() => { setSelected(name); setTab('profile') }}>
                     <td style={{ color: i < 3 ? 'var(--color-g)' : 'var(--color-muted)', fontWeight: i < 3 ? 'bold' : 'normal' }}>{i + 1}</td>
@@ -52,9 +51,9 @@ export default function TeamsPage() {
                       <FlagImg name={name} h={16} emoji={t?.flag ?? '🏳️'} />
                       {name}
                     </td>
-                    <td style={{ textAlign: 'center', color: 'var(--color-g)', fontFamily: 'monospace' }}>{s.toFixed(3)}</td>
+                    <td style={{ textAlign: 'center', color: 'var(--color-g)', fontFamily: 'monospace' }}>{strengthIndex(name)}</td>
+                    <td style={{ textAlign: 'center', color: 'var(--color-r)' }}>{teamElo(name)}</td>
                     <td style={{ textAlign: 'center' }}>{t?.fifa}</td>
-                    <td style={{ textAlign: 'center', color: 'var(--color-muted)', fontSize: 8 }}>{t?.conf}</td>
                   </tr>
                 )
               })}
@@ -89,16 +88,16 @@ export default function TeamsPage() {
             {selected.toUpperCase()}
           </div>
           <div style={{ fontSize: 8, color: 'var(--color-muted)', letterSpacing: 1 }}>
-            {team?.conf} · FIFA {team?.fifa} PTS · MODEL {score.toFixed(3)}
+            {team?.conf} · FIFA {team?.fifa} PTS · ELO {teamElo(selected)} · STRENGTH {strength}/100
           </div>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
         {[
-          { num: score.toFixed(3), label: 'MODEL SCORE', color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
-          { num: team?.fifa ?? '',  label: 'FIFA PTS',    color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
-          { num: `$${team?.gdp}k`, label: 'GDP/CAPITA',  color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
+          { num: `${strength}/100`, label: 'MODEL STRENGTH', color: 'var(--color-g)', sh: 'var(--color-g-sh)' },
+          { num: teamElo(selected), label: 'ELO RATING', color: 'var(--color-b)', sh: 'var(--color-b-sh)' },
+          { num: team?.fifa ?? '',  label: 'FIFA PTS',    color: 'var(--color-r)', sh: 'var(--color-r-sh)' },
         ].map(({ num, label, color, sh }) => (
           <div key={label} className="score-card">
             <span style={{ fontSize: 18, color, textShadow: `2px 2px 0 ${sh}`, display: 'block', marginBottom: 8 }}>{num}</span>

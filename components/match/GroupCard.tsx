@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { simResult, calcStandings, teamData } from '@/lib/klement'
-import type { MatchResult } from '@/types'
+import { simResult, matchP, calcStandings, teamData } from '@/lib/klement'
+import type { MatchResult, Standing } from '@/types'
 import GroupMatchRow from './GroupMatchRow'
 import FlagImg from '@/components/ui/FlagImg'
 
@@ -18,28 +18,48 @@ function buildFixtures(teams: string[]): [string, string][] {
   return pairs
 }
 
+// Deterministic default: expected record from match probabilities. This renders
+// identically on server and client (no Math.random), so it never triggers a
+// hydration mismatch. The dice button swaps in a real random simulation.
+function expectedView(teams: string[], fixtures: [string, string][]): { standings: Standing[]; results: MatchResult[] } {
+  const acc: Record<string, { w: number; d: number; l: number; pts: number }> = {}
+  for (const t of teams) acc[t] = { w: 0, d: 0, l: 0, pts: 0 }
+  const results: MatchResult[] = fixtures.map(([a, b]) => {
+    const { pA, dr, pB } = matchP(a, b)
+    acc[a].w += pA; acc[a].d += dr; acc[a].l += pB; acc[a].pts += 3 * pA + dr
+    acc[b].w += pB; acc[b].d += dr; acc[b].l += pA; acc[b].pts += 3 * pB + dr
+    const result = pA >= dr && pA >= pB ? 'A' : pB >= dr && pB >= pA ? 'B' : 'D'
+    return { teamA: a, teamB: b, result }
+  })
+  const standings: Standing[] = teams
+    .map((t) => ({ team: t, w: Math.round(acc[t].w), d: Math.round(acc[t].d), l: Math.round(acc[t].l), pts: Math.round(acc[t].pts) }))
+    .sort((a, b) => b.pts - a.pts)
+  return { standings, results }
+}
+
 export default function GroupCard({ group, teams }: Props) {
   const [open, setOpen] = useState(false)
-  const [tick, setTick] = useState(0)
+  const [sim, setSim] = useState<MatchResult[] | null>(null)
+  const fixtures = useMemo(() => buildFixtures(teams), [teams])
 
   const { standings, results } = useMemo(() => {
-    const fixtures = buildFixtures(teams)
-    const results: MatchResult[] = fixtures.map(([a, b]) => ({
-      teamA: a, teamB: b, result: simResult(a, b),
-    }))
-    return { standings: calcStandings(teams, results), results }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teams, tick])
+    if (sim) return { standings: calcStandings(teams, sim), results: sim }
+    return expectedView(teams, fixtures)
+  }, [teams, fixtures, sim])
+
+  function resimulate(): void {
+    setSim(fixtures.map(([a, b]) => ({ teamA: a, teamB: b, result: simResult(a, b) })))
+  }
 
   return (
     <div className="group-card">
       <div className="group-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span>GROUP {group}</span>
         <button
-          onClick={() => setTick(t => t + 1)}
-          title="Re-simulate"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: 'var(--color-b)', padding: 0, lineHeight: 1 }}
-        >🎲</button>
+          onClick={resimulate}
+          title="Run a random simulation"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 8, color: 'var(--color-b)', padding: 0, lineHeight: 1, fontFamily: 'inherit' }}
+        >{sim ? 'RESIM' : 'SIMULATE'}</button>
       </div>
       <table className="group-table">
         <thead>
@@ -57,7 +77,7 @@ export default function GroupCard({ group, teams }: Props) {
               <tr key={s.team}>
                 <td style={{ maxWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {advancing && <span className="qual-dot" />}
-                  <FlagImg name={s.team} h={14} emoji={t?.flag ?? '🏳️'} />
+                  <FlagImg name={s.team} h={14} emoji={t?.flag ?? '🏳'} />
                   {' '}{s.team}
                 </td>
                 <td>{s.w}</td>

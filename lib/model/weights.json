@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-06-28T12:25:31.007Z",
+  "source": "martj42/international_results (open historical international match data)",
+  "trainCutoff": "2014-01-01",
+  "components": [
+    {
+      "key": "gdp",
+      "label": "National wealth",
+      "beta": 0.0475,
+      "importancePct": 4.2,
+      "mean": 0.4838,
+      "std": 0.3146
+    },
+    {
+      "key": "pop",
+      "label": "Population base",
+      "beta": 0.1457,
+      "importancePct": 12.8,
+      "mean": 0.23,
+      "std": 0.2019
+    },
+    {
+      "key": "temp",
+      "label": "Climate fit",
+      "beta": 0.0589,
+      "importancePct": 5.2,
+      "mean": 0.7249,
+      "std": 0.1916
+    },
+    {
+      "key": "fifa",
+      "label": "FIFA ranking",
+      "beta": 0.4715,
+      "importancePct": 41.4,
+      "mean": 0.3195,
+      "std": 0.1811
+    },
+    {
+      "key": "elo",
+      "label": "Elo form (results)",
+      "beta": 0.3094,
+      "importancePct": 27.2,
+      "mean": 1822.3526,
+      "std": 145.0921
+    },
+    {
+      "key": "host",
+      "label": "Home advantage",
+      "beta": 0.478,
+      "importancePct": 9.3,
+      "mean": 0,
+      "std": 1
+    }
+  ],
+  "homeAdv": 0.478,
+  "draw": {
+    "max": 0.32,
+    "decay": 0.2
+  },
+  "poisson": {
+    "mu": 0.1097,
+    "gamma": 0.2845,
+    "homeBonus": 0.2157,
+    "maxGoals": 8
+  },
+  "standardizer": {
+    "gdp": {
+      "mean": 0.48375285010555963,
+      "std": 0.3145960510486043
+    },
+    "pop": {
+      "mean": 0.22998303509694604,
+      "std": 0.201850536984929
+    },
+    "temp": {
+      "mean": 0.7249216300940439,
+      "std": 0.19162844279452076
+    },
+    "fifa": {
+      "mean": 0.3195402298850574,
+      "std": 0.18108305314508485
+    },
+    "elo": {
+      "mean": 1822.3526358471474,
+      "std": 145.09207700636966
+    }
+  }
+}

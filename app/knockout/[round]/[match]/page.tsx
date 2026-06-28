@@ -81,7 +81,7 @@ export default async function MatchPage({
                 {teamA.toUpperCase()}
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>{tA?.conf}</div>
-              {k === teamA && <span className="k-badge">K✓ KLEMENT PICK</span>}
+              {k === teamA && <span className="k-badge">K✓ MODEL PICK</span>}
               <div style={{ fontSize: 14, color: 'var(--color-r)', fontWeight: 'bold' }}>{pAp}%</div>
             </div>
 
@@ -109,7 +109,7 @@ export default async function MatchPage({
                 {teamB.toUpperCase()}
               </div>
               <div style={{ fontSize: 8, color: 'var(--color-muted)' }}>{tB?.conf}</div>
-              {k === teamB && <span className="k-badge">K✓ KLEMENT PICK</span>}
+              {k === teamB && <span className="k-badge">K✓ MODEL PICK</span>}
               <div style={{ fontSize: 14, color: 'var(--color-b)', fontWeight: 'bold' }}>{pBp}%</div>
             </div>
           </div>

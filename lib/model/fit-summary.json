@@ -1,0 +1,169 @@
+{
+  "generatedAt": "2026-06-28T12:25:31.007Z",
+  "dataSource": "martj42/international_results (open historical international match data)",
+  "datasetUrl": "https://github.com/martj42/international_results",
+  "dateRange": "2014-01-01 to 2026-06-27",
+  "totalMatchesScanned": 49477,
+  "metrics": {
+    "nMatches": 2204,
+    "accuracy": 0.5276769509981851,
+    "logLoss": 0.9825487404341336,
+    "brier": 0.5866671827477197,
+    "pseudoR2": 0.0794858319354057,
+    "drawRate": 0.2636116152450091,
+    "calibration": [
+      {
+        "predicted": 0.07967371813129141,
+        "observed": 0.12903225806451613,
+        "n": 31
+      },
+      {
+        "predicted": 0.15943011620284875,
+        "observed": 0.1534090909090909,
+        "n": 176
+      },
+      {
+        "predicted": 0.25208272086955463,
+        "observed": 0.24836601307189543,
+        "n": 306
+      },
+      {
+        "predicted": 0.34988240103254314,
+        "observed": 0.373134328358209,
+        "n": 402
+      },
+      {
+        "predicted": 0.44958130488638615,
+        "observed": 0.40648379052369077,
+        "n": 401
+      },
+      {
+        "predicted": 0.549225588954012,
+        "observed": 0.5822784810126582,
+        "n": 316
+      },
+      {
+        "predicted": 0.6516520071133419,
+        "observed": 0.6764705882352942,
+        "n": 408
+      },
+      {
+        "predicted": 0.7402929698430023,
+        "observed": 0.7077922077922078,
+        "n": 154
+      },
+      {
+        "predicted": 0.8168331988962722,
+        "observed": 1,
+        "n": 10
+      }
+    ]
+  },
+  "topElo": [
+    {
+      "team": "Argentina",
+      "elo": 2169
+    },
+    {
+      "team": "France",
+      "elo": 2140
+    },
+    {
+      "team": "Spain",
+      "elo": 2136
+    },
+    {
+      "team": "England",
+      "elo": 2059
+    },
+    {
+      "team": "Brazil",
+      "elo": 2046
+    },
+    {
+      "team": "Colombia",
+      "elo": 2032
+    },
+    {
+      "team": "Netherlands",
+      "elo": 2013
+    },
+    {
+      "team": "Portugal",
+      "elo": 2007
+    },
+    {
+      "team": "Morocco",
+      "elo": 1982
+    },
+    {
+      "team": "Mexico",
+      "elo": 1979
+    },
+    {
+      "team": "Germany",
+      "elo": 1955
+    },
+    {
+      "team": "Japan",
+      "elo": 1948
+    }
+  ],
+  "components": [
+    {
+      "key": "gdp",
+      "label": "National wealth",
+      "beta": 0.0475,
+      "importancePct": 4.2,
+      "mean": 0.4838,
+      "std": 0.3146
+    },
+    {
+      "key": "pop",
+      "label": "Population base",
+      "beta": 0.1457,
+      "importancePct": 12.8,
+      "mean": 0.23,
+      "std": 0.2019
+    },
+    {
+      "key": "temp",
+      "label": "Climate fit",
+      "beta": 0.0589,
+      "importancePct": 5.2,
+      "mean": 0.7249,
+      "std": 0.1916
+    },
+    {
+      "key": "fifa",
+      "label": "FIFA ranking",
+      "beta": 0.4715,
+      "importancePct": 41.4,
+      "mean": 0.3195,
+      "std": 0.1811
+    },
+    {
+      "key": "elo",
+      "label": "Elo form (results)",
+      "beta": 0.3094,
+      "importancePct": 27.2,
+      "mean": 1822.3526,
+      "std": 145.0921
+    },
+    {
+      "key": "host",
+      "label": "Home advantage",
+      "beta": 0.478,
+      "importancePct": 9.3,
+      "mean": 0,
+      "std": 1
+    }
+  ],
+  "scorerWindow": "2022-01-01",
+  "notes": [
+    "Elo is computed point-in-time per match across all international results; no lookahead.",
+    "Socio-economic factors (GDP, population, climate, FIFA points) use current values as slow-moving team attributes.",
+    "Weights are logistic-regression coefficients re-fit from results; importance is the normalized coefficient magnitude.",
+    "Refit runs after each finished WC2026 match via the live update job."
+  ]
+}

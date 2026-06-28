@@ -4,10 +4,13 @@ import { usePathname } from 'next/navigation'
 
 const links = [
   { href: '/versus',       label: 'VERSUS'  },
+  { href: '/score',        label: 'SCORE'   },
+  { href: '/topscorers',   label: 'SCORERS' },
   { href: '/teams',        label: 'TEAMS'   },
   { href: '/mc',           label: 'MONTE'   },
   { href: '/groups',       label: 'GROUPS'  },
   { href: '/knockout/r32', label: 'BRACKET' },
+  { href: '/sensitivity',  label: 'SWEEP'   },
   { href: '/about',        label: 'ABOUT'   },
 ]
 
