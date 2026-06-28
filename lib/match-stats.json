@@ -936,5 +936,61 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "colombia-vs-portugal": {
+    "date": "2026-06-27T23:30:00Z",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "congo-dr-vs-uzbekistan": {
+    "date": "2026-06-27T23:30:00Z",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "jordan-vs-argentina": {
+    "date": "2026-06-28T02:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "algeria-vs-austria": {
+    "date": "2026-06-28T02:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
