@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-28T18:41:59.054Z",
+  "model": "klement-sensitivity-optimal",
+  "protocol": "train<=2014 / evaluate>2014: betas, standardizer and calibration fit on <=2014 rows only; forward-then-backward subset and regularization config chosen by pooled 2018-2026 holdout log-loss; final refit reported out-of-sample.",
+  "trainYears": [
+    1994,
+    1998,
+    2002,
+    2006,
+    2010,
+    2014
+  ],
+  "holdoutYears": [
+    2018,
+    2022,
+    2026
+  ],
+  "dataSource": "martj42/international_results + World Bank backward (live)",
+  "formula": "eta = scale * sum_k beta_k * ((rawA_k - mean_k)/std_k - (rawB_k - mean_k)/std_k); P(Awin) = sigmoid(eta) * (1 - draw); draw = clip(dmax*exp(-ddecay*abs(eta)), 0.05, 0.34); P(Bwin) = (1 - sigmoid(eta)) * (1 - draw).",
+  "config": {
+    "family": "elasticNet",
+    "lambda": 0.003792690190732249,
+    "alpha": 0.5,
+    "featureSubset": [
+      "elo",
+      "form",
+      "gdp",
+      "rest",
+      "goalsForm"
+    ]
+  },
+  "features": [
+    {
+      "key": "elo",
+      "label": "Elo",
+      "beta": 0.5411613783527857,
+      "mean": 1827.238993983871,
+      "std": 120.54251728305393
+    },
+    {
+      "key": "form",
+      "label": "Form (365d)",
+      "beta": -0.07739527684734553,
+      "mean": 23.759729345792742,
+      "std": 53.82264690632483
+    },
+    {
+      "key": "gdp",
+      "label": "GDP peak",
+      "beta": 0.043754395093747026,
+      "mean": 0.5580401779985632,
+      "std": 0.3489158243246271
+    },
+    {
+      "key": "pop",
+      "label": "Population pool",
+      "beta": 0,
+      "mean": 0.6258738239683035,
+      "std": 0.23037613290495437
+    },
+    {
+      "key": "confed",
+      "label": "Confederation Elo",
+      "beta": 0,
+      "mean": 1715.0673838012635,
+      "std": 56.71033474366176
+    },
+    {
+      "key": "climateGap",
+      "label": "Climate adaptation",
+      "beta": 0,
+      "mean": 0.7440127077223841,
+      "std": 0.1948963034768247
+    },
+    {
+      "key": "host",
+      "label": "Host nation",
+      "beta": 0,
+      "mean": 0.05241935483870968,
+      "std": 0.22287118718444338
+    },
+    {
+      "key": "continental",
+      "label": "Continental home",
+      "beta": 0,
+      "mean": 0.27956989247311825,
+      "std": 0.44878788719804685
+    },
+    {
+      "key": "rest",
+      "label": "Rest days",
+      "beta": 0.10253501651608059,
+      "mean": 0.4319316436251898,
+      "std": 0.18523203172069483
+    },
+    {
+      "key": "goalsForm",
+      "label": "Goals form",
+      "beta": 0.5509198900043267,
+      "mean": 0.7103494623655917,
+      "std": 0.8388021966994856
+    }
+  ],
+  "calibration": {
+    "scale": 0.9999999999999999,
+    "dmax": 0.3,
+    "ddecay": 0.2,
+    "loss": 0.9529570297599042
+  },
+  "oos": {
+    "pooledLogLoss": 0.9707804564985498,
+    "perTournament": {
+      "2018": {
+        "logLoss": 0.9737757085163962,
+        "n": 64
+      },
+      "2022": {
+        "logLoss": 1.0759544238587369,
+        "n": 64
+      },
+      "2026": {
+        "logLoss": 0.8746300392736314,
+        "n": 72
+      }
+    }
+  },
+  "baselines": {
+    "eloOnly": 0.9890901052977543,
+    "equal": 0.9916662421981036,
+    "mle": 1.0050066546102912,
+    "uniform": 1.0986122886681096
+  },
+  "caveats": "Selection on the same 2018-2026 holdout makes the headline mildly optimistic. The 2026 fold is partial (live, few or zero played matches). The edge over the elo-only baseline is thin: treat the extra features as marginal refinements.",
+  "regenerate": "From kalsh-main: npm run dev (starts server on http://localhost:3000), then in a second shell npm run export:weights."
+}
