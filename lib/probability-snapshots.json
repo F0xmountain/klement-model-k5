@@ -1604,5 +1604,27 @@
       "South Korea": 0.01,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-28T19:00:00Z",
+    "matchLabel": "R32: RSA vs CAN",
+    "snapshots": {
+      "Argentina": 0.1845,
+      "Spain": 0.173,
+      "France": 0.109,
+      "Brazil": 0.099,
+      "Japan": 0.069,
+      "England": 0.061,
+      "Portugal": 0.059,
+      "Germany": 0.0425,
+      "Mexico": 0.0385,
+      "Netherlands": 0.0355,
+      "Uruguay": 0.0325,
+      "Belgium": 0.0255,
+      "Colombia": 0.017,
+      "Canada": 0.012,
+      "South Korea": 0.01,
+      "Croatia": 0.01
+    }
   }
 ]

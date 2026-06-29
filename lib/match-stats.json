@@ -992,5 +992,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "south-africa-vs-canada": {
+    "date": "2026-06-28T19:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
