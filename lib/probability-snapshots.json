@@ -1626,5 +1626,27 @@
       "South Korea": 0.01,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-29T17:00:00Z",
+    "matchLabel": "R32: BRA vs JPN",
+    "snapshots": {
+      "Argentina": 0.1845,
+      "Spain": 0.1725,
+      "France": 0.1095,
+      "Brazil": 0.1005,
+      "Japan": 0.069,
+      "England": 0.061,
+      "Portugal": 0.059,
+      "Germany": 0.0425,
+      "Mexico": 0.0375,
+      "Netherlands": 0.036,
+      "Uruguay": 0.0325,
+      "Belgium": 0.025,
+      "Colombia": 0.0165,
+      "Canada": 0.012,
+      "South Korea": 0.01,
+      "Croatia": 0.01
+    }
   }
 ]
