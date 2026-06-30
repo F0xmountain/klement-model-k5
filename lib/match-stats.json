@@ -1020,5 +1020,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "germany-vs-paraguay": {
+    "date": "2026-06-29T20:30:00Z",
+    "score": {
+      "home": 4,
+      "away": 5
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "netherlands-vs-morocco": {
+    "date": "2026-06-30T01:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 4
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

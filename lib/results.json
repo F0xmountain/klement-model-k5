@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-29T21:13:12.295Z"
+    "lastUpdated": "2026-06-30T10:36:30.359Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -520,6 +520,20 @@
       "scoreA": 2,
       "scoreB": 1,
       "playedAt": "2026-06-29T17:00:00Z"
+    },
+    "germany-vs-paraguay": {
+      "teamA": "Germany",
+      "teamB": "Paraguay",
+      "scoreA": 4,
+      "scoreB": 5,
+      "playedAt": "2026-06-29T20:30:00Z"
+    },
+    "netherlands-vs-morocco": {
+      "teamA": "Netherlands",
+      "teamB": "Morocco",
+      "scoreA": 3,
+      "scoreB": 4,
+      "playedAt": "2026-06-30T01:00:00Z"
     }
   }
 }
