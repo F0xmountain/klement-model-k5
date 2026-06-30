@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-30T10:36:30.359Z"
+    "lastUpdated": "2026-06-30T21:46:10.901Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -534,6 +534,13 @@
       "scoreA": 3,
       "scoreB": 4,
       "playedAt": "2026-06-30T01:00:00Z"
+    },
+    "ivory-coast-vs-norway": {
+      "teamA": "Ivory Coast",
+      "teamB": "Norway",
+      "scoreA": 1,
+      "scoreB": 2,
+      "playedAt": "2026-06-30T17:00:00Z"
     }
   }
 }

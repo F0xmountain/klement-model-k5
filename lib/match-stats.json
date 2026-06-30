@@ -1048,5 +1048,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "ivory-coast-vs-norway": {
+    "date": "2026-06-30T17:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

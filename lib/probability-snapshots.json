@@ -1692,5 +1692,27 @@
       "South Korea": 0.01,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-06-30T17:00:00Z",
+    "matchLabel": "R32: CIV vs NOR",
+    "snapshots": {
+      "Argentina": 0.1855,
+      "Spain": 0.174,
+      "France": 0.11,
+      "Brazil": 0.102,
+      "Japan": 0.0685,
+      "England": 0.061,
+      "Portugal": 0.0585,
+      "Germany": 0.04,
+      "Mexico": 0.0375,
+      "Netherlands": 0.035,
+      "Uruguay": 0.032,
+      "Belgium": 0.025,
+      "Colombia": 0.017,
+      "Canada": 0.012,
+      "South Korea": 0.01,
+      "Croatia": 0.01
+    }
   }
 ]
