@@ -1062,5 +1062,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "france-vs-sweden": {
+    "date": "2026-06-30T21:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "mexico-vs-ecuador": {
+    "date": "2026-07-01T01:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 2,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
