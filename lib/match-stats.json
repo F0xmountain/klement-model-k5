@@ -1090,5 +1090,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "england-vs-congo-dr": {
+    "date": "2026-07-01T16:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
