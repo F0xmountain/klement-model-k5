@@ -1104,5 +1104,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "belgium-vs-senegal": {
+    "date": "2026-07-01T20:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "usa-vs-bosnia-herz": {
+    "date": "2026-07-02T00:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
