@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-02T08:32:16.440Z"
+    "lastUpdated": "2026-07-03T08:38:13.640Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -576,6 +576,27 @@
       "scoreA": 2,
       "scoreB": 0,
       "playedAt": "2026-07-02T00:00:00Z"
+    },
+    "spain-vs-austria": {
+      "teamA": "Spain",
+      "teamB": "Austria",
+      "scoreA": 3,
+      "scoreB": 0,
+      "playedAt": "2026-07-02T19:00:00Z"
+    },
+    "portugal-vs-croatia": {
+      "teamA": "Portugal",
+      "teamB": "Croatia",
+      "scoreA": 2,
+      "scoreB": 1,
+      "playedAt": "2026-07-02T23:00:00Z"
+    },
+    "switzerland-vs-algeria": {
+      "teamA": "Switzerland",
+      "teamB": "Algeria",
+      "scoreA": 2,
+      "scoreB": 0,
+      "playedAt": "2026-07-03T03:00:00Z"
     }
   }
 }

@@ -1132,5 +1132,47 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "spain-vs-austria": {
+    "date": "2026-07-02T19:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "portugal-vs-croatia": {
+    "date": "2026-07-02T23:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "switzerland-vs-algeria": {
+    "date": "2026-07-03T03:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
