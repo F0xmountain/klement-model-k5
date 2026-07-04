@@ -1174,5 +1174,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "australia-vs-egypt": {
+    "date": "2026-07-03T18:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 5
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
