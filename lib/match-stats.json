@@ -1188,5 +1188,33 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "argentina-vs-cape-verde": {
+    "date": "2026-07-03T22:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
+  },
+  "colombia-vs-ghana": {
+    "date": "2026-07-04T01:30:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

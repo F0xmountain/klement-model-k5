@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-04T00:17:47.770Z"
+    "lastUpdated": "2026-07-04T09:08:52.856Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -604,6 +604,20 @@
       "scoreA": 3,
       "scoreB": 5,
       "playedAt": "2026-07-03T18:00:00Z"
+    },
+    "argentina-vs-cape-verde": {
+      "teamA": "Argentina",
+      "teamB": "Cape Verde",
+      "scoreA": 3,
+      "scoreB": 2,
+      "playedAt": "2026-07-03T22:00:00Z"
+    },
+    "colombia-vs-ghana": {
+      "teamA": "Colombia",
+      "teamB": "Ghana",
+      "scoreA": 1,
+      "scoreB": 0,
+      "playedAt": "2026-07-04T01:30:00Z"
     }
   }
 }
