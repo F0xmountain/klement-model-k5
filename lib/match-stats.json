@@ -1216,5 +1216,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "canada-vs-morocco": {
+    "date": "2026-07-04T17:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

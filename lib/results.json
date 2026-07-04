@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-04T09:08:52.856Z"
+    "lastUpdated": "2026-07-04T20:14:38.661Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -618,6 +618,13 @@
       "scoreA": 1,
       "scoreB": 0,
       "playedAt": "2026-07-04T01:30:00Z"
+    },
+    "canada-vs-morocco": {
+      "teamA": "Canada",
+      "teamB": "Morocco",
+      "scoreA": 0,
+      "scoreB": 3,
+      "playedAt": "2026-07-04T17:00:00Z"
     }
   }
 }
