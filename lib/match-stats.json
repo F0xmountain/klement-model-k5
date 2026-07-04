@@ -1230,5 +1230,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "paraguay-vs-france": {
+    "date": "2026-07-04T21:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
