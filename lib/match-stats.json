@@ -1258,5 +1258,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "mexico-vs-england": {
+    "date": "2026-07-06T01:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
