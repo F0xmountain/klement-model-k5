@@ -1244,5 +1244,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "brazil-vs-norway": {
+    "date": "2026-07-05T20:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
