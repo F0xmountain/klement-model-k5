@@ -2044,5 +2044,27 @@
       "South Korea": 0.01,
       "Croatia": 0.0095
     }
+  },
+  {
+    "timestamp": "2026-07-06T19:00:00Z",
+    "matchLabel": "R16: POR vs ESP",
+    "snapshots": {
+      "Argentina": 0.1845,
+      "Spain": 0.177,
+      "France": 0.1095,
+      "Brazil": 0.1,
+      "Japan": 0.069,
+      "England": 0.061,
+      "Portugal": 0.0585,
+      "Mexico": 0.0385,
+      "Germany": 0.0375,
+      "Netherlands": 0.035,
+      "Uruguay": 0.033,
+      "Belgium": 0.026,
+      "Colombia": 0.017,
+      "Canada": 0.012,
+      "South Korea": 0.01,
+      "Croatia": 0.0095
+    }
   }
 ]
