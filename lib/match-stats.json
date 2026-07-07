@@ -1300,5 +1300,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "argentina-vs-egypt": {
+    "date": "2026-07-07T16:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
