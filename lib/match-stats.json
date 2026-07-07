@@ -1286,5 +1286,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "usa-vs-belgium": {
+    "date": "2026-07-07T00:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 4
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 2
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
