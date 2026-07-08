@@ -1314,5 +1314,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "switzerland-vs-colombia": {
+    "date": "2026-07-07T20:00:00Z",
+    "score": {
+      "home": 4,
+      "away": 3
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
