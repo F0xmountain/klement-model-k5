@@ -1328,5 +1328,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "france-vs-morocco": {
+    "date": "2026-07-09T20:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
