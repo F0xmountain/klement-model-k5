@@ -1342,5 +1342,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "spain-vs-belgium": {
+    "date": "2026-07-10T19:00:00Z",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
