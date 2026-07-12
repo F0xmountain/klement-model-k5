@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-10T22:03:49.700Z"
+    "lastUpdated": "2026-07-12T01:06:24.539Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -688,6 +688,13 @@
       "scoreA": 2,
       "scoreB": 1,
       "playedAt": "2026-07-10T19:00:00Z"
+    },
+    "norway-vs-england": {
+      "teamA": "Norway",
+      "teamB": "England",
+      "scoreA": 1,
+      "scoreB": 2,
+      "playedAt": "2026-07-11T21:00:00Z"
     }
   }
 }
