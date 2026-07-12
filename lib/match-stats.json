@@ -1370,5 +1370,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "argentina-vs-switzerland": {
+    "date": "2026-07-12T01:00:00Z",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "halfTime": {
+      "home": 1,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
