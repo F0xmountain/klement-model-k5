@@ -1384,5 +1384,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "france-vs-spain": {
+    "date": "2026-07-14T19:00:00Z",
+    "score": {
+      "home": 0,
+      "away": 2
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 1
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }

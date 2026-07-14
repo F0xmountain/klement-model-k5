@@ -2220,5 +2220,27 @@
       "South Korea": 0.01,
       "Croatia": 0.01
     }
+  },
+  {
+    "timestamp": "2026-07-14T19:00:00Z",
+    "matchLabel": "SF: FRA vs ESP",
+    "snapshots": {
+      "Argentina": 0.185,
+      "Spain": 0.1795,
+      "France": 0.1095,
+      "Brazil": 0.1005,
+      "Japan": 0.067,
+      "England": 0.0605,
+      "Portugal": 0.0585,
+      "Mexico": 0.0385,
+      "Germany": 0.037,
+      "Netherlands": 0.0355,
+      "Uruguay": 0.032,
+      "Belgium": 0.0265,
+      "Colombia": 0.017,
+      "Canada": 0.012,
+      "South Korea": 0.01,
+      "Croatia": 0.01
+    }
   }
 ]
