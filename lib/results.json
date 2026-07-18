@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-15T21:29:41.147Z"
+    "lastUpdated": "2026-07-18T23:54:11.694Z"
   },
   "results": {
     "mexico-vs-south-africa": {
@@ -716,6 +716,13 @@
       "scoreA": 1,
       "scoreB": 2,
       "playedAt": "2026-07-15T19:00:00Z"
+    },
+    "france-vs-england": {
+      "teamA": "France",
+      "teamB": "England",
+      "scoreA": 4,
+      "scoreB": 6,
+      "playedAt": "2026-07-18T21:00:00Z"
     }
   }
 }
