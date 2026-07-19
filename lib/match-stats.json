@@ -1426,5 +1426,19 @@
     "cards": null,
     "xg": null,
     "possession": null
+  },
+  "spain-vs-argentina": {
+    "date": "2026-07-19T19:00:00Z",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "halfTime": {
+      "home": 0,
+      "away": 0
+    },
+    "cards": null,
+    "xg": null,
+    "possession": null
   }
 }
