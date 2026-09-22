@@ -1,6 +1,6 @@
 name: Update Form Cache
 
-on:
+off:
   schedule:
     - cron: '0 3 * * *'    # Daily 03:00 UTC
   workflow_dispatch:          # Allow manual trigger
