@@ -1,6 +1,6 @@
 name: Update FIFA Rankings
 
-on:
+off:
   schedule:
     - cron: '0 6 * * 4'   # Every Thursday 06:00 UTC
   workflow_dispatch:        # Allow manual trigger
