@@ -1,6 +1,6 @@
 name: Ingest Match Results
 
-on:
+off:
   # schedule:
     # Wedstrijddag-venster: elke 30 min van 16:00 tot 04:30 UTC
     # (= 18:00-06:30 CEST), dekt de WK-avond/nacht-wedstrijden incl. naspeeltijd.
